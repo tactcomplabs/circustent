@@ -1,5 +1,6 @@
 # CircusTent: Atomic Memory Operation System Benchmarks
 
+![CircusTent](docs/imgs/circus_tent.png)
 
 ## Overview
 
