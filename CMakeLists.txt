@@ -56,6 +56,12 @@ else()
   message(STATUS "DISABLING OpenMP Implementation")
 endif()
 
+if (ENABLE_OPENSHMEM)
+  message(STATUS "ENABLING OpenSHMEM Implementation")
+else()
+  message(STATUS "DISABLING OpenSHMEM Implementation")
+endif()
+
 
 #------------------------------------------------------------------------
 # Add package paths
