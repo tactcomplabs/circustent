@@ -47,7 +47,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wall")
 #-- IMPLEMENTATION-SPECIFIC FLAGS
 #------------------------------------------------------------------------
 if (ENABLE_OMP)
-  set(CTOMPSrcs ${CTOMPSrcs} CT_OMP.h CT_OMP.cpp)
+  #set(CTOMPSrcs ${CTOMPSrcs} CT_OMP.h CT_OMP.cpp)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp -D_ENABLE_OMP_")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -D_ENABLE_OMP_")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenmp")
@@ -57,14 +57,18 @@ else()
 endif()
 
 if (ENABLE_OPENSHMEM)
+  #set(CMAKE_C_COMPILER "oshcc")
+  #set(CMAKE_CXX_COMPILER "oshcxx")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_OPENSHMEM_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_OPENSHMEM_")
   message(STATUS "ENABLING OpenSHMEM Implementation")
 else()
   message(STATUS "DISABLING OpenSHMEM Implementation")
 endif()
 
-
 #------------------------------------------------------------------------
 # Add package paths
+#------------------------------------------------------------------------
 if(NOT CT_INCLUDE_PATH)
   set(CT_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
   message(STATUS "CT_INCLUDE_PATH set to ${CT_INCLUDE_PATH}")

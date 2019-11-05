@@ -1,5 +1,5 @@
 /*
- * _CT_IMPL_C_
+ * _CT_SHMEM_IMPL_C_
  *
  * Copyright (C) 2017-2019 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -8,15 +8,15 @@
  * See LICENSE in the top level directory for licensing details
  */
 
-#include <omp.h>
+#include <shmem.h>
 #include <stdint.h>
 
 
-/* OpenMP Benchmark Implementations
+/* OpenSHMEM Benchmark Implementations
  *
  * Benchmark implementations are in the form:
  *
- * void BENCHTYPE_ATOMTYPE( uint64_t *ARRAY, uint64_t *IDX,
+ * void BENCHTYPE_ATOMTYPE( uint64_t *ARRAY, uint64_t *IDX, int *TARGET,
  *                          unsigned long long iters,
  *                          unsigned long long pes )
  *
@@ -24,6 +24,7 @@
 
 void RAND_ADD( uint64_t *restrict ARRAY,
                uint64_t *restrict IDX,
+               int *restrict TARGET,
                uint64_t iters,
                uint64_t pes ){
 
@@ -42,6 +43,7 @@ void RAND_ADD( uint64_t *restrict ARRAY,
 
 void RAND_CAS( uint64_t *restrict ARRAY,
                uint64_t *restrict IDX,
+               int *restrict TARGET,
                uint64_t iters,
                uint64_t pes ){
 
@@ -61,6 +63,7 @@ void RAND_CAS( uint64_t *restrict ARRAY,
 
 void STRIDE1_ADD( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes ){
 
@@ -79,6 +82,7 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
 
 void STRIDE1_CAS( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes ){
 
@@ -98,6 +102,7 @@ void STRIDE1_CAS( uint64_t *restrict ARRAY,
 
 void STRIDEN_ADD( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes,
                   uint64_t stride ){
@@ -117,6 +122,7 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
 
 void STRIDEN_CAS( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes,
                   uint64_t stride ){
@@ -136,6 +142,7 @@ void STRIDEN_CAS( uint64_t *restrict ARRAY,
 
 void PTRCHASE_ADD( uint64_t *restrict ARRAY,
                    uint64_t *restrict IDX,
+                   int *restrict TARGET,
                    uint64_t iters,
                    uint64_t pes ){
 
@@ -156,6 +163,7 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
 
 void PTRCHASE_CAS( uint64_t *restrict ARRAY,
                    uint64_t *restrict IDX,
+                   int *restrict TARGET,
                    uint64_t iters,
                    uint64_t pes ){
 
@@ -175,6 +183,7 @@ void PTRCHASE_CAS( uint64_t *restrict ARRAY,
 
 void SG_ADD( uint64_t *restrict ARRAY,
              uint64_t *restrict IDX,
+             int *restrict TARGET,
              uint64_t iters,
              uint64_t pes ){
 
@@ -199,6 +208,7 @@ void SG_ADD( uint64_t *restrict ARRAY,
 
 void SG_CAS( uint64_t *restrict ARRAY,
              uint64_t *restrict IDX,
+             int *restrict TARGET,
              uint64_t iters,
              uint64_t pes ){
 
@@ -230,6 +240,7 @@ void SG_CAS( uint64_t *restrict ARRAY,
 
 void CENTRAL_ADD( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes ){
   uint64_t i      = 0;
@@ -245,6 +256,7 @@ void CENTRAL_ADD( uint64_t *restrict ARRAY,
 
 void CENTRAL_CAS( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes ){
   uint64_t i      = 0;
@@ -261,6 +273,7 @@ void CENTRAL_CAS( uint64_t *restrict ARRAY,
 
 void SCATTER_ADD( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes ){
 
@@ -283,6 +296,7 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
 
 void SCATTER_CAS( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
+                  int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes ){
 
@@ -310,6 +324,7 @@ void SCATTER_CAS( uint64_t *restrict ARRAY,
 
 void GATHER_ADD( uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
+                 int *restrict TARGET,
                  uint64_t iters,
                  uint64_t pes ){
 
@@ -332,6 +347,7 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
 
 void GATHER_CAS( uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
+                 int *restrict TARGET,
                  uint64_t iters,
                  uint64_t pes ){
 
