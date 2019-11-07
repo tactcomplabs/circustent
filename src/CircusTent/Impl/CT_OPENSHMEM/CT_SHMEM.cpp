@@ -282,7 +282,7 @@ bool CT_SHMEM::AllocateData( uint64_t m,
   }
 
   // 'Idx' resides in symmetric heap space
-  Idx = (uint64_t *)(shmem_malloc( sizeof(uint64_t) * iters ));
+  Idx = (uint64_t *)(shmem_malloc( sizeof(uint64_t) * (iters+1) ));
   if( Idx == nullptr ){
     std::cout << "CT_SHMEM::AllocateData : 'Idx' could not be allocated" << std::endl;
     shmem_free( Array );
@@ -306,7 +306,7 @@ bool CT_SHMEM::AllocateData( uint64_t m,
   uint64_t *APtr = (uint64_t *)(shmem_ptr((void *)(Array),shmem_my_pe()));
   if( this->GetBenchType() == CT_PTRCHASE ){
     for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      IPtr[i] = (uint64_t)(rand()%(iters));
+      IPtr[i] = (uint64_t)(rand()%(elems));
     }
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
@@ -314,7 +314,7 @@ bool CT_SHMEM::AllocateData( uint64_t m,
     }
   }else{
     for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      IPtr[i] = (uint64_t)(rand()%(iters));
+      IPtr[i] = (uint64_t)(rand()%(elems));
     }
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
