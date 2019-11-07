@@ -248,18 +248,11 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
   uint64_t dest   = 0;
   uint64_t val    = 0;
 
-#if 0
-  #pragma omp parallel private(start,i,dest,val)
-  {
-    start = (uint64_t)(omp_get_thread_num()) * iters;
-    #pragma omp for
-    for( i=start; i<(start+iters); i++ ){
-      dest = __atomic_fetch_add( &IDX[i+1], (uint64_t)(0x00ull), __ATOMIC_RELAXED );
-      val = __atomic_fetch_add( &ARRAY[i], (uint64_t)(0x01ull), __ATOMIC_RELAXED );
-      __atomic_fetch_add( &ARRAY[dest], val, __ATOMIC_RELAXED );
-    }
+  for( i=0; i<iters; i++ ){
+    dest  = shmem_ulong_atomic_fetch_add(&IDX[+1],(uint64_t)(0x00ull),TARGET[i]);
+    val   = shmem_ulong_atomic_fetch_add(&ARRAY[i],(uint64_t)(0x01ull),TARGET[i]);
+    start = shmem_ulong_atomic_fetch_add(&ARRAY[dest], val, TARGET[i] );
   }
-#endif
 }
 
 void SCATTER_CAS( uint64_t *restrict ARRAY,
@@ -273,23 +266,20 @@ void SCATTER_CAS( uint64_t *restrict ARRAY,
   uint64_t dest   = 0;
   uint64_t val    = 0;
 
-#if 0
-  #pragma omp parallel private(start,i,dest,val)
-  {
-    start = (uint64_t)(omp_get_thread_num()) * iters;
-    dest  = 0x00ull;
-    val   = 0x00ull;
-    #pragma omp for
-    for( i=start; i<(start+iters); i++ ){
-      __atomic_compare_exchange_n( &IDX[i+1], &dest, IDX[i+1],
-                                   0, __ATOMIC_RELAXED, __ATOMIC_RELAXED );
-      __atomic_compare_exchange_n( &ARRAY[i], &val, ARRAY[i],
-                                   0, __ATOMIC_RELAXED, __ATOMIC_RELAXED );
-      __atomic_compare_exchange_n( &ARRAY[dest], &ARRAY[dest], val,
-                                   0, __ATOMIC_RELAXED, __ATOMIC_RELAXED );
-    }
+  for( i=0; i<iters; i++ ){
+    dest  = shmem_ulong_atomic_compare_swap(&IDX[i+1],
+                                            (uint64_t)(0x00),
+                                            (uint64_t)(0x00),
+                                            TARGET[i]);
+    val   = shmem_ulong_atomic_compare_swap(&ARRAY[i],
+                                            (uint64_t)(0x00),
+                                            (uint64_t)(0x00),
+                                            TARGET[i]);
+    start = shmem_ulong_atomic_compare_swap(&ARRAY[dest],
+                                            (uint64_t)(0x00),
+                                            val,
+                                            TARGET[i]);
   }
-#endif
 }
 
 void GATHER_ADD( uint64_t *restrict ARRAY,
@@ -303,18 +293,11 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
   uint64_t dest   = 0;
   uint64_t val    = 0;
 
-#if 0
-  #pragma omp parallel private(start,i,dest,val)
-  {
-    start = (uint64_t)(omp_get_thread_num()) * iters;
-    #pragma omp for
-    for( i=start; i<(start+iters); i++ ){
-      dest = __atomic_fetch_add( &IDX[i+1], (uint64_t)(0x00ull), __ATOMIC_RELAXED );
-      val = __atomic_fetch_add( &ARRAY[dest], (uint64_t)(0x01ull), __ATOMIC_RELAXED );
-      __atomic_fetch_add( &ARRAY[i], val, __ATOMIC_RELAXED );
-    }
+  for( i=0; i<iters; i++ ){
+    dest  = shmem_ulong_atomic_fetch_add(&IDX[+1],(uint64_t)(0x00ull),TARGET[i]);
+    val   = shmem_ulong_atomic_fetch_add(&ARRAY[dest],(uint64_t)(0x01ull),TARGET[i]);
+    start = shmem_ulong_atomic_fetch_add(&ARRAY[i], val, TARGET[i] );
   }
-#endif
 }
 
 void GATHER_CAS( uint64_t *restrict ARRAY,
@@ -328,23 +311,20 @@ void GATHER_CAS( uint64_t *restrict ARRAY,
   uint64_t dest   = 0;
   uint64_t val    = 0;
 
-#if 0
-  #pragma omp parallel private(start,i,dest,val)
-  {
-    start = (uint64_t)(omp_get_thread_num()) * iters;
-    dest  = 0x00ull;
-    val   = 0x00ull;
-    #pragma omp for
-    for( i=start; i<(start+iters); i++ ){
-      __atomic_compare_exchange_n( &IDX[i+1], &dest, IDX[i+1],
-                                   0, __ATOMIC_RELAXED, __ATOMIC_RELAXED );
-      __atomic_compare_exchange_n( &ARRAY[dest], &val, ARRAY[dest],
-                                   0, __ATOMIC_RELAXED, __ATOMIC_RELAXED );
-      __atomic_compare_exchange_n( &ARRAY[i], &ARRAY[i], val,
-                                   0, __ATOMIC_RELAXED, __ATOMIC_RELAXED );
-    }
+  for( i=0; i<iters; i++ ){
+    dest  = shmem_ulong_atomic_compare_swap(&IDX[i+1],
+                                            (uint64_t)(0x00),
+                                            (uint64_t)(0x00),
+                                            TARGET[i]);
+    val   = shmem_ulong_atomic_compare_swap(&ARRAY[dest],
+                                            (uint64_t)(0x00),
+                                            (uint64_t)(0x00),
+                                            TARGET[i]);
+    start = shmem_ulong_atomic_compare_swap(&ARRAY[i],
+                                            (uint64_t)(0x00),
+                                            val,
+                                            TARGET[i]);
   }
-#endif
 }
 
 
