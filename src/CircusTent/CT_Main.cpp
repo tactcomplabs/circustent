@@ -13,6 +13,7 @@
 #include "Impl/CT_OMP/CT_OMP.h"
 #endif
 #ifdef _ENABLE_OPENSHMEM_
+#include <mpp/shmem.h>
 #include "Impl/CT_OPENSHMEM/CT_SHMEM.h"
 #endif
 
@@ -56,7 +57,9 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
   }
 
   // Print the timing
-  PrintTiming( Timing, GAMS );
+  if( shmem_my_pe() == 0 ){
+    PrintTiming( Timing, GAMS );
+  }
 }
 #endif
 

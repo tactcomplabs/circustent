@@ -35,6 +35,10 @@ bool CT_SHMEM::Execute(double &Timing, double &GAMS){
   double EndTime    = 0.; // end time
   double OPS        = 0.; // billions of operations
 
+  if( shmem_my_pe() == 0 ){
+    std::cout << "Beginning test execution" << std::endl;
+  }
+
   // determine the benchmark type
   if( BType == CT_RAND ){
     switch( AType ){
@@ -288,6 +292,15 @@ bool CT_SHMEM::AllocateData( uint64_t m,
     }
   }
 
+  if( !(this->GetBenchType() == CT_PTRCHASE) ){
+    if( elems < iters ){
+      std::cout << "CT_SHMEM::AllocateData : Memory size is too small for iteration count" << std::endl;
+      std::cout << "                       : Increase the memory footprint per PE or reduce the iteration count" << std::endl;
+      shmem_finalize();
+      return false;
+    }
+  }
+
   // 'Array' resides in symmetric heap space
   Array = (uint64_t *)(shmem_malloc( memSize ));
   if( Array == nullptr ){
@@ -315,22 +328,31 @@ bool CT_SHMEM::AllocateData( uint64_t m,
     return false;
   }
 
+  if( shmem_my_pe() == 0 ){
+    std::cout << "Initializing SHMEM data members" << std::endl;
+  }
+
+  shmem_barrier_all();
+
   // initiate the random array
   srand(time(NULL));
-  uint64_t *IPtr = (uint64_t *)(shmem_ptr((void *)(Idx),shmem_my_pe()));
-  uint64_t *APtr = (uint64_t *)(shmem_ptr((void *)(Array),shmem_my_pe()));
+
   if( this->GetBenchType() == CT_PTRCHASE ){
     for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      IPtr[i] = (uint64_t)(rand()%(elems));
+      //IPtr[i] = (uint64_t)(rand()%(elems));
+      Idx[i] = (uint64_t)(rand()%(elems));
     }
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
       Target[i] = (int)(rand()%(shmem_n_pes()-1));
     }
   }else{
+
     for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      IPtr[i] = (uint64_t)(rand()%(elems));
+      //IPtr[i] = (uint64_t)(rand()%(elems));
+      Idx[i] = (uint64_t)(rand()%(elems));
     }
+
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
       if( shmem_my_pe() == (shmem_n_pes()-1) ){
@@ -341,8 +363,20 @@ bool CT_SHMEM::AllocateData( uint64_t m,
       }
     }
   }
-  for( unsigned i=0; i<elems; i++ ){
-    APtr[i] = (uint64_t)(rand());
+
+  // fix the target array if n_pes == 1
+  if( shmem_n_pes() == 1 ){
+    for( unsigned i=0; i<iters; i++ ){
+      Target[i] = 0;
+    }
+  }
+
+  for( uint64_t i=0; i<elems; i++ ){
+    Array[i] = (uint64_t)(rand());
+  }
+
+  if( shmem_my_pe() == 0 ){
+    std::cout << "Done initializing SHMEM data members" << std::endl;
   }
 
   shmem_barrier_all();

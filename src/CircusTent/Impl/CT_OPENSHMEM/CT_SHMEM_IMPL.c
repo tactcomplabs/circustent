@@ -10,6 +10,8 @@
 
 #include <mpp/shmem.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 /* OpenSHMEM Benchmark Implementations
@@ -35,7 +37,7 @@ void RAND_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
 
   for( i=0; i<iters; i++ ){
-    shmem_get8(&start,&IDX[i],1,TARGET[i]);
+    shmem_long_get((long *)(&start),(long *)(&IDX[i]),1,TARGET[i]);
     start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[start]),(long)(0x1),TARGET[i]));
   }
 }
@@ -50,7 +52,7 @@ void RAND_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
 
   for( i=0; i<iters; i++ ){
-    shmem_get8(&start,&IDX[i],1,TARGET[i]);
+    shmem_long_get((long *)(&start),(long *)(&IDX[i]),1,TARGET[i]);
     start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[start]),
                                         (long)(0x00),
                                         (long)(0x00),
