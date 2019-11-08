@@ -258,6 +258,21 @@ bool CT_SHMEM::AllocateData( uint64_t m,
   // init the shmem context
   shmem_init();
 
+  // print the shmem version info
+  int major = 0;
+  int minor = 0;
+  char vendor[SHMEM_MAX_NAME_LEN];
+  shmem_info_get_version(&major,&minor);
+  shmem_info_get_name(&vendor[0]);
+
+  if( shmem_my_pe() == 0 ){
+    std::cout << "OpenSHMEM Info:  Vendor = " << vendor
+              << "; Version = " << major << "." << minor
+              << "; PEs = " << shmem_n_pes() << std::endl;
+  }
+
+  shmem_barrier_all();
+
   // calculate the number of elements
   elems = (memSize/8);
 
@@ -328,19 +343,6 @@ bool CT_SHMEM::AllocateData( uint64_t m,
   }
   for( unsigned i=0; i<elems; i++ ){
     APtr[i] = (uint64_t)(rand());
-  }
-
-  // print the shmem version info
-  int major = 0;
-  int minor = 0;
-  char vendor[SHMEM_MAX_NAME_LEN];
-  shmem_info_get_version(&major,&minor);
-  shmem_info_get_name(&vendor[0]);
-
-  if( shmem_my_pe() == 0 ){
-    std::cout << "OpenSHMEM Info:  Vendor = " << vendor
-              << "; Version = " << major << "." << minor
-              << "; PEs = " << shmem_n_pes() << std::endl;
   }
 
   shmem_barrier_all();
