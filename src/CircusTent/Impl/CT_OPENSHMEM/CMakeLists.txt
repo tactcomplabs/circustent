@@ -18,4 +18,3 @@ include_directories(${CT_INCLUDE_PATH})
 include_directories(./)
 
 add_library(CT_SHMEM_OBJS OBJECT ${CTSHMEMSrcs})
-

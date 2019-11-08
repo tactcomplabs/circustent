@@ -223,7 +223,7 @@ for( i=0; i<iters; i++ ){
 * CMake Build Flag: -DENABLE_OPENSHMEM=ON
 * Users must specify the OpenSHMEM compiler wrapper alongside the CMake command as follows:
 ```
-CC=oshcc CXX=oshcxx cmake -DENABLE_OPENSHMEM=ON ../
+CC=mpicc CXX=mpicxx cmake -DENABLE_OPENSHMEM=ON ../
 ```
 * Implementation  Language: C++ and C using SHMEM functions and symmetric heap
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
@@ -281,7 +281,7 @@ circustent --list
 ```
 3. Execute the RAND\_ADD algorithm using 1024 bytes of memory, 2 PE's and 1000 iterations
 ```
-circustent -B RAND_ADD -m 1024 -p 2 -i 1000
+circustent -b RAND_ADD -m 1024 -p 2 -i 1000
 ```
 4. Execute the SCATTER\_CAS algorithm using 16GB of memory, 24 PE's and 20,000,000 iterations
 ```
