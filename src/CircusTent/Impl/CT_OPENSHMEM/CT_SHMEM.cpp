@@ -259,6 +259,29 @@ bool CT_SHMEM::AllocateData( uint64_t m,
     return false;
   }
 
+  // calculate the number of elements
+  elems = (memSize/8);
+
+  // test to see whether we'll stride out of bounds
+  if( stride > 1 ){
+    uint64_t end = (iters * stride)-stride;
+    if( end > elems ){
+      std::cout << "CT_SHMEM::AllocateData : 'Array' is not large enough for pes="
+                << pes << "; iters=" << iters << ";stride =" << stride
+                << std::endl;
+      return false;
+    }
+  }
+
+  // ensure that we have enough allocation space
+  if( !(this->GetBenchType() == CT_PTRCHASE) ){
+    if( elems < iters ){
+      std::cout << "CT_SHMEM::AllocateData : Memory size is too small for iteration count" << std::endl;
+      std::cout << "                       : Increase the memory footprint per PE or reduce the iteration count" << std::endl;
+      return false;
+    }
+  }
+
   // init the shmem context
   shmem_init();
 
@@ -276,30 +299,6 @@ bool CT_SHMEM::AllocateData( uint64_t m,
   }
 
   shmem_barrier_all();
-
-  // calculate the number of elements
-  elems = (memSize/8);
-
-  // test to see whether we'll stride out of bounds
-  if( stride > 1 ){
-    uint64_t end = (iters * stride)-stride;
-    if( end > elems ){
-      std::cout << "CT_SHMEM::AllocateData : 'Array' is not large enough for pes="
-                << pes << "; iters=" << iters << ";stride =" << stride
-                << std::endl;
-      shmem_finalize();
-      return false;
-    }
-  }
-
-  if( !(this->GetBenchType() == CT_PTRCHASE) ){
-    if( elems < iters ){
-      std::cout << "CT_SHMEM::AllocateData : Memory size is too small for iteration count" << std::endl;
-      std::cout << "                       : Increase the memory footprint per PE or reduce the iteration count" << std::endl;
-      shmem_finalize();
-      return false;
-    }
-  }
 
   // 'Array' resides in symmetric heap space
   Array = (uint64_t *)(shmem_malloc( memSize ));
@@ -335,24 +334,19 @@ bool CT_SHMEM::AllocateData( uint64_t m,
   shmem_barrier_all();
 
   // initiate the random array
-  srand(time(NULL));
+  srand(time(NULL) + shmem_my_pe());
 
-  if( this->GetBenchType() == CT_PTRCHASE ){
-    for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      //IPtr[i] = (uint64_t)(rand()%(elems));
-      Idx[i] = (uint64_t)(rand()%(elems));
+  // Init the target array
+  if( shmem_n_pes() == 1 ){
+    for( unsigned i=0; i<iters; i++ ){
+      Target[i] = 0;
     }
+  }else if( this->GetBenchType() == CT_PTRCHASE ){
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
       Target[i] = (int)(rand()%(shmem_n_pes()-1));
     }
   }else{
-
-    for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      //IPtr[i] = (uint64_t)(rand()%(elems));
-      Idx[i] = (uint64_t)(rand()%(elems));
-    }
-
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
       if( shmem_my_pe() == (shmem_n_pes()-1) ){
@@ -364,13 +358,10 @@ bool CT_SHMEM::AllocateData( uint64_t m,
     }
   }
 
-  // fix the target array if n_pes == 1
-  if( shmem_n_pes() == 1 ){
-    for( unsigned i=0; i<iters; i++ ){
-      Target[i] = 0;
-    }
+  // setup the Idx and array values
+  for( unsigned i=0; i<(iters+1); i++ ){
+    Idx[i] = (uint64_t)(rand()%(elems));
   }
-
   for( uint64_t i=0; i<elems; i++ ){
     Array[i] = (uint64_t)(rand());
   }
@@ -393,9 +384,6 @@ bool CT_SHMEM::FreeData(){
   }
 
   free( Target );
-
-  // destroy to openshmem context
-  shmem_finalize();
 
   return true;
 }

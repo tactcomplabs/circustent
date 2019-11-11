@@ -60,6 +60,7 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
   if( shmem_my_pe() == 0 ){
     PrintTiming( Timing, GAMS );
   }
+  shmem_finalize();
 }
 #endif
 
