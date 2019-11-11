@@ -204,7 +204,7 @@ for( i=0; i<iters; i++ ){
 | Benchmark | Supported? |
 | ------ | ------ |
 | RAND_ADD | yes |
-| RAND_CAS | yes | 
+| RAND_CAS | yes |
 | STRIDE1_ADD | yes |
 | STRIDE1_CAS | yes |
 | STRIDEN_ADD | yes |
@@ -219,6 +219,41 @@ for( i=0; i<iters; i++ ){
 | SCATTER_CAS | yes |
 | GATHER_ADD | yes |
 | GATHER_CAS | yes |
+
+### OpenSHMEM
+* CMake Build Flag: -DENABLE_OPENSHMEM=ON
+* Users must specify the OpenSHMEM compiler wrapper alongside the CMake command as follows:
+```
+CC=mpicc CXX=mpicxx cmake -DENABLE_OPENSHMEM=ON ../
+```
+* Implementation  Language: C++ and C using SHMEM functions and symmetric heap
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Target PE's for all benchmarks except PTRCHASE are initialized in a stride-1 ring pattern.  This implies 
+that for every N'th PE, the target PE is N+1.  All benchmarks except PTRCHASE target a single destination PE for each iteration
+* The PTRCHASE benchmark utilizes randomly generated target PE's for each iteration
+* For benchmark values that don't require atomic access to indices, we utilize SHMEM_GET operations to 
+fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
+* Tested with OSSS-UCX: [OpenSHMEM Reference Implementation](https://github.com/openshmem-org/osss-ucx)
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
 
 ## Exeuction Parameters
 
@@ -247,7 +282,7 @@ circustent --list
 ```
 3. Execute the RAND\_ADD algorithm using 1024 bytes of memory, 2 PE's and 1000 iterations
 ```
-circustent -B RAND_ADD -m 1024 -p 2 -i 1000
+circustent -b RAND_ADD -m 1024 -p 2 -i 1000
 ```
 4. Execute the SCATTER\_CAS algorithm using 16GB of memory, 24 PE's and 20,000,000 iterations
 ```

@@ -96,8 +96,8 @@ void STRIDE1_CAS( uint64_t *restrict ARRAY,
   }
 }
 
-void STRIDEN_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
+void STRIDEN_ADD( uint64_t *restrict ARRAY,
+                  uint64_t *restrict IDX,
                   uint64_t iters,
                   uint64_t pes,
                   uint64_t stride ){
@@ -115,8 +115,8 @@ void STRIDEN_ADD( uint64_t *ARRAY,
   }
 }
 
-void STRIDEN_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
+void STRIDEN_CAS( uint64_t *restrict ARRAY,
+                  uint64_t *restrict IDX,
                   uint64_t iters,
                   uint64_t pes,
                   uint64_t stride ){
@@ -134,8 +134,8 @@ void STRIDEN_CAS( uint64_t *ARRAY,
   }
 }
 
-void PTRCHASE_ADD( uint64_t *ARRAY,
-                   uint64_t *IDX,
+void PTRCHASE_ADD( uint64_t *restrict ARRAY,
+                   uint64_t *restrict IDX,
                    uint64_t iters,
                    uint64_t pes ){
 
@@ -154,8 +154,8 @@ void PTRCHASE_ADD( uint64_t *ARRAY,
   }
 }
 
-void PTRCHASE_CAS( uint64_t *ARRAY,
-                   uint64_t *IDX,
+void PTRCHASE_CAS( uint64_t *restrict ARRAY,
+                   uint64_t *restrict IDX,
                    uint64_t iters,
                    uint64_t pes ){
 
@@ -173,8 +173,8 @@ void PTRCHASE_CAS( uint64_t *ARRAY,
   }
 }
 
-void SG_ADD( uint64_t *ARRAY,
-             uint64_t *IDX,
+void SG_ADD( uint64_t *restrict ARRAY,
+             uint64_t *restrict IDX,
              uint64_t iters,
              uint64_t pes ){
 
@@ -197,8 +197,8 @@ void SG_ADD( uint64_t *ARRAY,
   }
 }
 
-void SG_CAS( uint64_t *ARRAY,
-             uint64_t *IDX,
+void SG_CAS( uint64_t *restrict ARRAY,
+             uint64_t *restrict IDX,
              uint64_t iters,
              uint64_t pes ){
 
@@ -228,8 +228,8 @@ void SG_CAS( uint64_t *ARRAY,
   }
 }
 
-void CENTRAL_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
+void CENTRAL_ADD( uint64_t *restrict ARRAY,
+                  uint64_t *restrict IDX,
                   uint64_t iters,
                   uint64_t pes ){
   uint64_t i      = 0;
@@ -243,8 +243,8 @@ void CENTRAL_ADD( uint64_t *ARRAY,
   }
 }
 
-void CENTRAL_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
+void CENTRAL_CAS( uint64_t *restrict ARRAY,
+                  uint64_t *restrict IDX,
                   uint64_t iters,
                   uint64_t pes ){
   uint64_t i      = 0;
@@ -259,8 +259,8 @@ void CENTRAL_CAS( uint64_t *ARRAY,
   }
 }
 
-void SCATTER_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
+void SCATTER_ADD( uint64_t *restrict ARRAY,
+                  uint64_t *restrict IDX,
                   uint64_t iters,
                   uint64_t pes ){
 
@@ -281,8 +281,8 @@ void SCATTER_ADD( uint64_t *ARRAY,
   }
 }
 
-void SCATTER_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
+void SCATTER_CAS( uint64_t *restrict ARRAY,
+                  uint64_t *restrict IDX,
                   uint64_t iters,
                   uint64_t pes ){
 
@@ -308,8 +308,8 @@ void SCATTER_CAS( uint64_t *ARRAY,
   }
 }
 
-void GATHER_ADD( uint64_t *ARRAY,
-                 uint64_t *IDX,
+void GATHER_ADD( uint64_t *restrict ARRAY,
+                 uint64_t *restrict IDX,
                  uint64_t iters,
                  uint64_t pes ){
 
@@ -330,8 +330,8 @@ void GATHER_ADD( uint64_t *ARRAY,
   }
 }
 
-void GATHER_CAS( uint64_t *ARRAY,
-                 uint64_t *IDX,
+void GATHER_CAS( uint64_t *restrict ARRAY,
+                 uint64_t *restrict IDX,
                  uint64_t iters,
                  uint64_t pes ){
 

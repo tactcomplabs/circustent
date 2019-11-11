@@ -123,6 +123,10 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       }
       std::string P(argv[i+1]);
       stride = atoll(P.c_str());
+      if( stride == 0 ){
+        std::cout << "Error : --stride cannot be 0" << std::endl;
+        return false;
+      }
       i++;
     }else if( (s=="-l") || (s=="-list") || (s=="--list") ){
       isList = true;
