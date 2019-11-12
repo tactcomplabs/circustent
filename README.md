@@ -73,6 +73,8 @@ The following are additional build options supported by the CircusTent CMake scr
 * CXX : Utilize the target C++ compiler
 * -DCMAKE\_C\_FLAGS : Set the C compiler flags
 * -DCMAKE\_CXX\_FLAGS : Set the C++ compiler flags
+* -DCT\_CFLAGS : Append the CT\_CFLAGS to the standard C\_FLAGS for the target Impl
+* -DCT\_CXXFLAGS : Append the CT\_CXXFLAGS to the standard CXX\_FLAGS for the target Impl
 * -DCMAKE\_INSTALL\_PREFIX : installation target (make install)
 * -DCIRCUSTENT\_BUILD\_RPM : Builds an RPM package
 * -DCIRCUSTENT\_BUILD\_DEB : Builds a DEB package

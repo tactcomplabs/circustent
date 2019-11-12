@@ -17,7 +17,8 @@ include_directories(${CT_INCLUDE_PATH})
 include_directories(${CT_SRC_PATH}/Impl/CT_OMP)
 
 add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OMP_OBJS>
-                                    $<TARGET_OBJECTS:CT_SHMEM_OBJS>)
+                                    $<TARGET_OBJECTS:CT_SHMEM_OBJS>
+                                    $<TARGET_OBJECTS:CT_MPI_OBJS>)
 
 if (ENABLE_OPENSHMEM)
   target_link_libraries(circustent oshmem mpi)
