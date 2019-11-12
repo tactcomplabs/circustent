@@ -48,7 +48,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      RAND_ADD( Array, Idx, Target, iters, pes );
+      RAND_ADD( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -56,7 +56,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      RAND_CAS( Array, Idx, Target, iters, pes );
+      RAND_CAS( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -71,7 +71,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      STRIDE1_ADD( Array, Idx, Target, iters, pes );
+      STRIDE1_ADD( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -79,7 +79,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      STRIDE1_CAS( Array, Idx, Target, iters, pes );
+      STRIDE1_CAS( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -94,7 +94,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      STRIDEN_ADD( Array, Idx, Target, iters, pes, stride );
+      STRIDEN_ADD( Array, Idx, Target, iters, pes, stride, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -102,7 +102,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      STRIDEN_CAS( Array, Idx, Target, iters, pes, stride );
+      STRIDEN_CAS( Array, Idx, Target, iters, pes, stride, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -117,7 +117,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      PTRCHASE_ADD( Array, Idx, Target, iters, pes );
+      PTRCHASE_ADD( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -125,7 +125,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      PTRCHASE_CAS( Array, Idx, Target, iters, pes );
+      PTRCHASE_CAS( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -140,7 +140,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      SG_ADD( Array, Idx, Target, iters, pes );
+      SG_ADD( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(4,iters,pes);
@@ -148,7 +148,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      SG_CAS( Array, Idx, Target, iters, pes );
+      SG_CAS( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(4,iters,pes);
@@ -163,7 +163,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      CENTRAL_ADD( Array, Idx, Target, iters, pes );
+      CENTRAL_ADD( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -171,7 +171,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      CENTRAL_CAS( Array, Idx, Target, iters, pes );
+      CENTRAL_CAS( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
@@ -186,7 +186,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      SCATTER_ADD( Array, Idx, Target, iters, pes );
+      SCATTER_ADD( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
@@ -194,7 +194,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      SCATTER_CAS( Array, Idx, Target, iters, pes );
+      SCATTER_CAS( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
@@ -209,7 +209,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      GATHER_ADD( Array, Idx, Target, iters, pes );
+      GATHER_ADD( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
@@ -217,7 +217,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
     case CT_CAS:
       MPI_Barrier(MPI_COMM_WORLD);
       StartTime = this->MySecond();
-      GATHER_CAS( Array, Idx, Target, iters, pes );
+      GATHER_CAS( Array, Idx, Target, iters, pes, ArrayWin, IdxWin );
       MPI_Barrier(MPI_COMM_WORLD);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
@@ -293,7 +293,8 @@ bool CT_MPI::AllocateData( uint64_t m,
   MPI_Init(NULL,NULL);
   MPI_Comm_rank(MPI_COMM_WORLD,&rank);
   MPI_Comm_size(MPI_COMM_WORLD,&size);
-
+  MPI_Win_create_dynamic(MPI_INFO_NULL,MPI_COMM_WORLD,&ArrayWin);
+  MPI_Win_create_dynamic(MPI_INFO_NULL,MPI_COMM_WORLD,&IdxWin);
   MPI_Barrier(MPI_COMM_WORLD);
 
   // 'Array' resides in local heap space
@@ -303,22 +304,30 @@ bool CT_MPI::AllocateData( uint64_t m,
     MPI_Finalize();
     return false;
   }
+  MPI_Win_Attach(ArrayWin,Array,memSize);
 
   // 'Idx' resides in local heap space
   Idx = (uint64_t *)(malloc( sizeof(uint64_t) * (iters+1) ));
   if( Idx == nullptr ){
     std::cout << "CT_MPI::AllocateData : 'Idx' could not be allocated" << std::endl;
+    MPI_Win_detach(ArrayWin,Array);
     free( Array );
+    MPI_Win_free(&ArrayWin);
     MPI_Finalize();
     return false;
   }
+  MPI_Win_Attach(IdxWin,Idx,sizeof(uint64_t) * (iters+1));
 
   // 'Target' resides in local PE memory
   Target = (int *)(malloc( sizeof( int ) * iters ));
   if( Target == nullptr ){
     std::cout << "CT_MPI:AllocateData: 'Target' could not be allocated" << std::endl;
+    MPI_Win_detach(ArrayWin,Array);
+    MPI_Win_detach(IdxWin,Idx);
     free(Array);
     free(Idx);
+    MPI_Win_free(&ArrayWin);
+    MPI_Win_free(&IdxWin);
     MPI_Finalize();
     return false;
   }
@@ -373,13 +382,18 @@ bool CT_MPI::AllocateData( uint64_t m,
 
 bool CT_MPI::FreeData(){
   if( Array ){
+    MPI_Win_detach(ArrayWin,Array);
     free( Array );
   }
   if( Idx ){
+    MPI_Win_detach(IdxWin,Idx);
     free( Idx );
   }
 
   free( Target );
+
+  MPI_Win_free(&ArrayWin);
+  MPI_Win_free(&IdxWin);
 
   return true;
 }

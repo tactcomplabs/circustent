@@ -1,5 +1,5 @@
 /*
- * _CT_SHMEM_IMPL_C_
+ * _CT_MPI_IMPL_C_
  *
  * Copyright (C) 2017-2019 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -14,15 +14,16 @@
 #include <stdio.h>
 
 
-/* OpenSHMEM Benchmark Implementations
+/* MPI Benchmark Implementations
  *
  * Benchmark implementations are in the form:
  *
  * void BENCHTYPE_ATOMTYPE( uint64_t *ARRAY, uint64_t *IDX, int *TARGET,
  *                          unsigned long long iters,
- *                          unsigned long long pes )
+ *                          unsigned long long pes,
+ *                          MPI_Win ARRAY_WIN, MPI_Win IDX_WIN )
  *
- * ARRAY and IDX are in the SHMEM symmetric heap
+ * ARRAY and IDX are in the MPI windows
  * TARGET is a local PE array
  *
  */
@@ -31,7 +32,9 @@ void RAND_ADD( uint64_t *restrict ARRAY,
                uint64_t *restrict IDX,
                int *restrict TARGET,
                uint64_t iters,
-               uint64_t pes ){
+               uint64_t pes,
+               MPI_Win AWin,
+               MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -46,7 +49,9 @@ void RAND_CAS( uint64_t *restrict ARRAY,
                uint64_t *restrict IDX,
                int *restrict TARGET,
                uint64_t iters,
-               uint64_t pes ){
+               uint64_t pes,
+               MPI_Win AWin,
+               MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -64,7 +69,9 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   int *restrict TARGET,
                   uint64_t iters,
-                  uint64_t pes ){
+                  uint64_t pes,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -78,7 +85,9 @@ void STRIDE1_CAS( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   int *restrict TARGET,
                   uint64_t iters,
-                  uint64_t pes ){
+                  uint64_t pes,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -96,7 +105,9 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
                   int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes,
-                  uint64_t stride ){
+                  uint64_t stride,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -113,7 +124,9 @@ void STRIDEN_CAS( uint64_t *restrict ARRAY,
                   int *restrict TARGET,
                   uint64_t iters,
                   uint64_t pes,
-                  uint64_t stride ){
+                  uint64_t stride,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
   uint64_t i      = 0;
   uint64_t start  = 0;
   uint64_t idx    = 0;
@@ -131,7 +144,9 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
                    uint64_t *restrict IDX,
                    int *restrict TARGET,
                    uint64_t iters,
-                   uint64_t pes ){
+                   uint64_t pes,
+                   MPI_Win AWin,
+                   MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -145,7 +160,9 @@ void PTRCHASE_CAS( uint64_t *restrict ARRAY,
                    uint64_t *restrict IDX,
                    int *restrict TARGET,
                    uint64_t iters,
-                   uint64_t pes ){
+                   uint64_t pes,
+                   MPI_Win AWin,
+                   MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -162,7 +179,9 @@ void SG_ADD( uint64_t *restrict ARRAY,
              uint64_t *restrict IDX,
              int *restrict TARGET,
              uint64_t iters,
-             uint64_t pes ){
+             uint64_t pes,
+             MPI_Win AWin,
+             MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -182,7 +201,9 @@ void SG_CAS( uint64_t *restrict ARRAY,
              uint64_t *restrict IDX,
              int *restrict TARGET,
              uint64_t iters,
-             uint64_t pes ){
+             uint64_t pes,
+             MPI_Win AWin,
+             MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -214,7 +235,9 @@ void CENTRAL_ADD( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   int *restrict TARGET,
                   uint64_t iters,
-                  uint64_t pes ){
+                  uint64_t pes,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
   uint64_t i      = 0;
   uint64_t start  = 0;
 
@@ -227,7 +250,9 @@ void CENTRAL_CAS( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   int *restrict TARGET,
                   uint64_t iters,
-                  uint64_t pes ){
+                  uint64_t pes,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
   uint64_t i      = 0;
   uint64_t start  = 0;
 
@@ -243,7 +268,9 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   int *restrict TARGET,
                   uint64_t iters,
-                  uint64_t pes ){
+                  uint64_t pes,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -261,7 +288,9 @@ void SCATTER_CAS( uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   int *restrict TARGET,
                   uint64_t iters,
-                  uint64_t pes ){
+                  uint64_t pes,
+                  MPI_Win AWin,
+                  MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -288,7 +317,9 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  int *restrict TARGET,
                  uint64_t iters,
-                 uint64_t pes ){
+                 uint64_t pes,
+                 MPI_Win AWin,
+                 MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
@@ -306,7 +337,9 @@ void GATHER_CAS( uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  int *restrict TARGET,
                  uint64_t iters,
-                 uint64_t pes ){
+                 uint64_t pes,
+                 MPI_Win AWin,
+                 MPI_Win IWin ){
 
   uint64_t i      = 0;
   uint64_t start  = 0;
