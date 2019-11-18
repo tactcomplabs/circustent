@@ -1,0 +1,175 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -- TACTICAL COMPUTING LABORATORIES
+% -- LATEX TEMPLATE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage[margin=1.0in]{geometry}
+\usepackage[version=3]{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+%\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[parfill]{parskip}
+\usepackage{array}
+\usepackage{algorithm}
+\usepackage{algcompatible}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{courier} % for \texttt{}
+\usepackage{dirtree}
+\usepackage{pgfgantt}
+\usepackage{multirow}
+\usepackage{xargs}
+\usepackage{xcolor}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
+\newcommand\mynote[1]{\textcolor{red}{#1}}
+
+\RequirePackage{epstopdf}
+\RequirePackage{tabularx}
+\RequirePackage{xstring}
+\RequirePackage{hyperref}
+\RequirePackage{fancyhdr}
+
+%-- setup paragraphs and margins
+\setlength{\parindent}{1em}
+\setlength{\parskip}{1em}
+
+%-- code listing setup
+\lstdefinestyle{base}{
+  language=C++,
+  numbers=left,
+  stepnumber=1,
+  emptylines=1,
+  breaklines=true,
+  basicstyle=\ttfamily\color{black},
+  moredelim=**[is][\color{red}]{@}{@},
+}
+
+%-- setup hyperlinks
+\hypersetup{
+  colorlinks=true,
+  linktoc=all,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+}
+%--
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%\usepackage{times} % Uncomment to use the Times New Roman font
+%----------------------------------------------------------------------------------------
+%	DOCUMENT LAYOUT INFORMATION
+%----------------------------------------------------------------------------------------
+\pagestyle{fancy}
+\lhead{}
+\chead{CircusTent}
+\rhead{}
+\lfoot{Version 1.0} %-- format: TR YYYY-RRR-V.V; y = year; r = report; v = version
+\cfoot{CircusTent}
+\rfoot{\thepage}      % -- page number
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{CircusTent Developer Guide} % Title
+
+\author{Tactical Computing Laboratories, LLC} % Author name
+
+\date{} % Date for the report
+
+\begin{document}
+
+%-- begin TCL logo
+\begin{figure}
+\begin{center}
+\includegraphics[width=2in]{figures/circus_tent.png} % Include the logo
+\end{center}
+\end{figure}
+%-- end TCL logo
+
+\maketitle % Insert the title, author and date
+\thispagestyle{fancy} %-- force the fancyhdr
+
+\begin{center}
+\begin{tabular}{l r}
+Date: & November 18, 2019 \\ % Date the experiment was performed
+Revision: & 1.0 \\         % revision number
+Authors: & John D. Leidel\\ % Author names
+& jleidel@tactcomplabs.com\\
+\end{tabular}
+\end{center}
+
+% If you wish to include an abstract, uncomment the lines below
+% \begin{abstract}
+% Abstract text
+% \end{abstract}
+
+%----------------------------------------------------------------------------------------
+%       TOC
+%----------------------------------------------------------------------------------------
+
+\clearpage
+\tableofcontents
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%       List of Figures
+%----------------------------------------------------------------------------------------
+
+\clearpage
+\listoffigures
+\lstlistoflistings
+\listoftables
+%\listofalgorithms
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+\clearpage
+\section{Introduction}
+\label{sec:Introduction}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+\section{Building CircusTent}
+\label{sec:Building}
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+\section{Backend Development}
+\label{sec:BackendDev}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\clearpage
+%\bibliography{refs.bib}
+%\bibliographystyle{IEEEtran}
+
+
+%----------------------------------------------------------------------------------------
+
+
+\end{document}
