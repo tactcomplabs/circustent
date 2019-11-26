@@ -273,6 +273,28 @@ $> cmake -DOPTION=ARGS
 \subsection{Development Overview}
 \label{sec:DevelopmentOverview}
 
+The process by which a new backend implementation is described below.  However, 
+we suggest familiarizing yourself with the source tree, especially those noted in 
+Section~\ref{sec:FileStructure}.  
+
+\begin{itemize}
+\item \textbf{Create the Source Tree}: Create the source tree for the new implementation 
+using the guide described in Section~\ref{sec:FileStructure}.  
+
+\item \textbf{Modify the CMake Infrastructure}: Modify the CMake build infrastructure 
+in order to integrate the new implementation infrastructure as described in Section~\ref{sec:CMakeMods}.  
+
+\item \textbf{Implement the Backend Implementation}: Implement the backend infrastructure 
+in the directory created in the previous step.  This process is described in Section~\ref{sec:BackendImpl}.  
+
+\item \textbf{Modify the Frontend Driver}:  Modify the frontend driver infrastructure in order to 
+integrate the new implementation model.  This process is described in Section~\ref{sec:FrontendMods}.  
+
+\item \textbf{Document the Implementation}: The final stage of the implementation is to document the 
+runtime details on how the model is constructed, what algorithms are supported and how the infrastructure 
+is executed (runtime details) in the top-level \texttt{README.md} file.   
+\end{itemize}
+
 \clearpage
 \subsection{File Structure}
 \label{sec:FileStructure}
