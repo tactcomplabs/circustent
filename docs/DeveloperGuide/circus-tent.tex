@@ -147,6 +147,15 @@ Authors: & John D. Leidel\\ % Author names
 \section{Introduction}
 \label{sec:Introduction}
 
+The CircusTent benchmark infrastructure is constructed in a manner that provides
+users the ability to extend the existing set of benchmark implementations (herein 
+referred to as \textit{Impls}) with additional programming models.  As we see in Figure~\ref{fig:Arch}, 
+the CircusTent infrastructure contains a top-level driver object that is manifested as a 
+binary executable.  Within this binary executable, we use a set of driver objects that handle 
+the initialization and parsing of various runtime options.  We also use a base implementation 
+class that is inherited from all other implementations in order to provide a common implementation 
+interface.  
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=4in]{figures/Arch.pdf}
@@ -155,6 +164,11 @@ Authors: & John D. Leidel\\ % Author names
 \label{fig:Arch}
 \end{center}
 \end{figure}
+
+The remainder of this document is organized as follows.  Section~\ref{sec:Building} 
+describes the process by which to build CircusTent from source.  Section~\ref{sec:BackendDev} 
+describes the process by which to modify the existing portions of the source tree and adding 
+the necessary files for new backend implementations.  
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
