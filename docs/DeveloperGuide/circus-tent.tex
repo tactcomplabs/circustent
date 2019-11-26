@@ -109,7 +109,7 @@
 
 \begin{center}
 \begin{tabular}{l r}
-Date: & November 18, 2019 \\ % Date the experiment was performed
+Date: & November 27, 2019 \\ % Date the experiment was performed
 Revision: & 1.0 \\         % revision number
 Authors: & John D. Leidel\\ % Author names
 & jleidel@tactcomplabs.com\\
@@ -147,6 +147,15 @@ Authors: & John D. Leidel\\ % Author names
 \section{Introduction}
 \label{sec:Introduction}
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=4in]{figures/Arch.pdf}
+\vspace*{8pt}
+\caption{CircusTent Architecture}
+\label{fig:Arch}
+\end{center}
+\end{figure}
+
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
@@ -177,6 +186,33 @@ Optional packages that may be required include:
 \subsection{Building From Source}
 \label{sec:BuildingFromSource}
 
+Building the CircusTent infrastructure can be performed using the following 
+steps.
+
+Clone the CircusTent repository:
+\begin{verbatim}
+$> git clone https://github.com/tactcomplabs/circustent.git
+\end{verbatim}
+
+Setup your build tree:
+\begin{verbatim}
+$> cd circustent
+$> mkdir build
+$> cd build
+\end{verbatim}
+
+Execute CMake to generate the makefiles (where XXX refers 
+to the backend that you wish to enable).
+\begin{verbatim}
+$> cmake -DENABLE_XXX=ON ../
+\end{verbatim}
+
+Execute the build.
+\begin{verbatim}
+$> make
+\end{verbatim}
+
+\clearpage
 \subsection{Backend Independent CMake Options}
 \label{sec:CMakeOptions}
 
@@ -226,6 +262,34 @@ $> cmake -DOPTION=ARGS
 \clearpage
 \subsection{File Structure}
 \label{sec:FileStructure}
+
+The following file hierarchy describes the files that may be required to be modified 
+in order to add a new backend implementation.  Please note that all the files are 
+relative to the base CircusTent source tree.  Further, the file hierarchy does not 
+depict \textit{all} the files in the source tree, only those that may need to be modified.  
+Finally, all the files resident under the \texttt{Impl/CT\_NEWIMPL} directory are considered 
+to be new files created for the new implementation.  
+
+\vspace{0.125in}
+\dirtree{%
+.1 CMakeLists.txt.
+.1 LICENSE.
+.1 README.md.
+.1 include.
+.2 CircusTent.
+.3 CTBaseImpl.h.
+.1 src.
+.2 CircusTent.
+.3 CMakeLists.txt.
+.3 CT\_Main.cpp.
+.3 Impl.
+.4 CMakeLists.txt.
+.4 CT\_NEWIMPL.
+.5 CMakeLists.txt.
+.5 CT\_NEWIMPL\_IMPL.c.
+.5 CT\_NEWIMPL.cpp.
+.5 CT\_NEWIMPL.h.
+}
 
 \clearpage
 \subsection{CMake Modifications}

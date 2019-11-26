@@ -44,7 +44,7 @@ and/or utilize non-GCC compilers.
 
 1. Clone the CircusTent repository
 ```
-git clone ....
+git clone https://github.com/tactcomplabs/circustent.git
 ```
 2. Setup your build tree
 ```
