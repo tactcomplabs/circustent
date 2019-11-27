@@ -442,6 +442,232 @@ add_subdirectory(CT_OPENSHMEM)
 \subsection{Backend Implementation}
 \label{sec:BackendImpl}
 
+\subsubsection{Implementation Header File}
+
+The first stage in the implementation of a new backend is to create the necessary C++ 
+header file.  The header file contains the inherited class definition for the unique implementation.  
+The header file must contain the following elements: 
+
+\begin{itemize}
+\item Inherited class definition using the \texttt{CTBaseImpl} class.
+\item Constructor and destructor routines for the inherited class.
+\item Overridden functions for \texttt{Execute}, \texttt{AllocateData} and \texttt{FreeData}.  The arguments to these functions cannot be modified.
+\item Any private variables to contain the respective internal state.
+\item The function prototypes for each logic implementation function.  In adjacent implementations, these functions are written in
+\textit{C} for performance.  As a result, these functions are defined as \textit{extern C} functions.  We will follow the same procedure here.
+\end{itemize}
+
+We provide an example header file (\texttt{CT\_NEWIMPL.h}) as follows.  
+
+\vspace{0.125in}
+\begin{lstlisting}[frame=single,style=base,caption={Sample Header File},captionpos=b,label={lis:SampleHeaderFile}]
+//
+// _CT_NEWIMPL_H_
+//
+// Copyright (C) 2017-2019 Tactical Computing Laboratories, LLC
+// All Rights Reserved
+// contact@tactcomplabs.com
+//
+// See LICENSE in the top level directory for licensing details
+//
+
+/**
+ * \class CT_NEWIMPL
+ *
+ * \ingroup CircusTent
+ *
+ * \brief CircusTent Sample Implementation
+ *
+ */
+
+#ifdef _ENABLE_NEWIMPL_
+
+#ifndef _CT_NEWIMPL_H_
+#define _CT_NEWIMPL_H_
+
+#include <cstdlib>
+#include <omp.h>
+#include <ctime>
+
+#include "CircusTent/CTBaseImpl.h"
+
+// Benchmark Prototypes
+extern "C" {
+/// RAND AMO ADD Benchmark
+void RAND_ADD( uint64_t *ARRAY,
+               uint64_t *IDX,
+               uint64_t iters,
+               uint64_t pes );
+
+/// RAND AMO CAS Benchmark
+void RAND_CAS( uint64_t *ARRAY,
+               uint64_t *IDX,
+               uint64_t iters,
+               uint64_t pes );
+
+/// STRIDE1 AMO ADD Benchmark
+void STRIDE1_ADD( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes );
+
+/// STRIDE1 AMO CAS Benchmark
+void STRIDE1_CAS( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes );
+
+/// STRIDEN AMO ADD Benchmark
+void STRIDEN_ADD( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes,
+                  uint64_t stride );
+
+/// STRIDEN AMO CAS Benchmark
+void STRIDEN_CAS( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes,
+                  uint64_t stride );
+
+/// PTRCHASE AMO ADD Benchmark
+void PTRCHASE_ADD( uint64_t *ARRAY,
+                   uint64_t *IDX,
+                   uint64_t iters,
+                   uint64_t pes );
+
+/// PTRCHASE AMO CAS Benchmark
+void PTRCHASE_CAS( uint64_t *ARRAY,
+                   uint64_t *IDX,
+                   uint64_t iters,
+                   uint64_t pes );
+
+/// SG AMO ADD Benchmark
+void SG_ADD( uint64_t *ARRAY,
+             uint64_t *IDX,
+             uint64_t iters,
+             uint64_t pes );
+
+/// SG AMO CAS Benchmark
+void SG_CAS( uint64_t *ARRAY,
+             uint64_t *IDX,
+             uint64_t iters,
+             uint64_t pes );
+
+/// CENTRAL AMO ADD Benchmark
+void CENTRAL_ADD( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes );
+
+/// CENTRAL AMO CAS Benchmark
+void CENTRAL_CAS( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes );
+
+/// SCATTER AMO ADD Benchmark
+void SCATTER_ADD( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes );
+
+/// SCATTER AMO CAS Benchmark
+void SCATTER_CAS( uint64_t *ARRAY,
+                  uint64_t *IDX,
+                  uint64_t iters,
+                  uint64_t pes );
+
+/// GATHER AMO ADD Benchmark
+void GATHER_ADD( uint64_t *ARRAY,
+                 uint64_t *IDX,
+                 uint64_t iters,
+                 uint64_t pes );
+
+/// GATHER AMO CAS Benchmark
+void GATHER_CAS( uint64_t *ARRAY,
+                 uint64_t *IDX,
+                 uint64_t iters,
+                 uint64_t pes );
+
+}
+
+
+class CT_NEWIMPL : public CTBaseImpl{
+private:
+  uint64_t *Array;          ///< CT_NEWIMPL: Data array
+  uint64_t *Idx;            ///< CT_NEWIMPL: Index array
+  uint64_t memSize;         ///< CT_NEWIMPL: Memory size (in bytes)
+  uint64_t pes;             ///< CT_NEWIMPL: Number of processing elements
+  uint64_t iters;           ///< CT_NEWIMPL: Number of iterations per thread
+  uint64_t elems;           ///< CT_NEWIMPL: Number of u8 elements
+  uint64_t stride;          ///< CT_NEWIMPL: Stride in elements
+
+public:
+  /// CircusTent OpenMP constructor
+  CT_NEWIMPL(CTBaseImpl::CTBenchType B,
+         CTBaseImpl::CTAtomType A);
+
+  /// CircusTent OpenMP destructor
+  ~CT_NEWIMPL();
+
+  /// CircusTent OpenMP exeuction function
+  virtual bool Execute(double &Timing,double &GAMS) override;
+
+  /// CircusTent OpenMP data allocation function
+  virtual bool AllocateData( uint64_t memSize,
+                             uint64_t pes,
+                             uint64_t iters,
+                             uint64_t stride ) override;
+
+  /// CircusTent OpenMP data free function
+  virtual bool FreeData() override;
+};
+
+#endif  // _CT_NEWIMPL_H_
+#endif  // _ENABLE_NEWIMPL_
+
+// EOF
+\end{lstlisting}
+
+\subsubsection{Implementation Overidden Functions}
+
+\subsubsection{Implementation Logic}
+
+\subsubsection{Implementation CMake Script}
+
+The final stage of the implementation is to generate a CMake script 
+for the respective source content.  The easiest method for doing so 
+is to copy an example from an adjacent implementation such as the OpenOMP 
+directory.  Within this CMake script, ensure that you create the correct object output 
+that will be linked to the CircusTent frontend when enabled (\texttt{CT\_NEWIMPL\_OBJS}).
+An example CMake script is provided in Listing~\ref{lis:ImplCMakeScript}.    
+
+\vspace{0.125in}
+\begin{lstlisting}[frame=single,style=base,caption={Implementation CMake Script},captionpos=b,label={lis:ImplCMakeScript}]
+# src/Impl/CT_NEWIMPL CMakeLists.txt
+# Copyright (C) 2017-2019 Tactical Computing Laboratories, LLC
+# All Rights Reserved
+# contact@tactcomplabs.com
+#
+# See LICENSE in the top level directory for licensing details
+#
+
+set(CTNEWIMPLSrcs
+)
+
+if (ENABLE_NEWIMPL)
+  set(CTNEWIMPLSrcs ${CTNEWIMPLSrcs} CT_NEWIMPL.h CT_NEWIMPL.cpp CT_NEWIMPL_IMPL.c)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+endif()
+
+include_directories(${CT_INCLUDE_PATH})
+include_directories(./)
+
+add_library(CT_NEWIMPL_OBJS OBJECT ${CTNEWIMPLSrcs})
+\end{lstlisting}
+
 \clearpage
 \subsection{Frontend Modifications}
 \label{sec:FrontendMods}
