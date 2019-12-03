@@ -8,7 +8,7 @@
  * See LICENSE in the top level directory for licensing details
  */
 
-#include <mpp/shmem.h>
+#include <mpi.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,8 +40,11 @@ void RAND_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
 
   for( i=0; i<iters; i++ ){
-    shmem_long_get((long *)(&start),(long *)(&IDX[i]),1,TARGET[i]);
-    start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[start]),(long)(0x1),TARGET[i]));
+    MPI_Get((unsigned long *)(&start),1,MPI_UNSIGNED_LONG,TARGET[i],
+            ((&IDX[i])-(&IDX[0])),1,MPI_UNSIGNED_LONG,IWin);
+    MPI_Fetch_and_op((unsigned long *)(&start),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[start])-(&ARRAY[0])),MPI_SUM,AWin);
   }
 }
 
@@ -57,11 +60,12 @@ void RAND_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
 
   for( i=0; i<iters; i++ ){
-    shmem_long_get((long *)(&start),(long *)(&IDX[i]),1,TARGET[i]);
-    start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[start]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
+    MPI_Get((unsigned long *)(&start),1,MPI_UNSIGNED_LONG,TARGET[i],
+            ((&IDX[i])-(&IDX[0])),1,MPI_UNSIGNED_LONG,IWin);
+    MPI_Compare_and_swap((unsigned long *)(&start),(unsigned long *)(&start),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[start])-(&ARRAY[0])),AWin);
   }
 }
 
@@ -77,7 +81,9 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[i]),(long)(0xF),TARGET[i]));
+    MPI_Fetch_and_op((unsigned long *)(&start),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[i])-(&ARRAY[0])),MPI_SUM,AWin);
   }
 }
 
@@ -93,10 +99,10 @@ void STRIDE1_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[i]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
+    MPI_Compare_and_swap((unsigned long *)(&start),(unsigned long *)(&start),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[i])-(&ARRAY[0])),AWin);
   }
 }
 
@@ -114,7 +120,9 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
   uint64_t idx    = 0;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[idx]),(long)(0xF),TARGET[i]));
+    MPI_Fetch_and_op((unsigned long *)(&start),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[idx])-(&ARRAY[0])),MPI_SUM,AWin);
     idx += stride;
   }
 }
@@ -132,10 +140,10 @@ void STRIDEN_CAS( uint64_t *restrict ARRAY,
   uint64_t idx    = 0;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[idx]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
+    MPI_Compare_and_swap((unsigned long *)(&start),(unsigned long *)(&start),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[idx])-(&ARRAY[0])),AWin);
     idx += stride;
   }
 }
@@ -150,9 +158,12 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
 
   uint64_t i      = 0;
   uint64_t start  = 0;
+  uint64_t zero   = 0;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_fadd((long *)(&IDX[start]),(long)(0x00ull),TARGET[i]));
+    MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&IDX[start])-(&IDX[0])),MPI_SUM,IWin);
   }
 }
 
@@ -166,12 +177,13 @@ void PTRCHASE_CAS( uint64_t *restrict ARRAY,
 
   uint64_t i      = 0;
   uint64_t start  = 0;
+  uint64_t zero   = 0;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_cswap((long *)(&IDX[start]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&start),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&IDX[start])-(&IDX[0])),IWin);
   }
 }
 
@@ -188,12 +200,25 @@ void SG_ADD( uint64_t *restrict ARRAY,
   uint64_t src    = 0;
   uint64_t dest   = 0;
   uint64_t val    = 0;
+  uint64_t zero   = 0x00ull;
+  uint64_t one    = 0x01ull;
 
   for( i=0; i<iters; i++ ){
-    src   = (uint64_t)(shmem_long_fadd((long *)(&IDX[i]),(long)(0x00ull),TARGET[i]));
-    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[+1]),(long)(0x00ull),TARGET[i]));
-    val   = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[src]),(long)(0x01ull),TARGET[i]));
-    start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[dest]), (long)(val), TARGET[i]));
+    MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&src),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&IDX[i])-(&IDX[0])),MPI_SUM,IWin);
+
+    MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&dest),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&IDX[i+1])-(&IDX[0])),MPI_SUM,IWin);
+
+    MPI_Fetch_and_op((unsigned long *)(&one),(unsigned long *)(&val),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[src])-(&ARRAY[0])),MPI_SUM,AWin);
+
+    MPI_Fetch_and_op((unsigned long *)(&val),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[dest])-(&ARRAY[0])),MPI_SUM,AWin);
   }
 }
 
@@ -210,24 +235,28 @@ void SG_CAS( uint64_t *restrict ARRAY,
   uint64_t src    = 0;
   uint64_t dest   = 0;
   uint64_t val    = 0;
+  uint64_t zero   = 0x00ull;
 
   for( i=0; i<iters; i++ ){
-    src   = (uint64_t)(shmem_long_cswap((long *)(&IDX[i]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
-    dest  = (uint64_t)(shmem_long_cswap((long *)(&IDX[i+1]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
-    val   = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[src]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
-    start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[dest]),
-                                        (long)(0x00),
-                                        (long )(val),
-                                        TARGET[i]));
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
+                         (unsigned long *)(&src),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&IDX[i])-(&IDX[0])),IWin);
+
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
+                         (unsigned long *)(&dest),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&IDX[i+1])-(&IDX[0])),IWin);
+
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
+                         (unsigned long *)(&val),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[src])-(&ARRAY[0])),AWin);
+
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&val),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[dest])-(&ARRAY[0])),AWin);
   }
 }
 
@@ -240,9 +269,12 @@ void CENTRAL_ADD( uint64_t *restrict ARRAY,
                   MPI_Win IWin ){
   uint64_t i      = 0;
   uint64_t start  = 0;
+  uint64_t one    = 0x01ull;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[0]),(long)(0x1),TARGET[i]));
+    MPI_Fetch_and_op((unsigned long *)(&one),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     (0),MPI_SUM,AWin);
   }
 }
 
@@ -255,12 +287,13 @@ void CENTRAL_CAS( uint64_t *restrict ARRAY,
                   MPI_Win IWin ){
   uint64_t i      = 0;
   uint64_t start  = 0;
+  uint64_t one    = 0x01ull;
 
   for( i=0; i<iters; i++ ){
-    start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[0]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
+    MPI_Compare_and_swap((unsigned long *)(&one),(unsigned long *)(&start),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         (0),AWin);
   }
 }
 
@@ -276,11 +309,21 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t dest   = 0;
   uint64_t val    = 0;
+  uint64_t zero   = 0x00ull;
+  uint64_t one    = 0x01ull;
 
   for( i=0; i<iters; i++ ){
-    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[+1]),(long)(0x00ull),TARGET[i]));
-    val   = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[i]),(long)(0x01ull),TARGET[i]));
-    start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[dest]), (long)(val), TARGET[i]));
+    MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&dest),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&IDX[i+1])-(&IDX[0])),MPI_SUM,IWin);
+
+    MPI_Fetch_and_op((unsigned long *)(&one),(unsigned long *)(&val),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[i])-(&ARRAY[0])),MPI_SUM,AWin);
+
+    MPI_Fetch_and_op((unsigned long *)(&val),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[dest])-(&ARRAY[0])),MPI_SUM,AWin);
   }
 }
 
@@ -296,20 +339,24 @@ void SCATTER_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t dest   = 0;
   uint64_t val    = 0;
+  uint64_t zero   = 0x00ull;
+  uint64_t one    = 0x01ull;
 
   for( i=0; i<iters; i++ ){
-    dest  = (uint64_t)(shmem_long_cswap((long *)(&IDX[i+1]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
-    val   = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[i]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
-    start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[dest]),
-                                        (long)(0x00),
-                                        (long)(val),
-                                        TARGET[i]));
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
+                         (unsigned long *)(&dest),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&IDX[i+1])-(&IDX[0])),IWin);
+
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&one),
+                         (unsigned long *)(&val),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[i])-(&ARRAY[0])),AWin);
+
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&val),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[dest])-(&ARRAY[0])),AWin);
   }
 }
 
@@ -325,11 +372,21 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t dest   = 0;
   uint64_t val    = 0;
+  uint64_t zero   = 0x00ull;
+  uint64_t one    = 0x01ull;
 
   for( i=0; i<iters; i++ ){
-    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[+1]),(long)(0x00ull),TARGET[i]));
-    val   = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[dest]),(long)(0x01ull),TARGET[i]));
-    start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[i]), (long)(val), TARGET[i]));
+    MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&dest),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&IDX[i+1])-(&IDX[0])),MPI_SUM,IWin);
+
+    MPI_Fetch_and_op((unsigned long *)(&one),(unsigned long *)(&val),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[dest])-(&ARRAY[0])),MPI_SUM,AWin);
+
+    MPI_Fetch_and_op((unsigned long *)(&val),(unsigned long *)(&start),
+                     MPI_UNSIGNED_LONG,TARGET[i],
+                     ((&ARRAY[i])-(&ARRAY[0])),MPI_SUM,AWin);
   }
 }
 
@@ -345,20 +402,23 @@ void GATHER_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t dest   = 0;
   uint64_t val    = 0;
+  uint64_t zero   = 0x00ull;
 
   for( i=0; i<iters; i++ ){
-    dest  = (uint64_t)(shmem_long_cswap((long *)(&IDX[i+1]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
-    val   = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[dest]),
-                                        (long)(0x00),
-                                        (long)(0x00),
-                                        TARGET[i]));
-    start = (uint64_t)(shmem_long_cswap((long *)(&ARRAY[i]),
-                                        (long)(0x00),
-                                        (long)(val),
-                                        TARGET[i]));
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
+                         (unsigned long *)(&dest),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&IDX[i+1])-(&IDX[0])),IWin);
+
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
+                         (unsigned long *)(&val),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[dest])-(&ARRAY[0])),AWin);
+
+    MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&val),
+                         (unsigned long *)(&start),
+                         MPI_UNSIGNED_LONG,TARGET[i],
+                         ((&ARRAY[i])-(&ARRAY[0])),AWin);
   }
 }
 

@@ -304,7 +304,7 @@ bool CT_MPI::AllocateData( uint64_t m,
     MPI_Finalize();
     return false;
   }
-  MPI_Win_Attach(ArrayWin,Array,memSize);
+  MPI_Win_attach(ArrayWin,Array,memSize);
 
   // 'Idx' resides in local heap space
   Idx = (uint64_t *)(malloc( sizeof(uint64_t) * (iters+1) ));
@@ -316,7 +316,7 @@ bool CT_MPI::AllocateData( uint64_t m,
     MPI_Finalize();
     return false;
   }
-  MPI_Win_Attach(IdxWin,Idx,sizeof(uint64_t) * (iters+1));
+  MPI_Win_attach(IdxWin,Idx,sizeof(uint64_t) * (iters+1));
 
   // 'Target' resides in local PE memory
   Target = (int *)(malloc( sizeof( int ) * iters ));

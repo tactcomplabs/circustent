@@ -78,7 +78,7 @@ bool CTOpts::EnableBench( std::string Bench ){
 
 bool CTOpts::ParseOpts(int argc, char **argv){
   l_argc = argc;
-  l_arrgv = argv;
+  l_argv = argv;
   for( int i=1; i<argc; i++ ){
     std::string s(argv[i]);
 
