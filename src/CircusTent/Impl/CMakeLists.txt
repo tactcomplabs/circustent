@@ -7,5 +7,6 @@
 
 add_subdirectory(CT_OMP)
 add_subdirectory(CT_OPENSHMEM)
+add_subdirectory(CT_MPI)
 
 # EOF

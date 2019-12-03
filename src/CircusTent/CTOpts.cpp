@@ -31,7 +31,8 @@ BenchType BenchTypeTable[] = {
 };
 
 CTOpts::CTOpts()
-  : isHelp( false ), isList(false), memSize(0), iters(0), stride(1) {
+  : isHelp( false ), isList(false), memSize(0), iters(0), stride(1),
+    l_argc(0), l_argv(nullptr) {
 
 }
 
@@ -76,6 +77,8 @@ bool CTOpts::EnableBench( std::string Bench ){
 }
 
 bool CTOpts::ParseOpts(int argc, char **argv){
+  l_argc = argc;
+  l_argv = argv;
   for( int i=1; i<argc; i++ ){
     std::string s(argv[i]);
 

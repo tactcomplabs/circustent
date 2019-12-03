@@ -42,6 +42,9 @@ private:
   uint64_t pes;               ///< number of pe's
   uint64_t stride;            ///< stride between accesses
 
+  int l_argc;                 ///< main argc
+  char **l_argv;              ///< main argv
+
   /// Prints the help menu
   void PrintHelp();
 
@@ -85,6 +88,12 @@ public:
 
   /// Retrieve the stride in elems
   uint64_t GetStride() { return stride; }
+
+  /// Retrieve the argc value
+  int GetArgc() { return l_argc; }
+
+  /// Retrieve the argv value
+  char **GetArgv() { return l_argv; }
 };
 
 #endif

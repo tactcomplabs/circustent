@@ -172,7 +172,7 @@ void SG_ADD( uint64_t *restrict ARRAY,
 
   for( i=0; i<iters; i++ ){
     src   = (uint64_t)(shmem_long_fadd((long *)(&IDX[i]),(long)(0x00ull),TARGET[i]));
-    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[+1]),(long)(0x00ull),TARGET[i]));
+    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[i+1]),(long)(0x00ull),TARGET[i]));
     val   = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[src]),(long)(0x01ull),TARGET[i]));
     start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[dest]), (long)(val), TARGET[i]));
   }
@@ -251,7 +251,7 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
   uint64_t val    = 0;
 
   for( i=0; i<iters; i++ ){
-    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[+1]),(long)(0x00ull),TARGET[i]));
+    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[i+1]),(long)(0x00ull),TARGET[i]));
     val   = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[i]),(long)(0x01ull),TARGET[i]));
     start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[dest]), (long)(val), TARGET[i]));
   }
@@ -296,7 +296,7 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
   uint64_t val    = 0;
 
   for( i=0; i<iters; i++ ){
-    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[+1]),(long)(0x00ull),TARGET[i]));
+    dest  = (uint64_t)(shmem_long_fadd((long *)(&IDX[i+1]),(long)(0x00ull),TARGET[i]));
     val   = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[dest]),(long)(0x01ull),TARGET[i]));
     start = (uint64_t)(shmem_long_fadd((long *)(&ARRAY[i]), (long)(val), TARGET[i]));
   }

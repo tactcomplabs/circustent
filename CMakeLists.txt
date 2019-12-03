@@ -31,11 +31,11 @@ execute_process(COMMAND lsb_release -cs
 #------------------------------------------------------------------------
 #-- COMPILER OPTIONS
 #------------------------------------------------------------------------
-if( CT_C_FLAGS )
-  message(STATUS "USING MACHINE-SPECIFIC C-FLAGS: ${CT_C_FLAGS}")
+if( CT_CFLAGS )
+  message(STATUS "USING MACHINE-SPECIFIC C-FLAGS: ${CT_CFLAGS}")
 endif()
-if( CT_CXX_FLAGS )
-  message(STATUS "USING MACHINE-SPECIFIC CXX-FLAGS: ${CT_CXX_FLAGS}")
+if( CT_CXXFLAGS )
+  message(STATUS "USING MACHINE-SPECIFIC CXX-FLAGS: ${CT_CXXFLAGS}")
 endif()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -std=c99 -Wall ${CT_CFLAGS}")
@@ -47,7 +47,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wall")
 #-- IMPLEMENTATION-SPECIFIC FLAGS
 #------------------------------------------------------------------------
 if (ENABLE_OMP)
-  #set(CTOMPSrcs ${CTOMPSrcs} CT_OMP.h CT_OMP.cpp)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp -D_ENABLE_OMP_")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -D_ENABLE_OMP_")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenmp")
@@ -62,6 +61,14 @@ if (ENABLE_OPENSHMEM)
   message(STATUS "ENABLING OpenSHMEM Implementation")
 else()
   message(STATUS "DISABLING OpenSHMEM Implementation")
+endif()
+
+if (ENABLE_MPI)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_MPI_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_MPI_")
+  message(STATUS "ENABLING MPI Implementation")
+else()
+  message(STATUS "DISABLING MPI Implementation")
 endif()
 
 #------------------------------------------------------------------------

@@ -73,6 +73,8 @@ The following are additional build options supported by the CircusTent CMake scr
 * CXX : Utilize the target C++ compiler
 * -DCMAKE\_C\_FLAGS : Set the C compiler flags
 * -DCMAKE\_CXX\_FLAGS : Set the C++ compiler flags
+* -DCT\_CFLAGS : Append the CT\_CFLAGS to the standard C\_FLAGS for the target Impl
+* -DCT\_CXXFLAGS : Append the CT\_CXXFLAGS to the standard CXX\_FLAGS for the target Impl
 * -DCMAKE\_INSTALL\_PREFIX : installation target (make install)
 * -DCIRCUSTENT\_BUILD\_RPM : Builds an RPM package
 * -DCIRCUSTENT\_BUILD\_DEB : Builds a DEB package
@@ -254,6 +256,39 @@ fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
 | GATHER_ADD | yes |
 | GATHER_CAS | yes |
 
+### MPI
+* CMake Build Flag: -DENABLE_MPI=ON
+* Users must specify the MPI compiler wrapper alongside the CMake command as follows:
+```
+CC=mpicc CXX=mpicxx cmake -DENABLE_MPI=ON ../
+```
+* Implementation  Language: C++ and C using MPI-3 functions and one-sided operations
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Target PE's for all benchmarks except PTRCHASE are initialized in a stride-1 ring pattern.  This implies 
+that for every N'th PE, the target PE is N+1.  All benchmarks except PTRCHASE target a single destination PE for each iteration
+* The PTRCHASE benchmark utilizes randomly generated target PE's for each iteration
+* For benchmark values that don't require atomic access to indices, we utilize MPI_Get operations to 
+fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
+* Tested with OpenMPI
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
 
 ## Exeuction Parameters
 
