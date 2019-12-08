@@ -23,7 +23,59 @@
 #include "Impl/CT_MPI/CT_MPI.h"
 #endif
 
+#ifdef _ENABLE_XBGAS_
+#include <xbrtime.h>
+#include "Impl/CT_XBGAS/CT_XBGAS.h"
+#endif
+
 void PrintTiming( double Timing, double GAMS );
+
+#ifdef _ENABLE_XBGAS_
+void RunBenchXBGAS( CTOpts *Opts ){
+  // init the XBGAS object
+  CT_XBGAS *CT = new CT_XBGAS(Opts->GetBenchType(),
+                              Opts->GetAtomType());
+  if( !CT ){
+    std::cout << "ERROR : COULD NOT ALLOCATE CT_XBGAS OBJECTS" << std::endl;
+    return ;
+  }
+
+  // Allocate the data
+  if( !CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride() ) ){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_XBGAS" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Execute the benchmark
+  double Timing = 0.;
+  double GAMS = 0.;
+  if( !CT->Execute(Timing,GAMS) ){
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_XBGAS" << std::endl;
+    CT->FreeData();
+    xbrtime_close();
+    free( CT );
+    return ;
+  }
+
+  // Free the data
+  if( !CT->FreeData() ){
+    std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_XBGAS" << std::endl;
+    free( CT );
+    xbrtime_close();
+    return ;
+  }
+
+  // Print the timing
+  if( xbrtime_mype() == 0 ){
+    PrintTiming( Timing, GAMS );
+  }
+  xbrtime_close();
+}
+#endif
 
 #ifdef _ENABLE_MPI_
 void RunBenchMPI( CTOpts *Opts ){
@@ -124,7 +176,6 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
 }
 #endif
 
-
 #ifdef _ENABLE_OMP_
 void RunBenchOMP( CTOpts *Opts ){
   // init the OpenMP object
@@ -196,6 +247,9 @@ int main( int argc, char **argv ){
 #endif
 #ifdef _ENABLE_MPI_
     RunBenchMPI(Opts);
+#endif
+#ifdef _ENABLE_XBGAS_
+    RunBenchXBGAS(Opts);
 #endif
   }
 

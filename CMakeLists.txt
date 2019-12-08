@@ -71,6 +71,15 @@ else()
   message(STATUS "DISABLING MPI Implementation")
 endif()
 
+if (ENABLE_XBGAS)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I$ENV{RISCV}/include -L$ENV{RISCV}/lib -lm -lxbrtime -D_ENABLE_XBGAS_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I$ENV{RISCV}/include -L$ENV{RISCV}/lib -lm -lxbrtime -D_ENABLE_XBGAS_")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -I$ENV{RISCV}/include -L$ENV{RISCV}/lib -lm -lxbrtime")
+  message(STATUS "ENABLING XBGAS Implementation")
+else()
+  message(STATUS "DISABLING XBGAS Implementation")
+endif()
+
 #------------------------------------------------------------------------
 # Add package paths
 #------------------------------------------------------------------------
