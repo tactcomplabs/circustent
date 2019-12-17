@@ -8,7 +8,6 @@ FINAL = CircusTent-DeveloperGuide-1.0
 $(PAPER).pdf: $(TEX) $(FIGS)
 	echo $(FIGS)
 	pdflatex $(PAPER)
-	#bibtex $(PAPER)
 	pdflatex $(PAPER)
 	pdflatex $(PAPER)
 	cp $(PAPER).pdf $(FINAL).pdf
