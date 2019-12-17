@@ -5,9 +5,20 @@
 # contact@tactcomplabs.com
 #
 
-add_subdirectory(CT_OMP)
-add_subdirectory(CT_OPENSHMEM)
-add_subdirectory(CT_MPI)
-add_subdirectory(CT_XBGAS)
+if (ENABLE_OMP)
+  add_subdirectory(CT_OMP)
+endif()
+
+if (ENABLE_OPENSHMEM)
+  add_subdirectory(CT_OPENSHMEM)
+endif()
+
+if (ENABLE_MPI)
+  add_subdirectory(CT_MPI)
+endif()
+
+if (ENABLE_XBGAS)
+  add_subdirectory(CT_XBGAS)
+endif()
 
 # EOF

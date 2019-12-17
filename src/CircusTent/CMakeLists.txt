@@ -16,16 +16,21 @@ CTOpts.cpp
 include_directories(${CT_INCLUDE_PATH})
 include_directories(${CT_SRC_PATH}/Impl/CT_OMP)
 
-add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OMP_OBJS>
-                                    $<TARGET_OBJECTS:CT_SHMEM_OBJS>
-                                    $<TARGET_OBJECTS:CT_MPI_OBJS>
-                                    $<TARGET_OBJECTS:CT_XBGAS_OBJS>)
+if (ENABLE_OMP)
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OMP_OBJS>)
+endif()
 
 if (ENABLE_OPENSHMEM)
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_SHMEM_OBJS>)
   target_link_libraries(circustent oshmem mpi)
 endif()
 
+if (ENABLE_MPI)
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_MPI_OBJS>)
+endif()
+
 if (ENABLE_XBGAS)
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_XBGAS_OBJS>)
   target_link_libraries(circustent $ENV{RISCV}/lib/libxbrtime.a)
 endif()
 
