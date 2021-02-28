@@ -1,5 +1,5 @@
 //
-// _CT_OMP_H_
+// _CT_OMP_TARGET_H
 //
 // Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
@@ -9,18 +9,18 @@
 //
 
 /**
- * \class CT_OMP
+ * \class CT_OMP_TARGET
  *
  * \ingroup CircusTent
  *
- * \brief CircusTent OpenMP Implementation
+ * \brief CircusTent OpenMP Target Implementation
  *
  */
 
-#ifdef _ENABLE_OMP_
+#ifdef _ENABLE_OMP_TARGET_
 
-#ifndef _CT_OMP_H_
-#define _CT_OMP_H_
+#ifndef _CT_OMP_TARGET_H_
+#define _CT_OMP_TARGET_H_
 
 #include <cstdlib>
 #include <omp.h>
@@ -130,39 +130,42 @@ void GATHER_CAS( uint64_t *ARRAY,
 
 }
 
-
-class CT_OMP : public CTBaseImpl{
+class CT_OMP_TARGET : public CTBaseImpl{
 private:
-  uint64_t *Array;          ///< CT_OMP: Data array
-  uint64_t *Idx;            ///< CT_OMP: Index array
-  uint64_t memSize;         ///< CT_OMP: Memory size (in bytes)
-  uint64_t pes;             ///< CT_OMP: Number of processing elements
-  uint64_t iters;           ///< CT_OMP: Number of iterations per thread
-  uint64_t elems;           ///< CT_OMP: Number of u8 elements
-  uint64_t stride;          ///< CT_OMP: Stride in elements
+  uint64_t *Array;          ///< CT_OMP_TARGET: Data array
+  uint64_t *Idx;            ///< CT_OMP_TARGET: Index array
+  uint64_t memSize;         ///< CT_OMP_TARGET: Memory size (in bytes)
+  uint64_t pes;             ///< CT_OMP_TARGET: Number of processing elements
+  uint64_t iters;           ///< CT_OMP_TARGET: Number of iterations per team
+  uint64_t elems;           ///< CT_OMP_TARGET: Number of u8 elements
+  uint64_t stride;          ///< CT_OMP_TARGET: Stride in elements
+  int deviceID;             ///< CT_OMP_TARGET: Target device id
 
 public:
-  /// CircusTent OpenMP constructor
-  CT_OMP(CTBaseImpl::CTBenchType B,
+  /// CircusTent OpenMP Target constructor
+  CT_OMP_TARGET(CTBaseImpl::CTBenchType B,
          CTBaseImpl::CTAtomType A);
 
-  /// CircusTent OpenMP destructor
-  ~CT_OMP();
+  /// CircusTent OpenMP Target destructor
+  ~CT_OMP_TARGET();
 
-  /// CircusTent OpenMP exeuction function
+  /// CircusTent OpenMP Target exeuction function
   virtual bool Execute(double &Timing,double &GAMS) override;
 
-  /// CircusTent OpenMP data allocation function
+  /// CircusTent OpenMP Target data allocation function
   virtual bool AllocateData( uint64_t memSize,
                              uint64_t pes,
                              uint64_t iters,
                              uint64_t stride ) override;
 
-  /// CircusTent OpenMP data free function
+  /// CircusTent OpenMP Target data free function
   virtual bool FreeData() override;
+
+  /// Function to set target device options
+  bool SetDevice();
 };
 
-#endif  // _CT_OMP_H_
-#endif  // _ENABLE_OMP_
+#endif  // _CT_OMP_TARGET_H_
+#endif  // _ENABLE_OMP_TARGET_
 
 // EOF

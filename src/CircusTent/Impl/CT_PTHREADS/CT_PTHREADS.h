@@ -1,5 +1,5 @@
 //
-// _CT_OMP_H_
+// _CT_PTHREADS_H_
 //
 // Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
@@ -9,21 +9,20 @@
 //
 
 /**
- * \class CT_OMP
+ * \class CT_PTHREADS
  *
  * \ingroup CircusTent
  *
- * \brief CircusTent OpenMP Implementation
+ * \brief CircusTent Pthreads Implementation
  *
  */
 
-#ifdef _ENABLE_OMP_
+#ifdef _ENABLE_PTHREADS_
 
-#ifndef _CT_OMP_H_
-#define _CT_OMP_H_
+#ifndef _CT_PTHREADS_H_
+#define _CT_PTHREADS_H_
 
 #include <cstdlib>
-#include <omp.h>
 #include <ctime>
 
 #include "CircusTent/CTBaseImpl.h"
@@ -131,7 +130,7 @@ void GATHER_CAS( uint64_t *ARRAY,
 }
 
 
-class CT_OMP : public CTBaseImpl{
+class CT_PTHREADS : public CTBaseImpl{
 private:
   uint64_t *Array;          ///< CT_OMP: Data array
   uint64_t *Idx;            ///< CT_OMP: Index array
@@ -142,27 +141,27 @@ private:
   uint64_t stride;          ///< CT_OMP: Stride in elements
 
 public:
-  /// CircusTent OpenMP constructor
-  CT_OMP(CTBaseImpl::CTBenchType B,
-         CTBaseImpl::CTAtomType A);
+  /// CircusTent Pthreads constructor
+  CT_PTHREADS(CTBaseImpl::CTBenchType B,
+              CTBaseImpl::CTAtomType A);
 
-  /// CircusTent OpenMP destructor
-  ~CT_OMP();
+  /// CircusTent Pthreads destructor
+  ~CT_PTHREADS();
 
-  /// CircusTent OpenMP exeuction function
+  /// CircusTent Pthreads exeuction function
   virtual bool Execute(double &Timing,double &GAMS) override;
 
-  /// CircusTent OpenMP data allocation function
+  /// CircusTent Pthreads data allocation function
   virtual bool AllocateData( uint64_t memSize,
                              uint64_t pes,
                              uint64_t iters,
                              uint64_t stride ) override;
 
-  /// CircusTent OpenMP data free function
+  /// CircusTent Pthreads data free function
   virtual bool FreeData() override;
 };
 
-#endif  // _CT_OMP_H_
-#endif  // _ENABLE_OMP_
+#endif  // _CT_PTHREADS_H_
+#endif  // _ENABLE_PTHREADS_
 
 // EOF

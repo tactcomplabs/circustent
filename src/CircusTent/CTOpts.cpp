@@ -1,7 +1,7 @@
 //
 // _CTOpts_cpp_
 //
-// Copyright (C) 2017-2020 Tactical Computing Laboratories, LLC
+// Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
 // contact@tactcomplabs.com
 //
@@ -31,9 +31,8 @@ BenchType BenchTypeTable[] = {
 };
 
 CTOpts::CTOpts()
-  : isHelp( false ), isList(false), memSize(0), iters(0), stride(1),
+  : isHelp(false), isList(false), memSize(0), iters(0), stride(1),
     l_argc(0), l_argv(nullptr) {
-
 }
 
 CTOpts::~CTOpts(){
@@ -171,19 +170,19 @@ void CTOpts::PrintBench(){
 void CTOpts::PrintHelp(){
   unsigned major = CT_VERSION_MAJOR;
   unsigned minor = CT_VERSION_MINOR;
-  std::cout << "================================================================" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
   std::cout << " CircusTent Version " << major << "." << minor << std::endl;
   std::cout << " Usage: circustent [OPTIONS]" << std::endl;
-  std::cout << "================================================================" << std::endl;
-  std::cout << " -b|-bench|--bench TEST             : Sets the benchmark to run" << std::endl;
-  std::cout << " -m|-memsize|--memsize BYTES        : Sets the size of the array" << std::endl;
-  std::cout << " -p|-pes|--pes PES                  : Sets the number of PEs" << std::endl;
-  std::cout << " -i|-iters|--iters ITERATIONS       : Sets the number of iterations per PE" << std::endl;
-  std::cout << " -s|-stride|--stride STRIDE (elems) : Sets the stride in 'elems'" << std::endl;
-  std::cout << "================================================================" << std::endl;
-  std::cout << " -h|-help|--help                    : Prints this help menu" << std::endl;
-  std::cout << " -l|-list|--list                    : List benchmarks" << std::endl;
-  std::cout << "================================================================" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << " -b|-bench|--bench TEST                    : Sets the benchmark to run" << std::endl;
+  std::cout << " -m|-memsize|--memsize BYTES               : Sets the size of the array" << std::endl;
+  std::cout << " -p|-pes|--pes PES                         : Sets the number of PEs" << std::endl;
+  std::cout << " -i|-iters|--iters ITERATIONS              : Sets the number of iterations per PE" << std::endl;
+  std::cout << " -s|-stride|--stride STRIDE (elems)        : Sets the stride in 'elems'" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << " -h|-help|--help                           : Prints this help menu" << std::endl;
+  std::cout << " -l|-list|--list                           : List benchmarks" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
 }
 
 // EOF

@@ -1,7 +1,7 @@
 //
 // _CT_Main_cpp_
 //
-// Copyright (C) 2017-2020 Tactical Computing Laboratories, LLC
+// Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
 // contact@tactcomplabs.com
 //
@@ -9,8 +9,13 @@
 //
 
 #include "CircusTent/CircusTent.h"
+
 #ifdef _ENABLE_OMP_
 #include "Impl/CT_OMP/CT_OMP.h"
+#endif
+
+#ifdef _ENABLE_OMP_TARGET_
+#include "Impl/CT_OMP_TARGET/CT_OMP_TARGET.h"
 #endif
 
 #ifdef _ENABLE_OPENSHMEM_
@@ -28,7 +33,110 @@
 #include "Impl/CT_XBGAS/CT_XBGAS.h"
 #endif
 
+#ifdef _ENABLE_PTHREADS_
+#include <pthread.h>
+#include "Impl/CT_PTHREADS/CT_PTHREADS.h"
+#endif
+
+#ifdef _ENABLE_OPENACC_
+#include <openacc.h>
+#include "Impl/CT_OPENACC/CT_OPENACC.h"
+#endif
+
 void PrintTiming( double Timing, double GAMS );
+
+#ifdef _ENABLE_OPENACC_
+void RunBenchOpenACC( CTOpts *Opts ){
+  // init the OpenACC object
+  CT_OPENACC *CT = new CT_OPENACC(Opts->GetBenchType(),
+                                  Opts->GetAtomType());
+  if( !CT ){
+    std::cout << "ERROR : COULD NOT ALLOCATE CT_OPENACC OBJECTS" << std::endl;
+    return;
+  }
+
+  // Set the target options
+  if ( !CT->SetDevice() ){
+    std::cout << "ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OPENACC" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Allocate the data
+  if( !CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride() ) ){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_OPENACC" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Execute the benchmark
+  double Timing = 0.;
+  double GAMS = 0.;
+  if( !CT->Execute(Timing,GAMS) ){
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_OPENACC" << std::endl;
+    CT->FreeData();
+    free( CT );
+    return ;
+  }
+
+  // Free the data
+  if( !CT->FreeData() ){
+    std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_OPENACC" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Print the timing
+  PrintTiming( Timing, GAMS );
+
+  // free the structure
+  free( CT );
+}
+#endif
+
+#ifdef _ENABLE_PTHREADS_
+void RunBenchPthreads( CTOpts *Opts ){
+  // init the PTHREADS object
+  CT_PTHREADS *CT = new CT_PTHREADS(Opts->GetBenchType(),
+                                    Opts->GetAtomType());
+  if( !CT ){
+    std::cout << "ERROR : COULD NOT ALLOCATE CT_PTHREADS OBJECTS" << std::endl;
+    return ;
+  }
+
+  // Allocate the data
+  if( !CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride() ) ){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_PTHREADS" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Execute the benchmark
+  double Timing = 0.;
+  double GAMS = 0.;
+  if( !CT->Execute(Timing,GAMS) ){
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_PTHREADS" << std::endl;
+    CT->FreeData();
+    free( CT );
+    return ;
+  }
+
+  // Free the data
+  if( !CT->FreeData() ){
+    std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_PTHREADS" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  PrintTiming( Timing, GAMS );
+}
+#endif
 
 #ifdef _ENABLE_XBGAS_
 void RunBenchXBGAS( CTOpts *Opts ){
@@ -176,6 +284,58 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
 }
 #endif
 
+#ifdef _ENABLE_OMP_TARGET_
+void RunBenchOMPTarget( CTOpts *Opts ){
+  // init the OpenMP Target object
+  CT_OMP_TARGET *CT = new CT_OMP_TARGET(Opts->GetBenchType(),
+                                        Opts->GetAtomType());
+  if( !CT ){
+    std::cout << "ERROR : COULD NOT ALLOCATE CT_OMP_TARGET OBJECTS" << std::endl;
+    return ;
+  }
+
+  // Set the target options
+  if ( !CT->SetDevice() ){
+    std::cout << "ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Allocate the data
+  if( !CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride() ) ){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_OMP_TARGET" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Execute the benchmark
+  double Timing = 0.;
+  double GAMS = 0.;
+  if( !CT->Execute(Timing,GAMS) ){
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_OMP_TARGET" << std::endl;
+    CT->FreeData();
+    free( CT );
+    return ;
+  }
+
+  // Free the data
+  if( !CT->FreeData() ){
+    std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_OMP_TARGET" << std::endl;
+    free( CT );
+    return ;
+  }
+
+  // Print the timing
+  PrintTiming( Timing, GAMS );
+
+  // free the structure
+  free( CT );
+}
+#endif
+
 #ifdef _ENABLE_OMP_
 void RunBenchOMP( CTOpts *Opts ){
   // init the OpenMP object
@@ -242,6 +402,9 @@ int main( int argc, char **argv ){
 #ifdef _ENABLE_OMP_
     RunBenchOMP(Opts);
 #endif
+#ifdef _ENABLE_OMP_TARGET_
+    RunBenchOMPTarget(Opts);
+#endif
 #ifdef _ENABLE_OPENSHMEM_
     RunBenchOpenSHMEM(Opts);
 #endif
@@ -251,6 +414,14 @@ int main( int argc, char **argv ){
 #ifdef _ENABLE_XBGAS_
     RunBenchXBGAS(Opts);
 #endif
+#ifdef _ENABLE_PTHREADS_
+    RunBenchPthreads(Opts);
+#endif
+
+#ifdef _ENABLE_OPENACC_
+    RunBenchOpenACC(Opts);
+#endif
+
   }
 
   delete Opts;
