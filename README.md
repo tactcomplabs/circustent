@@ -197,10 +197,40 @@ for( i=0; i<iters; i++ ){
 
 
 ## Backends
-
 ### OMP
 * CMake Build Flag: -DENABLE_OMP=ON
 * Implementation Language: C++ & C using GNU intrinsics
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Utilizes \_\_ATOMIC\_RELAXED where appropriate
+* Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
+### OMP with Target Offloading
+* CMake Build Flags: -DENABLE_OMP_TARGET=ON -DOFFLOAD_TARGETS=target_options
+where "target_options" is passed to the GNU -foffload compiler flag
+* Implementation Language: C++ & C using GNU intrinsics
+* Users may define $OMP_DEFAULT_DEVICE to select a different target device ID,
+otherwise the system default is utilized
+* Maps provided PEs argument to team-level parallelism, iterations for a given team
+are automatically subdivided across threads within each team
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 * Utilizes \_\_ATOMIC\_RELAXED where appropriate
 * Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
@@ -306,6 +336,62 @@ that for every N'th PE, the target PE is N+1.  All benchmarks except PTRCHASE ta
 * The PTRCHASE benchmark utilizes randomly generated target PE's for each iteration
 * For benchmark values that don't require atomic access to indices, we utilize XBGAS_GET operations to
 fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
+### OpenACC
+* CMake Build Flags: -DENABLE_OPENACC=ON -DOFFLOAD_TARGETS=target_options
+where "target_options" is passed to the GNU -foffload compiler flag
+* Implementation Language: C++ & C using GNU intrinsics
+* Users must define both $ACC_DEVICE_TYPE and $ACC_DEVICE_ID to set
+the target device type and ID, respectively
+* Maps provided PEs argument to gang-level parallelism
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Utilizes \_\_ATOMIC\_RELAXED where appropriate
+* Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
+### Pthreads
+* CMake Build Flags: -DENABLE_PTHREADS=ON
+* Implementation Language: C++ & C using GNU intrinsics
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Utilizes \_\_ATOMIC\_RELAXED where appropriate
+* Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
 
 | Benchmark | Supported? |
 | ------ | ------ |

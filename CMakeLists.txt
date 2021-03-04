@@ -1,6 +1,6 @@
 # CircusTent Top-Level CMake
 #
-# Copyright (C) 2017-2020 Tactical Computing Laboratories, LLC
+# Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 # All Rights Reserved
 # contact@tactcomplabs.com
 #
@@ -55,6 +55,20 @@ else()
   message(STATUS "DISABLING OpenMP Implementation")
 endif()
 
+if (ENABLE_OMP_TARGET)
+  if(NOT OFFLOAD_TARGETS)
+    message(FATAL_ERROR "Configuring OpenMP Target Implementation - OFFLOAD_TARGETS not specified!")
+  else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp -foffload=${OFFLOAD_TARGETS} -D_ENABLE_OMP_TARGET_")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -foffload=${OFFLOAD_TARGETS} -D_ENABLE_OMP_TARGET_")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenmp -foffload=${OFFLOAD_TARGETS}")
+    message(STATUS "ENABLING OpenMP Target Implementation")
+    message(STATUS "Offload targets = ${OFFLOAD_TARGETS}")
+  endif()
+else()
+  message(STATUS "DISABLING OpenMP Target Implementation")
+endif()
+
 if (ENABLE_OPENSHMEM)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_OPENSHMEM_")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_OPENSHMEM_")
@@ -78,6 +92,29 @@ if (ENABLE_XBGAS)
   message(STATUS "ENABLING XBGAS Implementation")
 else()
   message(STATUS "DISABLING XBGAS Implementation")
+endif()
+
+if (ENABLE_PTHREADS)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -D_ENABLE_PTHREADS_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -D_ENABLE_PTHREADS_")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+  message(STATUS "ENABLING Pthreads Implementation")
+else()
+  message(STATUS "DISABLING Pthreads Implementation")
+endif()
+
+if (ENABLE_OPENACC)
+  if(NOT OFFLOAD_TARGETS)
+    message(FATAL_ERROR "Configuring OpenACC Implementation - OFFLOAD_TARGETS not specified!")
+  else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenacc -foffload=${OFFLOAD_TARGETS} -D_ENABLE_OPENACC_")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenacc -foffload=${OFFLOAD_TARGETS} -D_ENABLE_OPENACC_")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenacc -foffload=${OFFLOAD_TARGETS}")
+    message(STATUS "ENABLING OpenACC Implementation")
+    message(STATUS "Offload targets = ${OFFLOAD_TARGETS}")
+   endif()
+else()
+  message(STATUS "DISABLING OpenACC Implementation")
 endif()
 
 #------------------------------------------------------------------------

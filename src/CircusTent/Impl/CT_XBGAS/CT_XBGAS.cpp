@@ -1,7 +1,7 @@
 //
 // _CT_XBGAS_CPP_
 //
-// Copyright (C) 2017-2020 Tactical Computing Laboratories, LLC
+// Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
 // contact@tactcomplabs.com
 //
@@ -263,14 +263,12 @@ bool CT_XBGAS::AllocateData( uint64_t m,
   elems = (memSize/8);
 
   // test to see whether we'll stride out of bounds
-  if( stride > 1 ){
-    uint64_t end = (iters * stride)-stride;
-    if( end > elems ){
-      std::cout << "CT_XBGAS::AllocateData : 'Array' is not large enough for pes="
-                << pes << "; iters=" << iters << ";stride =" << stride
-                << std::endl;
-      return false;
-    }
+  uint64_t end = (iters * stride)-stride;
+  if( end > elems ){
+    std::cout << "CT_XBGAS::AllocateData : 'Array' is not large enough for pes="
+              << pes << "; iters=" << iters << ";stride =" << stride
+              << std::endl;
+    return false;
   }
 
   // ensure that we have enough allocation space

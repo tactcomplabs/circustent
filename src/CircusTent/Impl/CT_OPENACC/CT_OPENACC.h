@@ -1,5 +1,5 @@
 //
-// _CT_OMP_H_
+// _CT_OPENACC_H_
 //
 // Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
@@ -9,21 +9,21 @@
 //
 
 /**
- * \class CT_OMP
+ * \class CT_OPENACC
  *
  * \ingroup CircusTent
  *
- * \brief CircusTent OpenMP Implementation
+ * \brief CircusTent OpenACC Implementation
  *
  */
 
-#ifdef _ENABLE_OMP_
+#ifdef _ENABLE_OPENACC_
 
-#ifndef _CT_OMP_H_
-#define _CT_OMP_H_
+#ifndef _CT_OPENACC_H_
+#define _CT_OPENACC_H_
 
 #include <cstdlib>
-#include <omp.h>
+#include <openacc.h>
 #include <ctime>
 
 #include "CircusTent/CTBaseImpl.h"
@@ -131,38 +131,44 @@ void GATHER_CAS( uint64_t *ARRAY,
 }
 
 
-class CT_OMP : public CTBaseImpl{
+class CT_OPENACC : public CTBaseImpl{
 private:
-  uint64_t *Array;          ///< CT_OMP: Data array
-  uint64_t *Idx;            ///< CT_OMP: Index array
-  uint64_t memSize;         ///< CT_OMP: Memory size (in bytes)
-  uint64_t pes;             ///< CT_OMP: Number of processing elements
-  uint64_t iters;           ///< CT_OMP: Number of iterations per thread
-  uint64_t elems;           ///< CT_OMP: Number of u8 elements
-  uint64_t stride;          ///< CT_OMP: Stride in elements
+  uint64_t *Array;             ///< CT_OPENACC: Data array
+  uint64_t *Idx;               ///< CT_OPENACC: Index array
+  uint64_t memSize;            ///< CT_OPENACC: Memory size (in bytes)
+  uint64_t pes;                ///< CT_OPENACC: Number of processing elements
+  uint64_t iters;              ///< CT_OPENACC: Number of iterations per thread
+  uint64_t elems;              ///< CT_OPENACC: Number of u8 elements
+  uint64_t stride;             ///< CT_OPENACC: Stride in elements
+  std::string deviceTypeStr;   ///< CT_OPENACC: Envrionment defined device type
+  acc_device_t deviceTypeEnum; ///< CT_OPENACC: acct_device_t device type enumeration
+  int deviceID;                ///< CT_OPENACC: Target device ID
 
 public:
-  /// CircusTent OpenMP constructor
-  CT_OMP(CTBaseImpl::CTBenchType B,
-         CTBaseImpl::CTAtomType A);
+  /// CircusTent OpenACC constructor
+  CT_OPENACC(CTBaseImpl::CTBenchType B,
+             CTBaseImpl::CTAtomType A);
 
-  /// CircusTent OpenMP destructor
-  ~CT_OMP();
+  /// CircusTent OpenACC destructor
+  ~CT_OPENACC();
 
-  /// CircusTent OpenMP exeuction function
+  /// CircusTent OpenACC exeuction function
   virtual bool Execute(double &Timing,double &GAMS) override;
 
-  /// CircusTent OpenMP data allocation function
+  /// CircusTent OpenACC data allocation function
   virtual bool AllocateData( uint64_t memSize,
                              uint64_t pes,
                              uint64_t iters,
                              uint64_t stride ) override;
 
-  /// CircusTent OpenMP data free function
+  /// CircusTent OpenACC data free function
   virtual bool FreeData() override;
+
+  /// Function to set target device options
+  bool SetDevice();
 };
 
-#endif  // _CT_OMP_H_
-#endif  // _ENABLE_OMP_
+#endif  // _CT_OPENACC_H_
+#endif  // _ENABLE_OPENACC_
 
 // EOF

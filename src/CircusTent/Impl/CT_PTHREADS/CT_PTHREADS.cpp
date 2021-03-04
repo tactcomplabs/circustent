@@ -1,5 +1,5 @@
 //
-// _CT_OMP_CPP_
+// _CT_PTHREADS_CPP_
 //
 // Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
@@ -8,12 +8,13 @@
 // See LICENSE in the top level directory for licensing details
 //
 
-#include "CT_OMP.h"
+#include "CT_PTHREADS.h"
 
-#ifdef _CT_OMP_H_
+#ifdef _CT_PTHREADS_H_
 
-CT_OMP::CT_OMP(CTBaseImpl::CTBenchType B,
-               CTBaseImpl::CTAtomType A) : CTBaseImpl("OMP",B,A),
+CT_PTHREADS::CT_PTHREADS(CTBaseImpl::CTBenchType B,
+                         CTBaseImpl::CTAtomType A) :
+                                           CTBaseImpl("PTHREADS",B,A),
                                            Array(nullptr),
                                            Idx(nullptr),
                                            memSize(0),
@@ -23,10 +24,10 @@ CT_OMP::CT_OMP(CTBaseImpl::CTBenchType B,
                                            stride(0) {
 }
 
-CT_OMP::~CT_OMP(){
+CT_PTHREADS::~CT_PTHREADS(){
 }
 
-bool CT_OMP::Execute(double &Timing, double &GAMS){
+bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
 
   CTBaseImpl::CTBenchType BType   = this->GetBenchType(); // benchmark type
   CTBaseImpl::CTAtomType AType    = this->GetAtomType();  // atomic type
@@ -198,10 +199,10 @@ bool CT_OMP::Execute(double &Timing, double &GAMS){
   return true;
 }
 
-bool CT_OMP::AllocateData( uint64_t m,
-                           uint64_t p,
-                           uint64_t i,
-                           uint64_t s){
+bool CT_PTHREADS::AllocateData( uint64_t m,
+                                uint64_t p,
+                                uint64_t i,
+                                uint64_t s){
   // save the data
   memSize = m;
   pes = p;
@@ -210,15 +211,15 @@ bool CT_OMP::AllocateData( uint64_t m,
 
   // allocate all the memory
   if( pes == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'pes' cannot be 0" << std::endl;
+    std::cout << "CT_PTHREADS::AllocateData : 'pes' cannot be 0" << std::endl;
     return false;
   }
   if( iters == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'iters' cannot be 0" << std::endl;
+    std::cout << "CT_PTHREADS::AllocateData : 'iters' cannot be 0" << std::endl;
     return false;
   }
   if( stride == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'stride' cannot be 0" << std::endl;
+    std::cout << "CT_PTHREADS::AllocateData : 'stride' cannot be 0" << std::endl;
     return false;
   }
 
@@ -228,7 +229,7 @@ bool CT_OMP::AllocateData( uint64_t m,
   // test to see whether we'll stride out of bounds
   uint64_t end = (pes * iters * stride)-stride;
   if( end > elems ){
-    std::cout << "CT_OMP::AllocateData : 'Array' is not large enough for pes="
+    std::cout << "CT_PTHREADS::AllocateData : 'Array' is not large enough for pes="
               << pes << "; iters=" << iters << ";stride =" << stride
               << std::endl;
     return false;
@@ -236,13 +237,13 @@ bool CT_OMP::AllocateData( uint64_t m,
 
   Array = (uint64_t *)(malloc( memSize ));
   if( Array == nullptr ){
-    std::cout << "CT_OMP::AllocateData : 'Array' could not be allocated" << std::endl;
+    std::cout << "CT_PTHREADS::AllocateData : 'Array' could not be allocated" << std::endl;
     return false;
   }
 
   Idx = (uint64_t *)(malloc( sizeof(uint64_t) * (pes+1) * iters ));
   if( Idx == nullptr ){
-    std::cout << "CT_OMP::AllocateData : 'Idx' could not be allocated" << std::endl;
+    std::cout << "CT_PTHREADS::AllocateData : 'Idx' could not be allocated" << std::endl;
     free( Array );
     return false;
   }
@@ -262,21 +263,12 @@ bool CT_OMP::AllocateData( uint64_t m,
     Array[i] = (uint64_t)(rand());
   }
 
-  // init the OpenMP context
-  omp_set_num_threads(pes);
-
-#pragma omp parallel
-  {
-#pragma omp single
-    {
-      std::cout << "RUNNING WITH NUM_THREADS = " << omp_get_num_threads() << std::endl;
-    }
-  }
+  std::cout << "RUNNING WITH NUM_THREADS = " << pes << std::endl;
 
   return true;
 }
 
-bool CT_OMP::FreeData(){
+bool CT_PTHREADS::FreeData(){
   if( Array ){
     free( Array );
   }

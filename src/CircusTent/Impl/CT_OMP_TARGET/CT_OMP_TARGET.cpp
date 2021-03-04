@@ -1,5 +1,5 @@
 //
-// _CT_OMP_CPP_
+// _CT_OMP_TARGET_CPP_
 //
 // Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
@@ -8,25 +8,26 @@
 // See LICENSE in the top level directory for licensing details
 //
 
-#include "CT_OMP.h"
+#include "CT_OMP_TARGET.h"
 
-#ifdef _CT_OMP_H_
+#ifdef _CT_OMP_TARGET_H_
 
-CT_OMP::CT_OMP(CTBaseImpl::CTBenchType B,
-               CTBaseImpl::CTAtomType A) : CTBaseImpl("OMP",B,A),
+CT_OMP_TARGET::CT_OMP_TARGET(CTBaseImpl::CTBenchType B,
+                CTBaseImpl::CTAtomType A) : CTBaseImpl("OMP_TARGET",B,A),
                                            Array(nullptr),
                                            Idx(nullptr),
                                            memSize(0),
                                            pes(0),
                                            iters(0),
                                            elems(0),
-                                           stride(0) {
+                                           stride(0),
+                                           deviceID(-1) {
 }
 
-CT_OMP::~CT_OMP(){
+CT_OMP_TARGET::~CT_OMP_TARGET(){
 }
 
-bool CT_OMP::Execute(double &Timing, double &GAMS){
+bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
 
   CTBaseImpl::CTBenchType BType   = this->GetBenchType(); // benchmark type
   CTBaseImpl::CTAtomType AType    = this->GetAtomType();  // atomic type
@@ -198,27 +199,27 @@ bool CT_OMP::Execute(double &Timing, double &GAMS){
   return true;
 }
 
-bool CT_OMP::AllocateData( uint64_t m,
-                           uint64_t p,
-                           uint64_t i,
-                           uint64_t s){
+bool CT_OMP_TARGET::AllocateData( uint64_t m,
+                                  uint64_t p,
+                                  uint64_t i,
+                                  uint64_t s){
   // save the data
   memSize = m;
   pes = p;
   iters = i;
   stride = s;
 
-  // allocate all the memory
+  // check args
   if( pes == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'pes' cannot be 0" << std::endl;
+    std::cout << "CT_OMP_TARGET::AllocateData : 'pes' cannot be 0" << std::endl;
     return false;
   }
   if( iters == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'iters' cannot be 0" << std::endl;
+    std::cout << "CT_OMP_TARGET::AllocateData : 'iters' cannot be 0" << std::endl;
     return false;
   }
   if( stride == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'stride' cannot be 0" << std::endl;
+    std::cout << "CT_OMP_TARGET::AllocateData : 'stride' cannot be 0" << std::endl;
     return false;
   }
 
@@ -228,60 +229,103 @@ bool CT_OMP::AllocateData( uint64_t m,
   // test to see whether we'll stride out of bounds
   uint64_t end = (pes * iters * stride)-stride;
   if( end > elems ){
-    std::cout << "CT_OMP::AllocateData : 'Array' is not large enough for pes="
+    std::cout << "CT_OMP_TARGET::AllocateData : 'Array' is not large enough for pes="
               << pes << "; iters=" << iters << ";stride =" << stride
               << std::endl;
     return false;
   }
 
-  Array = (uint64_t *)(malloc( memSize ));
-  if( Array == nullptr ){
-    std::cout << "CT_OMP::AllocateData : 'Array' could not be allocated" << std::endl;
+
+  // allocate the data on the target device
+  Array = (uint64_t *) omp_target_alloc(memSize, deviceID);
+  // temporary data array for initialization on the host
+  uint64_t *HostArray = (uint64_t *) malloc(memSize);
+
+  if( ( Array == nullptr ) || ( HostArray == nullptr ) ){
+	std::cout << "Array = " << Array << " HostArray = " << HostArray << std::endl;
+    std::cout << "CT_OMP_TARGET::AllocateData : 'Array' could not be allocated" << std::endl;
+    omp_target_free(Array, deviceID);
+    free(HostArray);
     return false;
   }
 
-  Idx = (uint64_t *)(malloc( sizeof(uint64_t) * (pes+1) * iters ));
-  if( Idx == nullptr ){
-    std::cout << "CT_OMP::AllocateData : 'Idx' could not be allocated" << std::endl;
-    free( Array );
+  // target and host Idx arrays
+  Idx = (uint64_t *) omp_target_alloc(sizeof(uint64_t)*(pes+1)*iters, deviceID);
+  uint64_t *HostIdx = (uint64_t *) malloc(sizeof(uint64_t)*(pes+1)*iters);
+
+  if( ( Idx == nullptr ) || ( HostIdx == nullptr ) ){
+    std::cout << "CT_OMP_TARGET::AllocateData : 'Idx' could not be allocated" << std::endl;
+    omp_target_free(Array, deviceID);
+    omp_target_free(Idx, deviceID);
+    free(HostArray);
+    free(HostIdx);
     return false;
   }
 
-  // initiate the random array
+  // Randomize arrays on the host
   srand(time(NULL));
   if( this->GetBenchType() == CT_PTRCHASE ){
     for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      Idx[i] = (uint64_t)(rand()%((pes+1)*iters));
+      HostIdx[i] = (uint64_t)(rand()%((pes+1)*iters));
     }
   }else{
     for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      Idx[i] = (uint64_t)(rand()%(elems-1));
+      HostIdx[i] = (uint64_t)(rand()%(elems-1));
     }
   }
   for( unsigned i=0; i<elems; i++ ){
-    Array[i] = (uint64_t)(rand());
+    HostArray[i] = (uint64_t)(rand());
   }
 
-  // init the OpenMP context
-  omp_set_num_threads(pes);
+  // Copy initalized arrays to target
+  omp_target_memcpy(Array, HostArray, memSize, 0, 0, deviceID, omp_get_initial_device());
+  omp_target_memcpy(Idx, HostIdx, sizeof(uint64_t)*(pes+1)*iters, 0, 0, deviceID, omp_get_initial_device());
 
-#pragma omp parallel
+  // Free temp arrays on host
+  free(HostArray);
+  free(HostIdx);
+
+  // Set the number of teams on device
+  // Need OpenMP 5.1 support, for now using num_teams clause at kernel directives
+  //omp_set_num_teams(pes);
+
+  // Sanity check on target
+  #pragma omp target teams num_teams(pes)
   {
-#pragma omp single
-    {
-      std::cout << "RUNNING WITH NUM_THREADS = " << omp_get_num_threads() << std::endl;
+    if(omp_get_team_num() == 0){
+        printf("RUNNING WITH NUM_TEAMS = %d\n", omp_get_num_teams());
     }
   }
 
   return true;
 }
 
-bool CT_OMP::FreeData(){
+bool CT_OMP_TARGET::SetDevice(){
+
+  // Check that target devices are detected
+  if(!omp_get_num_devices()){
+    std::cout << "CT_OMP_TARGET::SetDevice : No target devices detected!" << std::endl;
+    return false;
+  }
+
+  // Check if target device ID is overridden in the environment
+  if(getenv("OMP_DEFAULT_DEVICE") == nullptr){
+    std::cout << "CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set." << std::endl;
+  }
+
+  deviceID = omp_get_default_device();
+  std::cout << "CT_OMP_TARGET::SetDevice : Target device ID = " << deviceID << " of " \
+            << omp_get_num_devices() << " total detected devices." << std::endl;
+
+  return true;
+}
+
+bool CT_OMP_TARGET::FreeData(){
   if( Array ){
-    free( Array );
+    omp_target_free(Array, deviceID);
   }
   if( Idx ){
-    free( Idx );
+    omp_target_free(Idx, deviceID);
   }
   return true;
 }

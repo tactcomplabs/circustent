@@ -1,7 +1,7 @@
 //
 // _CTOpts_h_
 //
-// Copyright (C) 2017-2020 Tactical Computing Laboratories, LLC
+// Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
 // All Rights Reserved
 // contact@tactcomplabs.com
 //
@@ -41,7 +41,6 @@ private:
   uint64_t iters;             ///< number of iterations per thread
   uint64_t pes;               ///< number of pe's
   uint64_t stride;            ///< stride between accesses
-
   int l_argc;                 ///< main argc
   char **l_argv;              ///< main argv
 
