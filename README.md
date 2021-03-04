@@ -502,6 +502,7 @@ reasons (violations will be documented in pull request comments):
 CircustTent is licensed under an Apache-style license see the [LICENSE](LICENSE) file for details
 
 ## Authors
+* *Brody Williams* - *PhD Student* - [Texas Tech University](https://discl.cs.ttu.edu/doku.php)
 * *John Leidel* - *Chief Scientist* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 * *David Donofrio* - *Chief Hardware Architect* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 
