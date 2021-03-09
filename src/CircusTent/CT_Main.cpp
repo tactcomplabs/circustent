@@ -19,7 +19,7 @@
 #endif
 
 #ifdef _ENABLE_OPENSHMEM_
-#include <mpp/shmem.h>
+#include <shmem.h>
 #include "Impl/CT_OPENSHMEM/CT_SHMEM.h"
 #endif
 

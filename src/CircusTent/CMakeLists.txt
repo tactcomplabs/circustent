@@ -25,7 +25,6 @@ endif()
 
 if (ENABLE_OPENSHMEM)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_SHMEM_OBJS>)
-  target_link_libraries(circustent oshmem mpi)
 endif()
 
 if (ENABLE_MPI)

@@ -23,7 +23,7 @@
 #define _CT_SHMEM_H_
 
 #include <cstdlib>
-#include <mpp/shmem.h>
+#include <shmem.h>
 #include <ctime>
 
 #include "CircusTent/CTBaseImpl.h"

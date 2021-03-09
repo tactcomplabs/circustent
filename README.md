@@ -258,7 +258,7 @@ are automatically subdivided across threads within each team
 * CMake Build Flag: -DENABLE_OPENSHMEM=ON
 * Users must specify the OpenSHMEM compiler wrapper alongside the CMake command as follows:
 ```
-CC=mpicc CXX=mpicxx cmake -DENABLE_OPENSHMEM=ON ../
+CC=oshcc CXX=oschcxx  cmake -DENABLE_OPENSHMEM=ON ../
 ```
 * Implementation  Language: C++ and C using SHMEM functions and symmetric heap
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
