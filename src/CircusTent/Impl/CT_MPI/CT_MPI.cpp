@@ -234,7 +234,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
 
   Timing = this->Runtime(StartTime,EndTime);
   GAMS   = OPS/Timing;
-
+ 
   return true;
 }
 
@@ -291,8 +291,6 @@ bool CT_MPI::AllocateData( uint64_t m,
   MPI_Init(NULL,NULL);
   MPI_Comm_rank(MPI_COMM_WORLD,&rank);
   MPI_Comm_size(MPI_COMM_WORLD,&size);
-  MPI_Win_create_dynamic(MPI_INFO_NULL,MPI_COMM_WORLD,&ArrayWin);
-  MPI_Win_create_dynamic(MPI_INFO_NULL,MPI_COMM_WORLD,&IdxWin);
   MPI_Barrier(MPI_COMM_WORLD);
 
   // 'Array' resides in local heap space
@@ -302,26 +300,25 @@ bool CT_MPI::AllocateData( uint64_t m,
     MPI_Finalize();
     return false;
   }
-  MPI_Win_attach(ArrayWin,Array,memSize);
+  // Create Array window
+  MPI_Win_create(Array, memSize, sizeof(uint64_t), MPI_INFO_NULL, MPI_COMM_WORLD, &ArrayWin);
 
   // 'Idx' resides in local heap space
   Idx = (uint64_t *)(malloc( sizeof(uint64_t) * (iters+1) ));
   if( Idx == nullptr ){
     std::cout << "CT_MPI::AllocateData : 'Idx' could not be allocated" << std::endl;
-    MPI_Win_detach(ArrayWin,Array);
     free( Array );
     MPI_Win_free(&ArrayWin);
     MPI_Finalize();
     return false;
   }
-  MPI_Win_attach(IdxWin,Idx,sizeof(uint64_t) * (iters+1));
+  // Create Idx window
+  MPI_Win_create(Idx, sizeof(uint64_t) * (iters+1), sizeof(uint64_t), MPI_INFO_NULL, MPI_COMM_WORLD, &IdxWin);
 
   // 'Target' resides in local PE memory
   Target = (int *)(malloc( sizeof( int ) * iters ));
   if( Target == nullptr ){
     std::cout << "CT_MPI:AllocateData: 'Target' could not be allocated" << std::endl;
-    MPI_Win_detach(ArrayWin,Array);
-    MPI_Win_detach(IdxWin,Idx);
     free(Array);
     free(Idx);
     MPI_Win_free(&ArrayWin);
@@ -373,18 +370,25 @@ bool CT_MPI::AllocateData( uint64_t m,
     std::cout << "Done initializing MPI data members" << std::endl;
   }
 
+  // Initial fences to enable RMA
+  MPI_Win_fence(0, ArrayWin);
+  MPI_Win_fence(0, IdxWin);
+
   MPI_Barrier(MPI_COMM_WORLD);
 
   return true;
 }
 
 bool CT_MPI::FreeData(){
+
+  // Fences to conclude RMA
+  MPI_Win_fence(0, ArrayWin);
+  MPI_Win_fence(0, IdxWin);
+
   if( Array ){
-    MPI_Win_detach(ArrayWin,Array);
     free( Array );
   }
   if( Idx ){
-    MPI_Win_detach(IdxWin,Idx);
     free( Idx );
   }
 

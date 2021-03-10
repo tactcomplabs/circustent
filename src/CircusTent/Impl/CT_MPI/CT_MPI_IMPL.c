@@ -38,7 +38,7 @@ void RAND_ADD( uint64_t *restrict ARRAY,
 
   uint64_t i      = 0;
   uint64_t start  = 0;
-
+  
   for( i=0; i<iters; i++ ){
     MPI_Get((unsigned long *)(&start),1,MPI_UNSIGNED_LONG,TARGET[i],
             ((&IDX[i])-(&IDX[0])),1,MPI_UNSIGNED_LONG,IWin);
