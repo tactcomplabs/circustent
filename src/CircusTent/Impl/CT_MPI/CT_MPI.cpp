@@ -234,7 +234,7 @@ bool CT_MPI::Execute(double &Timing, double &GAMS){
 
   Timing = this->Runtime(StartTime,EndTime);
   GAMS   = OPS/Timing;
- 
+
   return true;
 }
 
@@ -294,24 +294,14 @@ bool CT_MPI::AllocateData( uint64_t m,
   MPI_Barrier(MPI_COMM_WORLD);
 
   // 'Array' resides in local heap space
-  Array = (uint64_t *)(malloc( memSize ));
-  if( Array == nullptr ){
-    std::cout << "CT_MPI::AllocateData : 'Array' could not be allocated" << std::endl;
-    MPI_Finalize();
-    return false;
-  }
+  MPI_Alloc_mem(memSize, MPI_INFO_NULL, &Array);
+
   // Create Array window
   MPI_Win_create(Array, memSize, sizeof(uint64_t), MPI_INFO_NULL, MPI_COMM_WORLD, &ArrayWin);
 
   // 'Idx' resides in local heap space
-  Idx = (uint64_t *)(malloc( sizeof(uint64_t) * (iters+1) ));
-  if( Idx == nullptr ){
-    std::cout << "CT_MPI::AllocateData : 'Idx' could not be allocated" << std::endl;
-    free( Array );
-    MPI_Win_free(&ArrayWin);
-    MPI_Finalize();
-    return false;
-  }
+  MPI_Alloc_mem(sizeof(uint64_t) * (iters+1), MPI_INFO_NULL, &Idx);
+
   // Create Idx window
   MPI_Win_create(Idx, sizeof(uint64_t) * (iters+1), sizeof(uint64_t), MPI_INFO_NULL, MPI_COMM_WORLD, &IdxWin);
 
@@ -319,10 +309,10 @@ bool CT_MPI::AllocateData( uint64_t m,
   Target = (int *)(malloc( sizeof( int ) * iters ));
   if( Target == nullptr ){
     std::cout << "CT_MPI:AllocateData: 'Target' could not be allocated" << std::endl;
-    free(Array);
-    free(Idx);
     MPI_Win_free(&ArrayWin);
     MPI_Win_free(&IdxWin);
+    MPI_Free_mem(Array);
+    MPI_Free_mem(Idx);
     MPI_Finalize();
     return false;
   }
@@ -360,7 +350,11 @@ bool CT_MPI::AllocateData( uint64_t m,
 
   // setup the Idx and array values
   for( unsigned i=0; i<(iters+1); i++ ){
-    Idx[i] = (uint64_t)(rand()%(elems));
+    if( this->GetBenchType() == CT_PTRCHASE ){
+      Idx[i] = (uint64_t)(rand()%(iters-1));
+    }else{
+      Idx[i] = (uint64_t)(rand()%(elems));
+    }
   }
   for( uint64_t i=0; i<elems; i++ ){
     Array[i] = (uint64_t)(rand());
@@ -380,22 +374,23 @@ bool CT_MPI::AllocateData( uint64_t m,
 }
 
 bool CT_MPI::FreeData(){
+  MPI_Barrier(MPI_COMM_WORLD);
+  int rank          = -1; // mpi rank
+  MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+  if( rank == 0 )
+    std::cout << "Releasing Memory" << std::endl;
 
-  // Fences to conclude RMA
-  MPI_Win_fence(0, ArrayWin);
-  MPI_Win_fence(0, IdxWin);
+  // Free the window
+  MPI_Win_free(&ArrayWin);
+  MPI_Win_free(&IdxWin);
 
-  if( Array ){
-    free( Array );
-  }
-  if( Idx ){
-    free( Idx );
-  }
+  // Free the memory
+  MPI_Free_mem(Array);
+  MPI_Free_mem(Idx);
 
   free( Target );
 
-  MPI_Win_free(&ArrayWin);
-  MPI_Win_free(&IdxWin);
+  MPI_Barrier(MPI_COMM_WORLD);
 
   return true;
 }

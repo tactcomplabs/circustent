@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <inttypes.h>
 
 
 /* MPI Benchmark Implementations
@@ -38,14 +39,24 @@ void RAND_ADD( uint64_t *restrict ARRAY,
 
   uint64_t i      = 0;
   uint64_t start  = 0;
-  
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Get((unsigned long *)(&start),1,MPI_UNSIGNED_LONG,TARGET[i],
             ((&IDX[i])-(&IDX[0])),1,MPI_UNSIGNED_LONG,IWin);
     MPI_Fetch_and_op((unsigned long *)(&start),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&ARRAY[start])-(&ARRAY[0])),MPI_SUM,AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void RAND_CAS( uint64_t *restrict ARRAY,
@@ -59,6 +70,9 @@ void RAND_CAS( uint64_t *restrict ARRAY,
   uint64_t i      = 0;
   uint64_t start  = 0;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Get((unsigned long *)(&start),1,MPI_UNSIGNED_LONG,TARGET[i],
             ((&IDX[i])-(&IDX[0])),1,MPI_UNSIGNED_LONG,IWin);
@@ -66,7 +80,14 @@ void RAND_CAS( uint64_t *restrict ARRAY,
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          ((&ARRAY[start])-(&ARRAY[0])),AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void STRIDE1_ADD( uint64_t *restrict ARRAY,
@@ -80,11 +101,21 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
   uint64_t i      = 0;
   uint64_t start  = 0;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Fetch_and_op((unsigned long *)(&start),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&ARRAY[i])-(&ARRAY[0])),MPI_SUM,AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void STRIDE1_CAS( uint64_t *restrict ARRAY,
@@ -98,12 +129,22 @@ void STRIDE1_CAS( uint64_t *restrict ARRAY,
   uint64_t i      = 0;
   uint64_t start  = 0;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Compare_and_swap((unsigned long *)(&start),(unsigned long *)(&start),
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          ((&ARRAY[i])-(&ARRAY[0])),AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void STRIDEN_ADD( uint64_t *restrict ARRAY,
@@ -119,12 +160,22 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t idx    = 0;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Fetch_and_op((unsigned long *)(&start),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&ARRAY[idx])-(&ARRAY[0])),MPI_SUM,AWin);
     idx += stride;
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void STRIDEN_CAS( uint64_t *restrict ARRAY,
@@ -139,13 +190,23 @@ void STRIDEN_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t idx    = 0;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Compare_and_swap((unsigned long *)(&start),(unsigned long *)(&start),
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          ((&ARRAY[idx])-(&ARRAY[0])),AWin);
     idx += stride;
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void PTRCHASE_ADD( uint64_t *restrict ARRAY,
@@ -160,11 +221,21 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t zero   = 0;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&IDX[start])-(&IDX[0])),MPI_SUM,IWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void PTRCHASE_CAS( uint64_t *restrict ARRAY,
@@ -179,12 +250,22 @@ void PTRCHASE_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t zero   = 0;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&start),
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          ((&IDX[start])-(&IDX[0])),IWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void SG_ADD( uint64_t *restrict ARRAY,
@@ -203,6 +284,9 @@ void SG_ADD( uint64_t *restrict ARRAY,
   uint64_t zero   = 0x00ull;
   uint64_t one    = 0x01ull;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&src),
                      MPI_UNSIGNED_LONG,TARGET[i],
@@ -219,7 +303,14 @@ void SG_ADD( uint64_t *restrict ARRAY,
     MPI_Fetch_and_op((unsigned long *)(&val),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&ARRAY[dest])-(&ARRAY[0])),MPI_SUM,AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void SG_CAS( uint64_t *restrict ARRAY,
@@ -236,6 +327,9 @@ void SG_CAS( uint64_t *restrict ARRAY,
   uint64_t dest   = 0;
   uint64_t val    = 0;
   uint64_t zero   = 0x00ull;
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 
   for( i=0; i<iters; i++ ){
     MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
@@ -257,7 +351,14 @@ void SG_CAS( uint64_t *restrict ARRAY,
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          ((&ARRAY[dest])-(&ARRAY[0])),AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void CENTRAL_ADD( uint64_t *restrict ARRAY,
@@ -271,11 +372,21 @@ void CENTRAL_ADD( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t one    = 0x01ull;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Fetch_and_op((unsigned long *)(&one),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      (0),MPI_SUM,AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void CENTRAL_CAS( uint64_t *restrict ARRAY,
@@ -289,12 +400,22 @@ void CENTRAL_CAS( uint64_t *restrict ARRAY,
   uint64_t start  = 0;
   uint64_t one    = 0x01ull;
 
+  MPI_Win_fence(0, AWin);
+  //MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Compare_and_swap((unsigned long *)(&one),(unsigned long *)(&start),
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          (0),AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      //MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  //MPI_Win_fence(0, IWin);
 }
 
 void SCATTER_ADD( uint64_t *restrict ARRAY,
@@ -312,6 +433,9 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
   uint64_t zero   = 0x00ull;
   uint64_t one    = 0x01ull;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&dest),
                      MPI_UNSIGNED_LONG,TARGET[i],
@@ -324,7 +448,14 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
     MPI_Fetch_and_op((unsigned long *)(&val),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&ARRAY[dest])-(&ARRAY[0])),MPI_SUM,AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void SCATTER_CAS( uint64_t *restrict ARRAY,
@@ -342,6 +473,9 @@ void SCATTER_CAS( uint64_t *restrict ARRAY,
   uint64_t zero   = 0x00ull;
   uint64_t one    = 0x01ull;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
                          (unsigned long *)(&dest),
@@ -357,7 +491,14 @@ void SCATTER_CAS( uint64_t *restrict ARRAY,
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          ((&ARRAY[dest])-(&ARRAY[0])),AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void GATHER_ADD( uint64_t *restrict ARRAY,
@@ -375,6 +516,9 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
   uint64_t zero   = 0x00ull;
   uint64_t one    = 0x01ull;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Fetch_and_op((unsigned long *)(&zero),(unsigned long *)(&dest),
                      MPI_UNSIGNED_LONG,TARGET[i],
@@ -387,7 +531,14 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
     MPI_Fetch_and_op((unsigned long *)(&val),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&ARRAY[i])-(&ARRAY[0])),MPI_SUM,AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 void GATHER_CAS( uint64_t *restrict ARRAY,
@@ -404,6 +555,9 @@ void GATHER_CAS( uint64_t *restrict ARRAY,
   uint64_t val    = 0;
   uint64_t zero   = 0x00ull;
 
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
+
   for( i=0; i<iters; i++ ){
     MPI_Compare_and_swap((unsigned long *)(&zero),(unsigned long *)(&zero),
                          (unsigned long *)(&dest),
@@ -419,7 +573,14 @@ void GATHER_CAS( uint64_t *restrict ARRAY,
                          (unsigned long *)(&start),
                          MPI_UNSIGNED_LONG,TARGET[i],
                          ((&ARRAY[i])-(&ARRAY[0])),AWin);
+    if( (i%50) == 0 ){
+      MPI_Win_fence(0, AWin);
+      MPI_Win_fence(0, IWin);
+    }
   }
+
+  MPI_Win_fence(0, AWin);
+  MPI_Win_fence(0, IWin);
 }
 
 
