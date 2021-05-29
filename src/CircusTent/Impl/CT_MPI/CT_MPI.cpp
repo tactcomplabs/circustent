@@ -334,7 +334,7 @@ bool CT_MPI::AllocateData( uint64_t m,
   }else if( this->GetBenchType() == CT_PTRCHASE ){
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
-      Target[i] = (int)(rand()%(size-1));
+      Target[i] = (int)(rand()%(size));
     }
   }else{
     for( unsigned i=0; i<iters; i++ ){

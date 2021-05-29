@@ -342,7 +342,7 @@ bool CT_SHMEM::AllocateData( uint64_t m,
   }else if( this->GetBenchType() == CT_PTRCHASE ){
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
-      Target[i] = (int)(rand()%(shmem_n_pes()-1));
+      Target[i] = (int)(rand()%(shmem_n_pes()));
     }
   }else{
     for( unsigned i=0; i<iters; i++ ){
@@ -358,7 +358,11 @@ bool CT_SHMEM::AllocateData( uint64_t m,
 
   // setup the Idx and array values
   for( unsigned i=0; i<(iters+1); i++ ){
-    Idx[i] = (uint64_t)(rand()%(elems));
+    if( this->GetBenchType() == CT_PTRCHASE ){
+      Idx[i] = (uint64_t)(rand()%(iters-1));
+    }else{
+      Idx[i] = (uint64_t)(rand()%(elems));
+    }
   }
   for( uint64_t i=0; i<elems; i++ ){
     Array[i] = (uint64_t)(rand());
