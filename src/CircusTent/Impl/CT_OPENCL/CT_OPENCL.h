@@ -23,8 +23,16 @@
 #define _CT_OPENCL_H_       // todo
 
 #include <cstdlib>
-#include <> // TODO: ADD OPENCL HEADER
 #include <ctime>
+
+// FIXME:
+// -------------------------
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#else
+#include <CL/cl.h>
+#endif
+// -------------------------
 
 #include "CircusTent/CTBaseImpl.h"
 
@@ -168,4 +176,5 @@ public:
 #endif  // CT_OPENCL_H_          FIXME:
 #endif  // _ENABLE_OPENCL_       FIXME:
 
+// ==============================================================
 // EOF

@@ -8,7 +8,16 @@
  * See LICENSE in the top level directory for licensing details
  */
 
-#include <> // TODO: ADD OPENCL HEADER
+// FIXME:
+// -------------------------
+#define __CL_ENABLE_EXCEPTIONS // FIXME:
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#else
+#include <CL/cl.h>
+#endif
+// -------------------------
+
 #include <stdint.h>
 
 /* OpenCL Benchmark Implementations
@@ -27,7 +36,8 @@ void RAND_ADD(
     uint64_t iters,
     uint64_t pes
 ) {
-    //todo:
+    // todo:
+    
 }
 
 void RAND_CAS(
@@ -162,4 +172,5 @@ void GATHER_CAS(
     // todo:
 }
 
-/* EOF */
+// ==============================================================
+// EOF
