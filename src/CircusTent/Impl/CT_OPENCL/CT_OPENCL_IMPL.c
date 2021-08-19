@@ -8,6 +8,7 @@
  * See LICENSE in the top level directory for licensing details
  */
 
+<<<<<<< HEAD
 // FIXME:
 // -------------------------
 #define __CL_ENABLE_EXCEPTIONS // FIXME:
@@ -18,6 +19,9 @@
 #endif
 // -------------------------
 
+=======
+#include <> // TODO: ADD OPENCL HEADER
+>>>>>>> 4af58e107beb0b739f11a988158755b3504a1135
 #include <stdint.h>
 
 /* OpenCL Benchmark Implementations
@@ -36,8 +40,12 @@ void RAND_ADD(
     uint64_t iters,
     uint64_t pes
 ) {
+<<<<<<< HEAD
     // todo:
     
+=======
+    //todo:
+>>>>>>> 4af58e107beb0b739f11a988158755b3504a1135
 }
 
 void RAND_CAS(
@@ -172,5 +180,9 @@ void GATHER_CAS(
     // todo:
 }
 
+<<<<<<< HEAD
 // ==============================================================
 // EOF
+=======
+/* EOF */
+>>>>>>> 4af58e107beb0b739f11a988158755b3504a1135

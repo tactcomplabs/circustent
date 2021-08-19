@@ -23,6 +23,7 @@
 #define _CT_OPENCL_H_       // todo
 
 #include <cstdlib>
+<<<<<<< HEAD
 #include <ctime>
 
 // FIXME:
@@ -34,6 +35,11 @@
 #endif
 // -------------------------
 
+=======
+#include <> // TODO: ADD OPENCL HEADER
+#include <ctime>
+
+>>>>>>> 4af58e107beb0b739f11a988158755b3504a1135
 #include "CircusTent/CTBaseImpl.h"
 
 // Benchmark Prototypes
@@ -176,5 +182,8 @@ public:
 #endif  // CT_OPENCL_H_          FIXME:
 #endif  // _ENABLE_OPENCL_       FIXME:
 
+<<<<<<< HEAD
 // ==============================================================
+=======
+>>>>>>> 4af58e107beb0b739f11a988158755b3504a1135
 // EOF
