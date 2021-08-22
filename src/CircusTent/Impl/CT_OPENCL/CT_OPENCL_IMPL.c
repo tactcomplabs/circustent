@@ -8,7 +8,6 @@
  * See LICENSE in the top level directory for licensing details
  */
 
-<<<<<<< HEAD
 // FIXME:
 // -------------------------
 #define __CL_ENABLE_EXCEPTIONS // FIXME:
@@ -19,9 +18,6 @@
 #endif
 // -------------------------
 
-=======
-#include <> // TODO: ADD OPENCL HEADER
->>>>>>> 4af58e107beb0b739f11a988158755b3504a1135
 #include <stdint.h>
 
 /* OpenCL Benchmark Implementations
@@ -34,18 +30,23 @@
  *
  */
 
+// FIXME:
 void RAND_ADD(
     uint64_t *restrict ARRAY,
     uint64_t *restrict IDX,
     uint64_t iters,
     uint64_t pes
 ) {
-<<<<<<< HEAD
-    // todo:
-    
-=======
-    //todo:
->>>>>>> 4af58e107beb0b739f11a988158755b3504a1135
+    uint64_t i      = 0;
+    uint64_t start  = 0;
+
+    // FIXME: Do I need to be making kernels?
+    #pragma ocl parallel private(start, i) {
+        start = (uint64_t)(get_global_id(0)) * iters; // FIXME: get_global_id might be wrong func for getting thread num
+        for (i=start; i<(start+iters); i++) {
+            __atomic_fetch_add( &ARRAY[IDX[i]], (uint64_t)(0x1), __ATOMIC_RELAXED ); // FIXME:
+        }
+    }
 }
 
 void RAND_CAS(
@@ -55,6 +56,7 @@ void RAND_CAS(
     uint64_t pes
 ) {
     // todo:
+
 }
 
 void STRIDE1_ADD(
@@ -180,9 +182,5 @@ void GATHER_CAS(
     // todo:
 }
 
-<<<<<<< HEAD
 // ==============================================================
 // EOF
-=======
-/* EOF */
->>>>>>> 4af58e107beb0b739f11a988158755b3504a1135

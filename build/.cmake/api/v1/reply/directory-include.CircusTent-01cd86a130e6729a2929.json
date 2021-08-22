@@ -1,0 +1,43 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"include/CircusTent/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 10,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "include/CircusTent",
+			"paths" : 
+			[
+				"include/CircusTent/."
+			],
+			"type" : "directory"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "include/CircusTent",
+		"source" : "include/CircusTent"
+	}
+}

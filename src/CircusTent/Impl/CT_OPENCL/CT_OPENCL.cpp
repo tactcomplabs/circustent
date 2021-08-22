@@ -209,7 +209,6 @@ bool CT_OPENCL::AllocateData(
     uint64_t s
 ) {
     // FIXME:
-
     // save the data
   memSize = m;
   pes = p;
@@ -218,15 +217,15 @@ bool CT_OPENCL::AllocateData(
 
   // allocate all the memory
   if( pes == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'pes' cannot be 0" << std::endl;
+    std::cout << "CT_OCL::AllocateData : 'pes' cannot be 0" << std::endl;
     return false;
   }
   if( iters == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'iters' cannot be 0" << std::endl;
+    std::cout << "CT_OCL::AllocateData : 'iters' cannot be 0" << std::endl;
     return false;
   }
   if( stride == 0 ){
-    std::cout << "CT_OMP::AllocateData : 'stride' cannot be 0" << std::endl;
+    std::cout << "CT_OCL::AllocateData : 'stride' cannot be 0" << std::endl;
     return false;
   }
 
@@ -236,7 +235,7 @@ bool CT_OPENCL::AllocateData(
   // test to see whether we'll stride out of bounds
   uint64_t end = (pes * iters * stride)-stride;
   if( end > elems ){
-    std::cout << "CT_OMP::AllocateData : 'Array' is not large enough for pes="
+    std::cout << "CT_OCL::AllocateData : 'Array' is not large enough for pes="
               << pes << "; iters=" << iters << ";stride =" << stride
               << std::endl;
     return false;
@@ -244,13 +243,13 @@ bool CT_OPENCL::AllocateData(
 
   Array = (uint64_t *)(malloc( memSize ));
   if( Array == nullptr ){
-    std::cout << "CT_OMP::AllocateData : 'Array' could not be allocated" << std::endl;
+    std::cout << "CT_OCL::AllocateData : 'Array' could not be allocated" << std::endl;
     return false;
   }
 
   Idx = (uint64_t *)(malloc( sizeof(uint64_t) * (pes+1) * iters ));
   if( Idx == nullptr ){
-    std::cout << "CT_OMP::AllocateData : 'Idx' could not be allocated" << std::endl;
+    std::cout << "CT_OCL::AllocateData : 'Idx' could not be allocated" << std::endl;
     free( Array );
     return false;
   }
@@ -270,29 +269,59 @@ bool CT_OPENCL::AllocateData(
     Array[i] = (uint64_t)(rand());
   }
 
-  // init the OpenMP context
-  omp_set_num_threads(pes);
+  // TODO: init the OpenCL context
+  // FIXME: omp_set_num_threads(pes);
 
-#pragma omp parallel
+#pragma ocl parallel
   {
-#pragma omp single
+#pragma ocl single
     {
-      std::cout << "RUNNING WITH NUM_THREADS = " << omp_get_num_threads() << std::endl;
+      std::cout << "RUNNING WITH NUM_THREADS = " << get_global_size(0) << std::endl; // FIXME:
     }
   }
 
   return true;
 }
 
-
-// FIXME: not sure if i need this
+// ---------------------------------------------------------
+// FIXME: this might be completely wrong
+// FIXME: copied from: https://www.cl.cam.ac.uk/teaching/1819/AdvGraphIP/03_OpenCL.pdf
 bool OPENCL::SetDevice() {
     // todo
-}
+    // get all platforms (drivers)
+    std::vector<cl::Platform> all_platforms;
+    cl::Platform::get(&all_platforms);
+    if (all_platforms.size() == 0) {
+      std::cout << "No platforms found. Check OpenCL installation!\n"
+      exit(1);
+    }
+    cl::Platform default_platform = all_platforms[0];
+    std::cout << "Using platform: " << default_platform.getInfo<CL_PLATFORM_NAME>() << "\n"
 
+    // get default device of the default platform
+    std::vector<cl::Device> all_devices;
+    default_platform.getDevices(CL_DEVICE_TYPE_ALL, &all_devices);
+    if (all_devices.size() == 0) {
+      std::cout << "No devices found. Check OpenCL installation!\n";
+      exit(1);
+    }
+
+    cl::Device default_device = all_devices[0];
+    std::cout << "Using device: " << default_device.getInfo<CL_DEVICE_NAME>() << "\n";
+}
+// ---------------------------------------------------------
+// FIXME:
 bool CT_OPENCL::FreeData() {
     // todo
+    if( Array ){
+      free( Array );
+    }
+    if( Idx ){
+      free( Idx );
+    }
+    return true;
 }
+// ---------------------------------------------------------
 
 #endif
 
