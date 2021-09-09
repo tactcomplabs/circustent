@@ -12,6 +12,7 @@
 
 #ifdef _CT_OPENCL_H_
 
+#include <fstream>
 using namespace cl;
 
 CT_OPENCL::CT_OPENCL(CTBaseImpl::CTBenchType B,
@@ -24,13 +25,11 @@ CT_OPENCL::CT_OPENCL(CTBaseImpl::CTBenchType B,
                                                  elems(0),
                                                  stride(0),
                                                  deviceTypeStr(""), // FIXME:
-                                                 deviceID(-1)
-{
-} // FIXME:
-
-CT_OPENCL::~CT_OPENCL()
+                                                 deviceID(-1)       // FIXME:
 {
 }
+
+CT_OPENCL::~CT_OPENCL(){}
 
 bool CT_OPENCL::Execute(double &Timing, double &GAMS)
 {
@@ -311,10 +310,6 @@ bool CT_OPENCL::AllocateData(
     Array[i] = (uint64_t)(rand());
   }
 
-  // TODO: init the OpenCL context
-  // FIXME: omp_set_num_threads(pes);
-
-
 #pragma ocl parallel
   {
 #pragma ocl single
@@ -327,45 +322,10 @@ bool CT_OPENCL::AllocateData(
 }
 
 // ---------------------------------------------------------
-// FIXME: this might be completely wrong
-// FIXME: copied from: https://www.cl.cam.ac.uk/teaching/1819/AdvGraphIP/03_OpenCL.pdf
-bool OPENCL::SetDevice()
-{
-  // todo
-  // // get all platforms (drivers)
-  // std::vector<cl::Platform> all_platforms;
-  // cl::Platform::get(&all_platforms);
-  // if (all_platforms.size() == 0) {
-  //   std::cout << "No platforms found. Check OpenCL installation!\n"
-  //   exit(1);
-  // }
-  // cl::Platform default_platform = all_platforms[0];
-  // std::cout << "Using platform: " << default_platform.getInfo<CL_PLATFORM_NAME>() << "\n"
-
-  // // get default device of the default platform
-  // std::vector<cl::Device> all_devices;
-  // default_platform.getDevices(CL_DEVICE_TYPE_ALL, &all_devices);
-  // if (all_devices.size() == 0) {
-  //   std::cout << "No devices found. Check OpenCL installation!\n";
-  //   exit(1);
-  // }
-  // cl::Device default_device = all_devices[0];
-  // std::cout << "Using device: " << default_device.getInfo<CL_DEVICE_NAME>() << "\n";
-}
-// ---------------------------------------------------------
-// FIXME:
+// TODO:
 bool CT_OPENCL::FreeData()
 {
-  // todo
-  if (Array)
-  {
-    free(Array);
-  }
-  if (Idx)
-  {
-    free(Idx);
-  }
-  return true;
+
 }
 // ---------------------------------------------------------
 
@@ -427,6 +387,8 @@ cl_program program = CreateProgram(LoadKernel("CT_OPENCL_KERNELS.cl"), context);
 
 // Build the program
 clBuildProgram(program, 0, NULL, "-cl-mad-enable", NULL, NULL);
+
+// TODO: Do I need to create a buffer here?
 
 
 // ************ THIS PART ONLY NEEDS TO BE DONE WHEN SPECIFIED IN "circustent" ARGS ***************
