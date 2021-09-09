@@ -1,5 +1,5 @@
 /*
- * TODO: __CT_OPENCL_IMPL_C_IMPL_C
+ * TODO: __CT_OPENCL_IMPL_C_
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -8,18 +8,23 @@
  * See LICENSE in the top level directory for licensing details
  */
 
-// FIXME:
 // -------------------------
-#define __CL_ENABLE_EXCEPTIONS // FIXME:
+#include <stdint.h>
+// FIXME: Will having these two extra import statements skew the benchmark results?
+#include <stdlib.h>
+#include <stdio.h>
+
+#define __CL_ENABLE_EXCEPTIONS
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #else
 #include <CL/cl.h>
 #endif
+
+// #define MAX_SOURCE_SIZE (0x100000)
+
+
 // -------------------------
-
-#include <stdint.h>
-
 /* OpenCL Benchmark Implementations
  *
  * Benchmark implementations are in the form:
@@ -30,23 +35,14 @@
  *
  */
 
-// FIXME:
+
 void RAND_ADD(
     uint64_t *restrict ARRAY,
     uint64_t *restrict IDX,
     uint64_t iters,
     uint64_t pes
 ) {
-    uint64_t i      = 0;
-    uint64_t start  = 0;
-
-    // FIXME: Do I need to be making kernels?
-    #pragma ocl parallel private(start, i) {
-        start = (uint64_t)(get_global_id(0)) * iters; // FIXME: get_global_id might be wrong func for getting thread num
-        for (i=start; i<(start+iters); i++) {
-            __atomic_fetch_add( &ARRAY[IDX[i]], (uint64_t)(0x1), __ATOMIC_RELAXED ); // FIXME:
-        }
-    }
+    // todo
 }
 
 void RAND_CAS(

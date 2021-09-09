@@ -48,7 +48,7 @@ void RAND_ADD( uint64_t *ARRAY,
 void RAND_CAS( uint64_t *ARRAY,
                uint64_t *IDX,
                uint64_t iters,
-               uint64_t pes );
+               uint64_t pes )
 
 /// STRIDE1 AMO ADD Benchmark
 void STRIDE1_ADD( uint64_t *ARRAY,

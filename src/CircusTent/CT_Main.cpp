@@ -43,6 +43,21 @@
 #include "Impl/CT_OPENACC/CT_OPENACC.h"
 #endif
 
+// -----------------------------------------
+#ifdef _ENABLE_OPENCL_
+
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#include "Impl/CT_OPENCL/CT_OPENCL.h"
+#else
+#include <CL/cl.h>
+#include "Impl/CT_OPENCL/CT_OPENCL.h"
+#endif
+
+#include "Impl/CT_OPENCL/CT_OPENCL.h"
+#endif
+// -----------------------------------------
+
 void PrintTiming( double Timing, double GAMS );
 
 #ifdef _ENABLE_OPENACC_
@@ -381,6 +396,13 @@ void RunBenchOMP( CTOpts *Opts ){
 }
 #endif
 
+// TODO:
+#ifdef _ENABLE_OPENCL_
+void RunBenchOCL() {
+  // TODO:
+}
+#endif
+
 void PrintTiming(double Timing, double GAMS){
   std::cout << "================================================" << std::endl;
   std::cout << " Timing (secs)        : " << Timing << std::endl;
@@ -420,6 +442,10 @@ int main( int argc, char **argv ){
 
 #ifdef _ENABLE_OPENACC_
     RunBenchOpenACC(Opts);
+#endif
+
+#ifdef _ENABLE_OPENCL_
+    RunBenchOCL(Opts);
 #endif
 
   }
