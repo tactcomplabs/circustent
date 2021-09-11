@@ -1,5 +1,5 @@
 /*
- * TODO: _CT_OPENCL_TARGET_IMPL_C
+ * TODO: _CT_OPENCL_IMPL_C
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -12,8 +12,8 @@
 
 #ifdef _CT_OPENCL_H_
 
-#include <fstream>
-using namespace cl;
+// #include <fstream>
+// using namespace cl;
 
 CT_OPENCL::CT_OPENCL(CTBaseImpl::CTBenchType B,
                      CTBaseImpl::CTAtomType A) : CTBaseImpl("OPENCL", B, A),
@@ -33,9 +33,7 @@ CT_OPENCL::~CT_OPENCL(){}
 
 bool CT_OPENCL::Execute(double &Timing, double &GAMS)
 {
-  // --------------------------------
   // FIXME:
-  // --------------------------------
   CTBaseImpl::CTBenchType BType = this->GetBenchType(); // benchmark type
   CTBaseImpl::CTAtomType AType = this->GetAtomType();   // atomic type
   double StartTime = 0.;                                // start time
@@ -237,7 +235,6 @@ bool CT_OPENCL::AllocateData(
     uint64_t i,
     uint64_t s)
 {
-  // FIXME:
   // save the data
   memSize = m;
   pes = p;
@@ -330,7 +327,7 @@ bool CT_OPENCL::FreeData()
 // ---------------------------------------------------------
 
 
-// ************* BOILERPLATE OCL CODE ***************
+// ************* OpenCL Setup Code ***************
 
 // Getting OpenCL Platform
 std::vector<cl_platform_id> GetPlatforms() {
@@ -391,7 +388,7 @@ clBuildProgram(program, 0, NULL, "-cl-mad-enable", NULL, NULL);
 // TODO: Do I need to create a buffer here?
 
 
-// ************ THIS PART ONLY NEEDS TO BE DONE WHEN SPECIFIED IN "circustent" ARGS ***************
+// ************ THIS PART ONLY NEEDS TO BE DONE WHEN SPECIFIED IN "circustent" comamand ARGS ***************
 // Create a kernel from the program
 // TODO: does this need to be done for each kernel?
 cl_kernel RAND_ADD = clCreateKernel(program, "RAND_ADD", NULL);
