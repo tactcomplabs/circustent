@@ -8,12 +8,10 @@
  * See LICENSE in the top level directory for licensing details
  */
 
-#include "CT_OPENCL.h"
-
 #ifdef _CT_OPENCL_H_
-
-// #include <fstream>
-// using namespace cl;
+#include "CT_OPENCL.h"
+#include <fstream>
+using namespace cl;
 
 CT_OPENCL::CT_OPENCL(CTBaseImpl::CTBenchType B,
                      CTBaseImpl::CTAtomType A) : CTBaseImpl("OPENCL", B, A),
@@ -395,7 +393,7 @@ cl_kernel RAND_ADD = clCreateKernel(program, "RAND_ADD", NULL);
 
 // FIXME: Specify arguments to the kernel
 // TODO: does this need to be done for each kernel?
-// XXX: Im confused by this part 
+// TODO: Pass in the arguments given in the command line
   clSetKernelArg(RAND_ADD, 0, sizeof(cl_mem), &d_a);
   clSetKernelArg(RAND_ADD, 1, sizeof(cl_mem), &d_b);
   clSetKernelArg(RAND_ADD, 2, sizeof(cl_mem), &d_c);

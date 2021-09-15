@@ -10,7 +10,6 @@
 
 // -------------------------
 #include <stdint.h>
-// FIXME: Will having these two extra import statements skew the benchmark results?
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -34,7 +33,6 @@
  *                          unsigned long long pes )
  *
  */
-
 
 void RAND_ADD(
     uint64_t *restrict ARRAY,
