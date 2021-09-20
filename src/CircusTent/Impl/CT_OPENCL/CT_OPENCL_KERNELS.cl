@@ -1,4 +1,6 @@
 #pragma OPENCL EXTENSION cl_khr_int64_base_atomics: enable
+#pragma OPENCL EXTENSION cl_khr_int64_extended_atomics: enable
+
 
 // XXX: uint64_t not available in .cl files
 // XXX: get_global_id() arguments might need to be adjusted

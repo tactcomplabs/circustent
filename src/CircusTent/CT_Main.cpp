@@ -43,9 +43,7 @@
 #include "Impl/CT_OPENACC/CT_OPENACC.h"
 #endif
 
-// -----------------------------------------
-#ifdef _ENABLE_OPENCL_ // FIXME:
-
+#ifdef _ENABLE_OPENCL_
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #include "Impl/CT_OPENCL/CT_OPENCL.h"
@@ -54,9 +52,7 @@
 #include <CL/cl.hpp>
 #include "Impl/CT_OPENCL/CT_OPENCL.h"
 #endif
-
 #endif
-// -----------------------------------------
 
 void PrintTiming( double Timing, double GAMS );
 
@@ -396,10 +392,8 @@ void RunBenchOMP( CTOpts *Opts ){
 }
 #endif
 
-// TODO:
 #ifdef _ENABLE_OPENCL_
 void RunBenchOCL() {
-  // TODO:
   // Init the OpenCL Object
   CT_OCL *CT = new CT_OCL(Opts->GetBenchType(),
                           Opts->GetAtomType());
@@ -409,7 +403,7 @@ void RunBenchOCL() {
     return ;
   }
 
-  // TODO: Allocate the data
+  // Allocate the data
   if (!CT->AllocateData( Opts->GetMemSize(),
                          Opts->GetPEs(),
                          Opts->GetIters(),
@@ -421,7 +415,7 @@ void RunBenchOCL() {
       return;
   }
 
-  // TODO: Execute the benchmark
+  // Execute the benchmark
   double Timing = 0;
   double GAMS = 0.;
   if ( !CT->Execute(Timing, GAMS) ) {
@@ -431,17 +425,17 @@ void RunBenchOCL() {
     return;
   }
 
-  // TODO: Free the data
+  // Free the data
   if ( !CT->FreeData() ) {
     std::cout << "ERROR: COULD NOT FREETHE MEMORY FOR CT_OCL" << std::endl;
     free( CT );
     return;
   } 
 
-  // TODO: Print the timing
+  // Print the timing
   PrintTiming( Timing, GAMS );
 
-  // TODO: Free the structure
+  // sFree the structure
   free( CT );
 }
 #endif

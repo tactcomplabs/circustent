@@ -392,11 +392,12 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
   return true;
 }
 
+// FIXME: CHANGED ALL uint64_t DATA TYPES TO ulong. Might not work
 bool CT_OPENCL::AllocateData(
-    uint64_t m,
-    uint64_t p,
-    uint64_t i,
-    uint64_t s)
+    ulong m,
+    ulong p,
+    ulong i,
+    ulong s)
 {
   // save the data
   memSize = m;
@@ -425,7 +426,7 @@ bool CT_OPENCL::AllocateData(
   elems = (memSize / 8);
 
   // test to see whether we'll stride out of bounds
-  uint64_t end = (pes * iters * stride) - stride;
+  ulong end = (pes * iters * stride) - stride;
   if (end > elems)
   {
     std::cout << "CT_OCL::AllocateData : 'Array' is not large enough for pes="
@@ -434,14 +435,14 @@ bool CT_OPENCL::AllocateData(
     return false;
   }
 
-  Array = (uint64_t *)(malloc(memSize));
+  Array = (ulong *)(malloc(memSize));
   if (Array == nullptr)
   {
     std::cout << "CT_OCL::AllocateData : 'Array' could not be allocated" << std::endl;
     return false;
   }
 
-  Idx = (uint64_t *)(malloc(sizeof(uint64_t) * (pes + 1) * iters));
+  Idx = (ulong *)(malloc(sizeof(ulong) * (pes + 1) * iters));
   if (Idx == nullptr)
   {
     std::cout << "CT_OCL::AllocateData : 'Idx' could not be allocated" << std::endl;
@@ -455,19 +456,19 @@ bool CT_OPENCL::AllocateData(
   {
     for (unsigned i = 0; i < ((pes + 1) * iters); i++)
     {
-      Idx[i] = (uint64_t)(rand() % ((pes + 1) * iters));
+      Idx[i] = (ulong)(rand() % ((pes + 1) * iters));
     }
   }
   else
   {
-    for (unsigned i = 0; i < ((pes + 1) * iters); i++)
+    for (ulong i = 0; i < ((pes + 1) * iters); i++)
     {
-      Idx[i] = (uint64_t)(rand() % (elems - 1));
+      Idx[i] = (ulong)(rand() % (elems - 1));
     }
   }
   for (unsigned i = 0; i < elems; i++)
   {
-    Array[i] = (uint64_t)(rand());
+    Array[i] = (ulong)(rand());
   }
 
 #pragma ocl parallel
@@ -484,15 +485,12 @@ bool CT_OPENCL::AllocateData(
 // ---------------------------------------------------------
 bool CT_OPENCL::FreeData()
 {
-  // TODO:
   if (Array) {
-
+    free (Array);
   }
   if (Idx) {
-
+    free(Idx);
   }
-
-  // Close OpenCL
 
   return true;
 }
