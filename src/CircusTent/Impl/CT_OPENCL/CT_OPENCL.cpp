@@ -1,5 +1,5 @@
 /*
- * TODO: _CT_OPENCL_IMPL_C
+ * _CT_OPENCL_IMPL_C
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -11,6 +11,14 @@
 #ifdef _CT_OPENCL_H_
 #include "CT_OPENCL.h"
 #include <fstream>
+
+#define __CL_ENABLE_EXCEPTIONS
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#else
+#include <CL/cl.h>
+#endif
+
 using namespace cl;
 
 

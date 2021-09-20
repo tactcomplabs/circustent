@@ -1,5 +1,5 @@
 /*
- * TODO: CT_OPENCL__H
+ * CT_OPENCL__H
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -25,7 +25,6 @@
 #include <cstdlib>
 #include <ctime>
 
-// FIXME:
 // -------------------------
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
@@ -35,108 +34,6 @@
 // -------------------------
 
 #include "CircusTent/CTBaseImpl.h"
-
-// Benchmark Prototypes
-extern "C" {
-/// RAND AMO ADD Benchmark
-void RAND_ADD( uint64_t *ARRAY,
-               uint64_t *IDX,
-               uint64_t iters,
-               uint64_t pes );
-
-/// RAND AMO CAS Benchmark
-void RAND_CAS( uint64_t *ARRAY,
-               uint64_t *IDX,
-               uint64_t iters,
-               uint64_t pes )
-
-/// STRIDE1 AMO ADD Benchmark
-void STRIDE1_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// STRIDE1 AMO CAS Benchmark
-void STRIDE1_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// STRIDEN AMO ADD Benchmark
-void STRIDEN_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes,
-                  uint64_t stride );
-
-/// STRIDEN AMO CAS Benchmark
-void STRIDEN_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes,
-                  uint64_t stride );
-
-/// PTRCHASE AMO ADD Benchmark
-void PTRCHASE_ADD( uint64_t *ARRAY,
-                   uint64_t *IDX,
-                   uint64_t iters,
-                   uint64_t pes );
-
-/// PTRCHASE AMO CAS Benchmark
-void PTRCHASE_CAS( uint64_t *ARRAY,
-                   uint64_t *IDX,
-                   uint64_t iters,
-                   uint64_t pes );
-
-/// SG AMO ADD Benchmark
-void SG_ADD( uint64_t *ARRAY,
-             uint64_t *IDX,
-             uint64_t iters,
-             uint64_t pes );
-
-/// SG AMO CAS Benchmark
-void SG_CAS( uint64_t *ARRAY,
-             uint64_t *IDX,
-             uint64_t iters,
-             uint64_t pes );
-
-/// CENTRAL AMO ADD Benchmark
-void CENTRAL_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// CENTRAL AMO CAS Benchmark
-void CENTRAL_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// SCATTER AMO ADD Benchmark
-void SCATTER_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// SCATTER AMO CAS Benchmark
-void SCATTER_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// GATHER AMO ADD Benchmark
-void GATHER_ADD( uint64_t *ARRAY,
-                 uint64_t *IDX,
-                 uint64_t iters,
-                 uint64_t pes );
-
-/// GATHER AMO CAS Benchmark
-void GATHER_CAS( uint64_t *ARRAY,
-                 uint64_t *IDX,
-                 uint64_t iters,
-                 uint64_t pes );
-
-}
 
 class CT_OPENCL : public CTBaseImpl{
 private:
@@ -168,9 +65,6 @@ public:
 
   /// CircusTent OpenCL Target data free function
   virtual bool FreeData() override;
-
-  /// Function to set target device options
-  bool SetDevice();
 };
 
 #endif  // CT_OPENCL_H_          FIXME:
