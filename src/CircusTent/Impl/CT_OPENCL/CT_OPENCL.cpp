@@ -21,7 +21,6 @@
 
 using namespace cl;
 
-
 // ************* OpenCL Setup Code ***************
 // Getting OpenCL Platform
 std::vector<cl_platform_id> GetPlatforms() {
@@ -98,11 +97,8 @@ CT_OPENCL::CT_OPENCL(CTBaseImpl::CTBenchType B,
 
 CT_OPENCL::~CT_OPENCL(){}
 
-// TODO: Create func to set OCL kernel args on the fly
-
 bool CT_OPENCL::Execute(double &Timing, double &GAMS)
 {
-  // FIXME:
   CTBaseImpl::CTBenchType BType = this->GetBenchType(); // benchmark type
   CTBaseImpl::CTAtomType AType = this->GetAtomType();   // atomic type
   double StartTime = 0.;                                // start time
@@ -478,7 +474,7 @@ bool CT_OPENCL::AllocateData(
   {
 #pragma ocl single
     {
-      std::cout << "RUNNING WITH NUM_THREADS = " << get_global_size(0) << std::endl; // FIXME:
+      std::cout << "RUNNING WITH NUM_THREADS = " << get_global_size(0) << std::endl;
     }
   }
 
@@ -489,6 +485,16 @@ bool CT_OPENCL::AllocateData(
 bool CT_OPENCL::FreeData()
 {
   // TODO:
+  if (Array) {
+
+  }
+  if (Idx) {
+
+  }
+
+  // Close OpenCL
+
+  return true;
 }
 
 #endif
