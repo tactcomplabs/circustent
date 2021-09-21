@@ -117,6 +117,21 @@ else()
   message(STATUS "DISABLING OpenACC Implementation")
 endif()
 
+# FIXME:
+if (ENABLE_OPENCL)
+  # if(NOT OFFLOAD_TARGETS)
+  #   message(FATAL_ERROR "Configuring OpenCL Target Implementation - OFFLOAD_TARGETS not specified!")
+  # else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopencl -foffload=${OFFLOAD_TARGETS} -D_ENABLE_OPENCL")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopencl -foffload=${OFFLOAD_TARGETS} -D_ENABLE_OPENCL")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopencl -foffload=${OFFLOAD_TARGETS}")
+    message(STATUS "ENABLING OpenCL Implementation")
+    message(STATUS "Offload targets = ${OFFLOAD_TARGETS}")
+  # endif()
+else()
+  message(STATUS "DISABLING OpenCL Implementation")
+endif()
+
 #------------------------------------------------------------------------
 # Add package paths
 #------------------------------------------------------------------------

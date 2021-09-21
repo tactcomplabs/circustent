@@ -1,11 +1,6 @@
-#pragma OPENCL EXTENSION cl_khr_int64_base_atomics: enable
-#pragma OPENCL EXTENSION cl_khr_int64_extended_atomics: enable
-
-
 // XXX: uint64_t not available in .cl files
 // XXX: get_global_id() arguments might need to be adjusted
 
-// FIXME:
 __kernel void RAND_ADD(
         __local ulong* ARRAY,
         __local ulong* IDX,
@@ -24,7 +19,6 @@ __kernel void RAND_ADD(
     }
 }
 
-// FIXME:
 __kernel void RAND_CAS(
         __local ulong* ARRAY,
         __local ulong* IDX,

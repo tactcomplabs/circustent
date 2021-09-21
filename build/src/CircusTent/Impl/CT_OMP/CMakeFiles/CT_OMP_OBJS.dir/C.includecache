@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/mibeebe/beebe_circustent/src/CircusTent/Impl/CT_OMP/CT_OMP_IMPL.c
+omp.h
+-
+stdint.h
+-
+

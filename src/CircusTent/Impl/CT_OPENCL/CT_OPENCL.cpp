@@ -1,3 +1,5 @@
+// TODO: Don't time setup
+
 /*
  * _CT_OPENCL_IMPL_C
  *
@@ -111,25 +113,25 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel RAND_ADD = clCreateKernel(program, "RAND_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(RAND_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(RAND_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(RAND_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(RAND_ADD, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, RAND_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel RAND_CAS = clCreateKernel(program, "RAND_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(RAND_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(RAND_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(RAND_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(RAND_CAS, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, RAND_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
@@ -145,25 +147,25 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel STRIDE1_ADD = clCreateKernel(program, "STRIDE1_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDE1_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(STRIDE1_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(STRIDE1_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(STRIDE1_ADD, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, STRIDE1_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel STRIDE1_CAS = clCreateKernel(program, "STRIDE1_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDE1_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(STRIDE1_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(STRIDE1_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(STRIDE1_CAS, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, STRIDE1_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
@@ -179,7 +181,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel STRIDEN_ADD = clCreateKernel(program, "STRIDEN_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDEN_ADD, 0, sizeof(cl_mem), Array);
@@ -187,12 +188,12 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       clSetKernelArg(STRIDEN_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(STRIDEN_ADD, 3, sizeof(cl_mem), pes);
       clSetKernelArg(STRIDEN_ADD, 4, sizeof(cl_mem), stride);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, STRIDEN_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel STRIDEN_CAS = clCreateKernel(program, "STRIDEN_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDEN_CAS, 0, sizeof(cl_mem), Array);
@@ -200,6 +201,7 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       clSetKernelArg(STRIDEN_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(STRIDEN_CAS, 3, sizeof(cl_mem), pes);
       clSetKernelArg(STRIDEN_CAS, 4, sizeof(cl_mem), stride);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, STRIDEN_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
@@ -215,25 +217,25 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel PTRCHASE_ADD = clCreateKernel(program, "PTRCHASE_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(PTRCHASE_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(PTRCHASE_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(PTRCHASE_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(PTRCHASE_ADD, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, PTRCHASE_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel PTRCHASE_CAS = clCreateKernel(program, "PTRCHASE_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(PTRCHASE_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(PTRCHASE_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(PTRCHASE_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(PTRCHASE_CAS, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, PTRCHASE_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
@@ -249,25 +251,25 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel SG_ADD = clCreateKernel(program, "SG_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(SG_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SG_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SG_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(SG_ADD, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, SG_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(4, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel SG_CAS = clCreateKernel(program, "SG_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(SG_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SG_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SG_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(SG_CAS, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, SG_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(4, iters, pes);
@@ -283,25 +285,25 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel CENTRAL_ADD = clCreateKernel(program, "CENTRAL_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(CENTRAL_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(CENTRAL_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(CENTRAL_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(CENTRAL_ADD, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, CENTRAL_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel CENTRAL_CAS = clCreateKernel(program, "CENTRAL_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(CENTRAL_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(CENTRAL_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(CENTRAL_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(CENTRAL_CAS, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, CENTRAL_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(1, iters, pes);
@@ -317,25 +319,25 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel SCATTER_ADD = clCreateKernel(program, "SCATTER_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(SCATTER_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SCATTER_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SCATTER_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(SCATTER_ADD, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, SCATTER_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(3, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel SCATTER_CAS = clCreateKernel(program, "SCATTER_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(SCATTER_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SCATTER_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SCATTER_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(SCATTER_CAS, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, SCATTER_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(3, iters, pes);
@@ -351,25 +353,25 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     switch (AType)
     {
     case CT_ADD:
-      StartTime = this->MySecond();
       cl_kernel GATHER_ADD = clCreateKernel(program, "GATHER_ADD", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(GATHER_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(GATHER_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(GATHER_ADD, 2, sizeof(cl_mem), iters);
       clSetKernelArg(GATHER_ADD, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, GATHER_ADD, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(3, iters, pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
       cl_kernel GATHER_CAS = clCreateKernel(program, "GATHER_CAS", NULL);
        // XXX: arg might need to be a pointer
       clSetKernelArg(GATHER_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(GATHER_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(GATHER_CAS, 2, sizeof(cl_mem), iters);
       clSetKernelArg(GATHER_CAS, 3, sizeof(cl_mem), pes);
+      StartTime = this->MySecond();
       clEnqueueNDRangeKernel(queue, GATHER_CAS, 1, NULL, &globalSize, &localSize, 0, NULL, NULL);
       EndTime = this->MySecond();
       OPS = this->GAM(3, iters, pes);
