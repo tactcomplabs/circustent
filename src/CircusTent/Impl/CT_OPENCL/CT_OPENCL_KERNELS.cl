@@ -1,6 +1,3 @@
-// XXX: uint64_t not available in .cl files
-// XXX: get_global_id() arguments might need to be adjusted
-
 __kernel void RAND_ADD(
         __local ulong* ARRAY,
         __local ulong* IDX,
@@ -44,7 +41,6 @@ __kernel void STRIDE1_ADD(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
 
@@ -63,7 +59,6 @@ __kernel void STRIDE1_CAS(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
 
@@ -84,7 +79,6 @@ __kernel void STRIDEN_ADD(
         ulong pes,
         ulong stride
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
 
@@ -104,7 +98,6 @@ __kernel void STRIDEN_CAS(
         ulong pes,
         ulong stride
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
 
@@ -124,7 +117,6 @@ __kernel void PTRCHASE_ADD(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
 
@@ -165,7 +157,6 @@ __kernel void SG_ADD(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
     ulong src    = 0;
@@ -190,7 +181,6 @@ __kernel void SG_CAS(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
     ulong src    = 0;
@@ -222,7 +212,6 @@ __kernel void CENTRAL_ADD(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
 
     #pragma ocl parallel private(i)
@@ -239,7 +228,6 @@ __kernel void CENTRAL_CAS(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
 
     #pragma ocl parallel private(i)
@@ -257,7 +245,6 @@ __kernel void SCATTER_ADD(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
     ulong dest   = 0;
@@ -280,7 +267,6 @@ __kernel void SCATTER_CAS(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
     ulong dest   = 0;
@@ -308,7 +294,6 @@ __kernel void GATHER_ADD(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
     ulong dest   = 0;
@@ -331,7 +316,6 @@ __kernel void GATHER_CAS(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
     ulong dest   = 0;

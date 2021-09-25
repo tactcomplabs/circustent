@@ -1,1 +1,1 @@
-/usr/bin/c++   -O3 -std=c++11 -Wall  -fopencl -foffload= -D_ENABLE_OPENCL   -fopencl -foffload= CMakeFiles/circustent.dir/CT_Main.cpp.o CMakeFiles/circustent.dir/CTOpts.cpp.o Impl/CT_OPENCL/CMakeFiles/CT_OPENCL_OBJS.dir/CT_OPENCL.cpp.o  -o circustent 
+/usr/bin/c++   -O3 -std=c++11 -Wall  -D_ENABLE_OPENCL   CMakeFiles/circustent.dir/CT_Main.cpp.o CMakeFiles/circustent.dir/CTOpts.cpp.o Impl/CT_OPENCL/CMakeFiles/CT_OPENCL_OBJS.dir/CT_OPENCL.cpp.o  -o circustent 

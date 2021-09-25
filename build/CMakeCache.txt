@@ -234,13 +234,19 @@ DVIPS_CONVERTER:FILEPATH=/usr/bin/dvips
 DVIPS_CONVERTER_FLAGS:STRING=-Ppdf -G0 -t letter
 
 //No help, variable specified on the command line.
+EMABLE_OPENCL:UNINITIALIZED=OFF
+
+//No help, variable specified on the command line.
 ENABLE_OCL:UNINITIALIZED=ON
 
 //No help, variable specified on the command line.
 ENABLE_OMP:UNINITIALIZED=OFF
 
 //No help, variable specified on the command line.
-ENABLE_OPENCL:UNINITIALIZED=OFF
+ENABLE_OPENACC:UNINITIALIZED=OFF
+
+//No help, variable specified on the command line.
+ENABLE_OPENCL:UNINITIALIZED=ON
 
 //Path to a program.
 GZIP:FILEPATH=/bin/gzip
@@ -462,7 +468,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=8
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
