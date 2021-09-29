@@ -90,11 +90,13 @@ circustent_OBJECTS = \
 
 # External object files for target circustent
 circustent_EXTERNAL_OBJECTS = \
-"/home/mibeebe/beebe_circustent/build/src/CircusTent/Impl/CT_OPENCL/CMakeFiles/CT_OPENCL_OBJS.dir/CT_OPENCL.cpp.o"
+"/home/mibeebe/beebe_circustent/build/src/CircusTent/Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/CT_OMP.cpp.o" \
+"/home/mibeebe/beebe_circustent/build/src/CircusTent/Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/CT_OMP_IMPL.c.o"
 
 src/CircusTent/circustent: src/CircusTent/CMakeFiles/circustent.dir/CT_Main.cpp.o
 src/CircusTent/circustent: src/CircusTent/CMakeFiles/circustent.dir/CTOpts.cpp.o
-src/CircusTent/circustent: src/CircusTent/Impl/CT_OPENCL/CMakeFiles/CT_OPENCL_OBJS.dir/CT_OPENCL.cpp.o
+src/CircusTent/circustent: src/CircusTent/Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/CT_OMP.cpp.o
+src/CircusTent/circustent: src/CircusTent/Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/CT_OMP_IMPL.c.o
 src/CircusTent/circustent: src/CircusTent/CMakeFiles/circustent.dir/build.make
 src/CircusTent/circustent: src/CircusTent/CMakeFiles/circustent.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mibeebe/beebe_circustent/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable circustent"

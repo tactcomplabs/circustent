@@ -259,17 +259,17 @@ circustent/fast:
 .PHONY : circustent/fast
 
 #=============================================================================
-# Target rules for targets named CT_OPENCL_OBJS
+# Target rules for targets named CT_OMP_OBJS
 
 # Build rule for target.
-CT_OPENCL_OBJS: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 CT_OPENCL_OBJS
-.PHONY : CT_OPENCL_OBJS
+CT_OMP_OBJS: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 CT_OMP_OBJS
+.PHONY : CT_OMP_OBJS
 
 # fast build rule for target.
-CT_OPENCL_OBJS/fast:
-	$(MAKE) -f src/CircusTent/Impl/CT_OPENCL/CMakeFiles/CT_OPENCL_OBJS.dir/build.make src/CircusTent/Impl/CT_OPENCL/CMakeFiles/CT_OPENCL_OBJS.dir/build
-.PHONY : CT_OPENCL_OBJS/fast
+CT_OMP_OBJS/fast:
+	$(MAKE) -f src/CircusTent/Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/build.make src/CircusTent/Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/build
+.PHONY : CT_OMP_OBJS/fast
 
 # Help Target
 help:
@@ -291,7 +291,7 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... circustent"
-	@echo "... CT_OPENCL_OBJS"
+	@echo "... CT_OMP_OBJS"
 .PHONY : help
 
 

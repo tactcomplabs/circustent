@@ -1,5 +1,3 @@
-// TODO: Don't time setup
-
 /*
  * _CT_OPENCL_IMPL_C
  *
@@ -63,7 +61,7 @@ cl_context context = clCreateContext(0, 1, &deviceIds[device_num], NULL, NULL, N
 // Create a Command Queue (with profiling enabled, needed for timing kernels)
 cl_command_queue queue = clCreateCommandQueue(context, deviceIds[device_num], CL_QUEUE_PROFILING_ENABLE, NULL);
 
-// Creare program for specified context
+// Create program for specified context
 std::string LoadKernel(const char* name) {
     std::ifstream in(name);
   std::string result((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
@@ -394,7 +392,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
   return true;
 }
 
-// FIXME: CHANGED ALL uint64_t DATA TYPES TO ulong. Might not work
 bool CT_OPENCL::AllocateData(
     ulong m,
     ulong p,

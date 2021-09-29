@@ -240,13 +240,13 @@ EMABLE_OPENCL:UNINITIALIZED=OFF
 ENABLE_OCL:UNINITIALIZED=ON
 
 //No help, variable specified on the command line.
-ENABLE_OMP:UNINITIALIZED=OFF
+ENABLE_OMP:UNINITIALIZED=ON
 
 //No help, variable specified on the command line.
 ENABLE_OPENACC:UNINITIALIZED=OFF
 
 //No help, variable specified on the command line.
-ENABLE_OPENCL:UNINITIALIZED=ON
+ENABLE_OPENCL:UNINITIALIZED=OFF
 
 //Path to a program.
 GZIP:FILEPATH=/bin/gzip
