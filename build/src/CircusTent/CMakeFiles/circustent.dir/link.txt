@@ -1,1 +1,0 @@
-/usr/bin/c++   -O3 -std=c++11 -Wall  -fopenmp -D_ENABLE_OMP_   -fopenmp CMakeFiles/circustent.dir/CT_Main.cpp.o CMakeFiles/circustent.dir/CTOpts.cpp.o Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/CT_OMP.cpp.o Impl/CT_OMP/CMakeFiles/CT_OMP_OBJS.dir/CT_OMP_IMPL.c.o  -o circustent 
