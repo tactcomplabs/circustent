@@ -364,10 +364,6 @@ bool CT_MPI::AllocateData( uint64_t m,
     std::cout << "Done initializing MPI data members" << std::endl;
   }
 
-  // Initial fences to enable RMA
-  MPI_Win_fence(0, ArrayWin);
-  MPI_Win_fence(0, IdxWin);
-
   MPI_Barrier(MPI_COMM_WORLD);
 
   return true;
