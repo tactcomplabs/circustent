@@ -112,7 +112,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel RAND_ADD = clCreateKernel(program, "RAND_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(RAND_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(RAND_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(RAND_ADD, 2, sizeof(cl_mem), iters);
@@ -124,7 +123,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel RAND_CAS = clCreateKernel(program, "RAND_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(RAND_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(RAND_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(RAND_CAS, 2, sizeof(cl_mem), iters);
@@ -146,7 +144,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel STRIDE1_ADD = clCreateKernel(program, "STRIDE1_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDE1_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(STRIDE1_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(STRIDE1_ADD, 2, sizeof(cl_mem), iters);
@@ -158,7 +155,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel STRIDE1_CAS = clCreateKernel(program, "STRIDE1_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDE1_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(STRIDE1_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(STRIDE1_CAS, 2, sizeof(cl_mem), iters);
@@ -180,7 +176,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel STRIDEN_ADD = clCreateKernel(program, "STRIDEN_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDEN_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(STRIDEN_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(STRIDEN_ADD, 2, sizeof(cl_mem), iters);
@@ -193,7 +188,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel STRIDEN_CAS = clCreateKernel(program, "STRIDEN_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(STRIDEN_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(STRIDEN_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(STRIDEN_CAS, 2, sizeof(cl_mem), iters);
@@ -216,7 +210,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel PTRCHASE_ADD = clCreateKernel(program, "PTRCHASE_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(PTRCHASE_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(PTRCHASE_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(PTRCHASE_ADD, 2, sizeof(cl_mem), iters);
@@ -228,7 +221,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel PTRCHASE_CAS = clCreateKernel(program, "PTRCHASE_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(PTRCHASE_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(PTRCHASE_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(PTRCHASE_CAS, 2, sizeof(cl_mem), iters);
@@ -262,7 +254,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel SG_CAS = clCreateKernel(program, "SG_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(SG_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SG_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SG_CAS, 2, sizeof(cl_mem), iters);
@@ -284,7 +275,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel CENTRAL_ADD = clCreateKernel(program, "CENTRAL_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(CENTRAL_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(CENTRAL_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(CENTRAL_ADD, 2, sizeof(cl_mem), iters);
@@ -296,7 +286,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel CENTRAL_CAS = clCreateKernel(program, "CENTRAL_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(CENTRAL_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(CENTRAL_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(CENTRAL_CAS, 2, sizeof(cl_mem), iters);
