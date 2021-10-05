@@ -17,10 +17,10 @@
  *
  */
 
-#ifdef _ENABLE_OPENCL_      // todo
+#ifdef _ENABLE_OPENCL_
 
-#ifndef _CT_OPENCL_H_       // todo
-#define _CT_OPENCL_H_       // todo
+#ifndef _CT_OPENCL_H_
+#define _CT_OPENCL_H_
 
 #include <cstdlib>
 #include <ctime>

@@ -137,7 +137,6 @@ __kernel void PTRCHASE_CAS(
         ulong iters,
         ulong pes
 ) {
-    // todo
     ulong i      = 0;
     ulong start  = 0;
 
