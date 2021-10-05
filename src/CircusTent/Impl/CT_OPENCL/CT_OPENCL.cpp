@@ -242,7 +242,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel SG_ADD = clCreateKernel(program, "SG_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(SG_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SG_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SG_ADD, 2, sizeof(cl_mem), iters);
