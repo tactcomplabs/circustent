@@ -10,14 +10,6 @@
 
 #ifdef _CT_OPENCL_H_
 #include "CT_OPENCL.h"
-#include <fstream>
-
-#define __CL_ENABLE_EXCEPTIONS
-#ifdef __APPLE__
-#include <OpenCL/opencl.h>
-#else
-#include <CL/cl.h>
-#endif
 
 using namespace cl;
 
@@ -77,8 +69,6 @@ cl_program program = CreateProgram(LoadKernel("CT_OPENCL_KERNELS.cl"), context);
 
 // Build the program
 clBuildProgram(program, 0, NULL, "-cl-mad-enable", NULL, NULL);
-
-// TODO: Create a memory buffer
 
 // ************* END OF OpenCL Setup Code ***************
 

@@ -22,9 +22,6 @@
 #ifndef _CT_OPENCL_H_
 #define _CT_OPENCL_H_
 
-#include <cstdlib>
-#include <ctime>
-
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #else
