@@ -78,7 +78,7 @@ cl_program program = CreateProgram(LoadKernel("CT_OPENCL_KERNELS.cl"), context);
 // Build the program
 clBuildProgram(program, 0, NULL, "-cl-mad-enable", NULL, NULL);
 
-// TODO: Do I need to create a buffer here?
+// TODO: Create a memory buffer
 
 // ************* END OF OpenCL Setup Code ***************
 
@@ -318,7 +318,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel SCATTER_ADD = clCreateKernel(program, "SCATTER_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(SCATTER_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SCATTER_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SCATTER_ADD, 2, sizeof(cl_mem), iters);
@@ -330,7 +329,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel SCATTER_CAS = clCreateKernel(program, "SCATTER_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(SCATTER_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(SCATTER_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(SCATTER_CAS, 2, sizeof(cl_mem), iters);
@@ -352,7 +350,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
     {
     case CT_ADD:
       cl_kernel GATHER_ADD = clCreateKernel(program, "GATHER_ADD", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(GATHER_ADD, 0, sizeof(cl_mem), Array);
       clSetKernelArg(GATHER_ADD, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(GATHER_ADD, 2, sizeof(cl_mem), iters);
@@ -364,7 +361,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS)
       break;
     case CT_CAS:
       cl_kernel GATHER_CAS = clCreateKernel(program, "GATHER_CAS", NULL);
-       // XXX: arg might need to be a pointer
       clSetKernelArg(GATHER_CAS, 0, sizeof(cl_mem), Array);
       clSetKernelArg(GATHER_CAS, 1, sizeof(cl_mem), Idx);
       clSetKernelArg(GATHER_CAS, 2, sizeof(cl_mem), iters);
@@ -481,7 +477,6 @@ bool CT_OPENCL::AllocateData(
   return true;
 }
 
-// ---------------------------------------------------------
 bool CT_OPENCL::FreeData()
 {
   if (Array) {

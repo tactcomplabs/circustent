@@ -117,7 +117,6 @@ else()
   message(STATUS "DISABLING OpenACC Implementation")
 endif()
 
-# FIXME:
 if (ENABLE_OPENCL)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_OPENCL")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_OPENCL")

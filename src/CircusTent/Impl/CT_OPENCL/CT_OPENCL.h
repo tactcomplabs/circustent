@@ -25,13 +25,11 @@
 #include <cstdlib>
 #include <ctime>
 
-// -------------------------
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #else
 #include <CL/cl.h>
 #endif
-// -------------------------
 
 #include "CircusTent/CTBaseImpl.h"
 
@@ -67,8 +65,8 @@ public:
   virtual bool FreeData() override;
 };
 
-#endif  // CT_OPENCL_H_          FIXME:
-#endif  // _ENABLE_OPENCL_       FIXME:
+#endif  // CT_OPENCL_H_
+#endif  // _ENABLE_OPENCL_
 
 // ==============================================================
 // EOF
