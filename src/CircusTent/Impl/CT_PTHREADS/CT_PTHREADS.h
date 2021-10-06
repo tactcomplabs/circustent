@@ -23,6 +23,7 @@
 #define _CT_PTHREADS_H_
 
 #include <cstdlib>
+#include <pthread.h>
 #include <ctime>
 
 #include "CircusTent/CTBaseImpl.h"

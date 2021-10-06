@@ -19,39 +19,27 @@
 #endif
 
 #ifdef _ENABLE_OPENSHMEM_
-#include <shmem.h>
 #include "Impl/CT_OPENSHMEM/CT_SHMEM.h"
 #endif
 
 #ifdef _ENABLE_MPI_
-#include <mpi.h>
 #include "Impl/CT_MPI/CT_MPI.h"
 #endif
 
 #ifdef _ENABLE_XBGAS_
-#include <xbrtime.h>
 #include "Impl/CT_XBGAS/CT_XBGAS.h"
 #endif
 
 #ifdef _ENABLE_PTHREADS_
-#include <pthread.h>
 #include "Impl/CT_PTHREADS/CT_PTHREADS.h"
 #endif
 
 #ifdef _ENABLE_OPENACC_
-#include <openacc.h>
 #include "Impl/CT_OPENACC/CT_OPENACC.h"
 #endif
 
 #ifdef _ENABLE_OPENCL_
-#ifdef __APPLE__
-#include <OpenCL/opencl.h>
 #include "Impl/CT_OPENCL/CT_OPENCL.h"
-#else
-#include <CL/cl.h>
-#include <CL/cl.hpp>
-#include "Impl/CT_OPENCL/CT_OPENCL.h"
-#endif
 #endif
 
 void PrintTiming( double Timing, double GAMS );
@@ -430,12 +418,12 @@ void RunBenchOCL() {
     std::cout << "ERROR: COULD NOT FREETHE MEMORY FOR CT_OCL" << std::endl;
     free( CT );
     return;
-  } 
+  }
 
   // Print the timing
   PrintTiming( Timing, GAMS );
 
-  // sFree the structure
+  // Free the structure
   free( CT );
 }
 #endif
@@ -476,11 +464,9 @@ int main( int argc, char **argv ){
 #ifdef _ENABLE_PTHREADS_
     RunBenchPthreads(Opts);
 #endif
-
 #ifdef _ENABLE_OPENACC_
     RunBenchOpenACC(Opts);
 #endif
-
 #ifdef _ENABLE_OPENCL_
     RunBenchOCL(Opts);
 #endif

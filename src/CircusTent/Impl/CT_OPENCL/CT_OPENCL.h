@@ -26,6 +26,7 @@
 #include <OpenCL/opencl.h>
 #else
 #include <CL/cl.h>
+#include <CL/cl.hpp>
 #endif
 
 #include "CircusTent/CTBaseImpl.h"
