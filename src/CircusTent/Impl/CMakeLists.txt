@@ -33,4 +33,8 @@ if (ENABLE_OPENACC)
   add_subdirectory(CT_OPENACC)
 endif()
 
+if (ENABLE_OPENCL)
+  add_subdirectory(CT_OPENCL)
+endif()
+
 # EOF

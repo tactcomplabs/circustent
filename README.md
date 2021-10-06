@@ -412,6 +412,32 @@ the target device type and ID, respectively
 | GATHER_ADD | yes |
 | GATHER_CAS | yes |
 
+### OpenCL
+* CMake Build Flags: -DENABLE_OPENCL=ON
+* Implementation Language: C++ & C using GNU intrinsics
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Utilizes \_\_ATOMIC\_RELAXED where appropriate
+* Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
 ## Execution Parameters
 
 ### Parameters
@@ -503,6 +529,7 @@ CircustTent is licensed under an Apache-style license see the [LICENSE](LICENSE)
 
 ## Authors
 * *Brody Williams* - *PhD Student* - [Texas Tech University](https://discl.cs.ttu.edu/doku.php)
+* *Michael Beebe* - *PhD Student* - [Texas Tech University](https://discl.cs.ttu.edu/doku.php)
 * *John Leidel* - *Chief Scientist* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 * *David Donofrio* - *Chief Hardware Architect* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 

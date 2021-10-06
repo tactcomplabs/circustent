@@ -117,6 +117,15 @@ else()
   message(STATUS "DISABLING OpenACC Implementation")
 endif()
 
+if (ENABLE_OPENCL)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_OPENCL")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_OPENCL")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+    message(STATUS "ENABLING OpenCL Implementation")
+else()
+  message(STATUS "DISABLING OpenCL Implementation")
+endif()
+
 #------------------------------------------------------------------------
 # Add package paths
 #------------------------------------------------------------------------

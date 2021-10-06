@@ -44,4 +44,8 @@ if (ENABLE_OPENACC)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OPENACC_OBJS>)
 endif()
 
+if (ENABLE_OPENCL)
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OPENCL_OBJS>)
+endif()
+
 install(TARGETS circustent DESTINATION bin)
