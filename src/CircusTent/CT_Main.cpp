@@ -397,7 +397,7 @@ void RunBenchOCL() {
                          Opts->GetIters(),
                          Opts->GetStride()))
   {
-      std::cout << "Error: COULD NOT ALOCATE MEMORY FOR CT_OCL" << std::endl;
+      std::cout << "ERROR: COULD NOT ALOCATE MEMORY FOR CT_OCL" << std::endl;
       CT->FreeData();
       free( CT );
       return;
