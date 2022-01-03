@@ -1,5 +1,5 @@
 /*
- * CT_OPENCL__H
+ * CT_OPENCL_H
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -33,33 +33,56 @@
 
 class CT_OPENCL : public CTBaseImpl{
 private:
-  uint64_t *Array;          ///< CT_OPENCL: Data array
-  uint64_t *Idx;            ///< CT_OPENCL: Index array
-  uint64_t memSize;         ///< CT_OPENCL: Memory size (in bytes)
-  uint64_t pes;             ///< CT_OPENCL: Number of processing elements
-  uint64_t iters;           ///< CT_OPENCL: Number of iterations per team
-  uint64_t elems;           ///< CT_OPENCL: Number of u8 elements
-  uint64_t stride;          ///< CT_OPENCL: Stride in elements
-  int deviceID;             ///< CT_OPENCL: Target device id
+  cl_ulong *Array;              ///< CT_OPENCL: Data array
+  cl_mem arrayBuffer;           ///< CT_OPENCL: OCL array buffer object
+  cl_ulong *Idx;                ///< CT_OPENCL: Index array
+  cl_mem idxBuffer;             ///< CT_OPENCL: OCL idx array buffer object
+  cl_ulong memSize;             ///< CT_OPENCL: Memory size (in bytes)
+  cl_ulong pes;                 ///< CT_OPENCL: Number of processing elements
+  cl_ulong iters;               ///< CT_OPENCL: Number of iterations per pe
+  cl_ulong elems;               ///< CT_OPENCL: Number of u8 elements
+  cl_ulong stride;              ///< CT_OPENCL: Stride in elements
+  cl_uint numPlatforms;         ///< CT_OPENCL: Number of detected platforms
+  cl_platform_id *platformIDs;  ///< CT_OPENCL: Array of platform IDs
+  int targetPlatformID;         ///< CT_OPENCL: Index of target platform
+  cl_uint numDevices;           ///< CT_OPENCL: Number of detected devices for selected platform
+  cl_device_ids *deviceIDs;     ///< CT_OPENCL: Array of device IDs for selected platform
+  int targetDeviceID;           ///< CT_OPENCL: Index of target device for selected platform
+  cl_context context;           ///< CT_OPENCL: OCL context
+  cl_command_queue commandQueue;///< CT_OPENCL: OCL command queue
+  cl_program program;           ///< CT_OPENCL: OCL program containing CircusTent kernels
+  cl_kernel kernel;             ///< CT_OPENCL: Selected kernel for execution
 
 public:
-  /// CircusTent OpenCL Target constructor
+  /// CircusTent OpenCL constructor
   CT_OPENCL(CTBaseImpl::CTBenchType B,
          CTBaseImpl::CTAtomType A);
 
-  /// CircusTent OpenCL Target destructor
+  /// CircusTent OpenCL destructor
   ~CT_OPENCL();
 
-  /// CircusTent OpenCL Target exeuction function
+  // Helper functions
+  void checkOCLError(const char* function, const char* filename, int line, cl_int error);
+  void printBuildErrors();
+  std::string GetPlatformName(cl_platform_id id);
+  std::string GetDeviceName(cl_device_id id);
+
+  // Run time calculation for OpenCL implementaion, overrides CT_BASE
+  double Runtime(cl_ulong StartTime, cl_ulong EndTime);
+
+  // CircusTent OpenCL initialization function
+  bool Initialize();
+
+  /// CircusTent OpenCL execution function
   virtual bool Execute(double &Timing,double &GAMS) override;
 
-  /// CircusTent OpenCL Target data allocation function
-  virtual bool AllocateData( uint64_t memSize,
-                             uint64_t pes,
-                             uint64_t iters,
-                             uint64_t stride ) override;
+  /// CircusTent OpenCL data allocation function
+  virtual bool AllocateData( cl_ulong memSize,
+                             cl_ulong pes,
+                             cl_ulong iters,
+                             cl_ulong stride ) override;
 
-  /// CircusTent OpenCL Target data free function
+  /// CircusTent OpenCL data free function
   virtual bool FreeData() override;
 };
 

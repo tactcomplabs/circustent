@@ -44,6 +44,61 @@
 
 void PrintTiming( double Timing, double GAMS );
 
+#ifdef _ENABLE_OPENCL_
+void RunBenchOCL() {
+  // Init the OpenCL Object
+  CT_OCL *CT = new CT_OCL(Opts->GetBenchType(),
+                          Opts->GetAtomType());
+
+  if ( !CT ) {
+    std::cout << "ERROR: COULD NOT ALLOCATE CT_OCL OBJECTS" << std::endl;
+    return ;
+  }
+
+  // Initialize the OCL environment
+  if ( !CT->Initialize() ){
+    std::cout << "ERROR : COULD NOT INITIALIZE CT_OCL ENVIRONMENT" << std::endl;
+    CT->FreeData();
+    free( CT );
+    return ;
+  }
+
+  // Allocate the data
+  if (!CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride())){
+      std::cout << "ERROR: COULD NOT ALLOCATE MEMORY FOR CT_OCL" << std::endl;
+      CT->FreeData();
+      free( CT );
+      return;
+  }
+
+  // Execute the benchmark
+  double Timing = 0;
+  double GAMS = 0.;
+  if ( !CT->Execute(Timing, GAMS) ) {
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_OCL" << std::endl;
+    CT->FreeData();
+    free ( CT );
+    return;
+  }
+
+  // Free the data
+  if ( !CT->FreeData() ) {
+    std::cout << "ERROR: COULD NOT FREE THE MEMORY FOR CT_OCL" << std::endl;
+    free( CT );
+    return;
+  }
+
+  // Print the timing
+  PrintTiming( Timing, GAMS );
+
+  // Free the structure
+  free( CT );
+}
+#endif
+
 #ifdef _ENABLE_OPENACC_
 void RunBenchOpenACC( CTOpts *Opts ){
   // init the OpenACC object
@@ -81,15 +136,17 @@ void RunBenchOpenACC( CTOpts *Opts ){
     return ;
   }
 
+  // Print the timing
+  PrintTiming( Timing, GAMS );
+
+
+clean_up:
   // Free the data
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_OPENACC" << std::endl;
     free( CT );
     return ;
   }
-
-  // Print the timing
-  PrintTiming( Timing, GAMS );
 
   // free the structure
   free( CT );
@@ -380,54 +437,6 @@ void RunBenchOMP( CTOpts *Opts ){
 }
 #endif
 
-#ifdef _ENABLE_OPENCL_
-void RunBenchOCL() {
-  // Init the OpenCL Object
-  CT_OCL *CT = new CT_OCL(Opts->GetBenchType(),
-                          Opts->GetAtomType());
-
-  if ( !CT ) {
-    std::cout << "ERROR: COULD NOT ALLOCATE CT_OCL OBJECTS" << std::endl;
-    return ;
-  }
-
-  // Allocate the data
-  if (!CT->AllocateData( Opts->GetMemSize(),
-                         Opts->GetPEs(),
-                         Opts->GetIters(),
-                         Opts->GetStride()))
-  {
-      std::cout << "ERROR: COULD NOT ALOCATE MEMORY FOR CT_OCL" << std::endl;
-      CT->FreeData();
-      free( CT );
-      return;
-  }
-
-  // Execute the benchmark
-  double Timing = 0;
-  double GAMS = 0.;
-  if ( !CT->Execute(Timing, GAMS) ) {
-    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_OCL" << std::endl;
-    CT->FreeData();
-    free ( CT );
-    return;
-  }
-
-  // Free the data
-  if ( !CT->FreeData() ) {
-    std::cout << "ERROR: COULD NOT FREETHE MEMORY FOR CT_OCL" << std::endl;
-    free( CT );
-    return;
-  }
-
-  // Print the timing
-  PrintTiming( Timing, GAMS );
-
-  // Free the structure
-  free( CT );
-}
-#endif
-
 void PrintTiming(double Timing, double GAMS){
   std::cout << "================================================" << std::endl;
   std::cout << " Timing (secs)        : " << Timing << std::endl;
@@ -470,7 +479,6 @@ int main( int argc, char **argv ){
 #ifdef _ENABLE_OPENCL_
     RunBenchOCL(Opts);
 #endif
-
   }
 
   delete Opts;

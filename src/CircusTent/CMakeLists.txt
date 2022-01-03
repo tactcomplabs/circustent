@@ -46,7 +46,7 @@ endif()
 
 if (ENABLE_OPENCL)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OPENCL_OBJS>)
-  # For development/testing on GC64
+  # Temp: For development/testing on GC64
   target_link_libraries(circustent /opt/intel/opencl_compilers_and_libraries_18.1.0.015/linux/compiler/lib/intel64_lin/libOpenCL.so)
 endif()
 

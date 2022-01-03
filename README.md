@@ -414,10 +414,11 @@ the target device type and ID, respectively
 
 ### OpenCL
 * CMake Build Flags: -DENABLE_OPENCL=ON
-* Implementation Language: C++ & C using GNU intrinsics
-* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
-* Utilizes \_\_ATOMIC\_RELAXED where appropriate
-* Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
+* Implementation Language: C++ & C with OpenCL extensions
+* Users must define both $OCL_TARGET_PLATFORM_NAME and $OCL_TARGET_DEVICE_NAME to set
+the OpenCL target platform and device, respectively
+* Utilizes unsigned 64-bit integers (cl_ulong) for the ARRAY and IDX values
+* Utilizes OpenCL API-level atomic operations
 
 | Benchmark | Supported? |
 | ------ | ------ |
