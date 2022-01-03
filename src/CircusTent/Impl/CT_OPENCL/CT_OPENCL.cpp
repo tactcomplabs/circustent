@@ -30,23 +30,23 @@ CT_OPENCL::CT_OPENCL(CTBaseImpl::CTBenchType B,
 
 CT_OPENCL::~CT_OPENCL() {}
 
-void checkOCLError(const char* function, const char* filename, int line, cl_int error){
+void CT_OPENCL::checkOCLError(const char* function, const char* filename, int line, cl_int error){
   if(error != CL_SUCCESS){
     printf("ERROR: %s FAILED! (FILE: %s LINE: %d)\n", function, filename, line);
-    goto clean_up;
+    FreeData();
+    exit(-1);
   }
 }
 
-void printBuildErrors(){
+void CT_OPENCL::printBuildErrors(){
   cl_int error;
   size_t buildLogSize;
   error = clGetProgramBuildInfo(program, deviceIDs[targetDeviceID], CL_PROGRAM_BUILD_LOG, 0, NULL, &buildLogSize);
   checkOCLError("clGetProgramBuildInfo", __FILE__, __LINE__, error);
 
-  std::string buildLog;
-  buildLog.resize(buildLogSize);
+  char buildLog[buildLogSize];
 
-  error = clGetProgramBuildInfo(program, deviceIDs[targetDeviceID], CL_PROGRAM_BUILD_LOG, buildLogSize, buildLog.c_str(), NULL);
+  error = clGetProgramBuildInfo(program, deviceIDs[targetDeviceID], CL_PROGRAM_BUILD_LOG, buildLogSize, buildLog, NULL);
   checkOCLError("clGetProgramBuildInfo", __FILE__, __LINE__, error);
 
   std::cout << buildLog << std::endl;
@@ -73,7 +73,7 @@ std::string CT_OPENCL::GetPlatformName(cl_platform_id id){
 std::string CT_OPENCL::GetDeviceName(cl_device_id id){
 
   cl_int error;
-  std:string result;
+  std::string result;
   size_t size = 0;
 
   error = clGetDeviceInfo(id, CL_DEVICE_NAME, 0, nullptr, &size);
@@ -87,7 +87,7 @@ std::string CT_OPENCL::GetDeviceName(cl_device_id id){
   return result;
 }
 
-double Runtime(cl_ulong StartTime, cl_ulong EndTime){
+double CT_OPENCL::Runtime(cl_ulong StartTime, cl_ulong EndTime){
   // Convert nanoseconds to seconds
   return (double) ((EndTime-StartTime) * 1.e-9);
 }
@@ -107,7 +107,7 @@ bool CT_OPENCL::Initialize(){
     return false;
   }
   else{
-    std::cout << "Found " << numPlatforms << " platforms." << std:endl;
+    std::cout << "Found " << numPlatforms << " platforms." << std::endl;
   }
 
   // Get available platformIDs
@@ -117,7 +117,7 @@ bool CT_OPENCL::Initialize(){
 
   // Print available platform names/IDs
   std::cout << "Available Platforms:" << std::endl;
-  for(int i = 0; i < numPlatforms; i++){
+  for(cl_uint i = 0; i < numPlatforms; i++){
     std::cout << "Platform ID: " << i << " Platforn Name: " << GetPlatformName(platformIDs[i]) << std::endl;
   }
 
@@ -128,8 +128,8 @@ bool CT_OPENCL::Initialize(){
   }
 
   // Find target platform
-  for(int i = 0; i < numPlatforms; i++){
-    if(strcmp(getenv("OCL_TARGET_PLATFORM_NAME"), GetPlatformName(platformIDs[i]).c_str() == 0)){
+  for(cl_uint i = 0; i < numPlatforms; i++){
+    if(strcmp(getenv("OCL_TARGET_PLATFORM_NAME"), GetPlatformName(platformIDs[i]).c_str()) == 0){
       std::cout << "Platform ID " << i << " selected." << std::endl;
       targetPlatformID = i;
       break;
@@ -138,7 +138,7 @@ bool CT_OPENCL::Initialize(){
 
   // Ensure the target platform was found
   if(targetPlatformID == -1){
-    std::cout << "ERROR: PLATFORM " << std:string(getenv("OCL_TARGET_PLATFORM_NAME")) << " NOT FOUND!" << std::endl;
+    std::cout << "ERROR: PLATFORM " << std::string(getenv("OCL_TARGET_PLATFORM_NAME")) << " NOT FOUND!" << std::endl;
     return false;
   }
 
@@ -151,7 +151,7 @@ bool CT_OPENCL::Initialize(){
     return false;
   }
   else{
-    std::cout << "Found " << numDevices << " devices." << std:endl;
+    std::cout << "Found " << numDevices << " devices." << std::endl;
   }
 
   // Get available deviceIDs
@@ -161,7 +161,7 @@ bool CT_OPENCL::Initialize(){
 
   // Print available device names/IDs for selected platform
   std::cout << "Available Devices:" << std::endl;
-  for(int i = 0; i < numDevices; i++){
+  for(cl_uint i = 0; i < numDevices; i++){
     std::cout << "Device ID: " << i << " Device Name: " << GetDeviceName(deviceIDs[i]) << std::endl;
   }
 
@@ -172,8 +172,8 @@ bool CT_OPENCL::Initialize(){
   }
 
   // Find target device
-  for(int i = 0; i < numDevices; i++){
-    if(strcmp(getenv("OCL_TARGET_DEVICE_NAME"), GetDeviceName(deviceIDs[i]).c_str() == 0)){
+  for(cl_uint i = 0; i < numDevices; i++){
+    if(strcmp(getenv("OCL_TARGET_DEVICE_NAME"), GetDeviceName(deviceIDs[i]).c_str()) == 0){
       std::cout << "Device ID " << i << " selected." << std::endl;
       targetDeviceID = i;
       break;
@@ -187,18 +187,20 @@ bool CT_OPENCL::Initialize(){
   }
 
   // Create context
-  cl_context_properties properties[] = {CL_CONTEXT_PLATFORM, (cl_context_properties) targetPlatformID, 0};
-  context = clCreateContext(properties, 1, &deviceIDs[targetDeviceID], NULL, NULL, &error);
+  cl_context_properties contextProps[] = {CL_CONTEXT_PLATFORM, targetPlatformID, 0};
+  context = clCreateContext(contextProps, 1, &deviceIDs[targetDeviceID], NULL, NULL, &error);
   checkOCLError("clCreateContext", __FILE__, __LINE__, error);
 
   // Create command queue
-  commandQueue = clCreateCommandQueue(context, deviceIDs[targetDeviceID], CL_QUEUE_PROFILING_ENABLE, &error);
+  cl_queue_properties queueProps[] = {CL_QUEUE_PROPERTIES, CL_QUEUE_PROFILING_ENABLE, 0};
+  commandQueue = clCreateCommandQueueWithProperties(context, deviceIDs[targetDeviceID], queueProps, &error);
   checkOCLError("clCreateCommandQueue", __FILE__, __LINE__, error);
 
   // Create program
   std::ifstream source_stream("CT_OPENCL_KERNELS.cl");
-  std::string source_string(std::istreambuf_iterator<char>(source_stream), std::istreambuf_iterator<char>());
-  program = clCreateProgramWithSource(context, 1, &(source_string.c_str()), NULL, &error);
+  std::string source_string((std::istreambuf_iterator<char>(source_stream)), std::istreambuf_iterator<char>());
+  const char* strings[1] = { source_string.c_str() };
+  program = clCreateProgramWithSource(context, 1, strings, NULL, &error);
   checkOCLError("clCreateProgramWithSource", __FILE__, __LINE__, error);
 
   // Build program, if compile/link errors, print before clean up
@@ -215,8 +217,8 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
 
   CTBaseImpl::CTBenchType BType = this->GetBenchType(); // benchmark type
   CTBaseImpl::CTAtomType AType = this->GetAtomType();   // atomic type
-  cl_ulong StartTime = 0.;                                // start time
-  cl_ulong EndTime = 0.;                                  // end time
+  cl_ulong StartTime = 0.;                              // start time
+  cl_ulong EndTime = 0.;                                // end time
   double OPS = 0.;                                      // billions of operations
   cl_int error;                                         // OCL ret value
   cl_event kernelComplete;                              // OCL event for kernel execution
@@ -637,6 +639,10 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
 
       OPS = this->GAM(3, iters, pes);
       break;
+    default:
+      this->ReportBenchError();
+      return false;
+      break;
     }
   }
   else{
@@ -648,11 +654,11 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
   error = clWaitForEvents(1, &kernelComplete);
 
   // Extract start and end times from profiled event
-  error = clGetEventProfilingInfo(kernelComplete, CL_​PROFILING_​COMMAND_​START,
+  error = clGetEventProfilingInfo(kernelComplete, CL_PROFILING_COMMAND_START,
                                   sizeof(cl_ulong), &StartTime, NULL);
   checkOCLError("clGetProfilingInfo", __FILE__, __LINE__, error);
 
-  error = clGetEventProfilingInfo(kernelComplete, CL_​PROFILING_​COMMAND_​END,
+  error = clGetEventProfilingInfo(kernelComplete, CL_PROFILING_COMMAND_END,
                                   sizeof(cl_ulong), &EndTime, NULL);
   checkOCLError("clGetProfilingInfo", __FILE__, __LINE__, error);
   clReleaseEvent(kernelComplete);
@@ -735,10 +741,10 @@ bool CT_OPENCL::AllocateData( cl_ulong m,
   cl_event arrayWrite, idxWrite;
 
   // Create OpenCL buffers using initialized arrays
-  arrayBuffer = clCreateBuffer(context, CL_​MEM_​READ_​WRITE | CL_MEM_USE_HOST_PTR,
+  arrayBuffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
                                memSize, Array, &error);
   checkOCLError("clCreateBuffer", __FILE__, __LINE__, error);
-  idxBuffer = clCreateBuffer(context, CL_​MEM_​READ_​WRITE | CL_MEM_USE_HOST_PTR,
+  idxBuffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
                              (sizeof(cl_ulong) * (pes + 1) * iters), Idx, &error);
   checkOCLError("clCreateBuffer", __FILE__, __LINE__, error);
 
@@ -769,8 +775,8 @@ bool CT_OPENCL::FreeData(){
   // First release OCL resources
   clReleaseKernel(kernel);
   clReleaseProgram(program);
-  clReleaseMemObject();
-  clReleaseMemObject();
+  clReleaseMemObject(arrayBuffer);
+  clReleaseMemObject(idxBuffer);
   clReleaseCommandQueue(commandQueue);
   clReleaseContext(context);
 

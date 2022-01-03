@@ -22,6 +22,9 @@
 #ifndef _CT_OPENCL_H_
 #define _CT_OPENCL_H_
 
+#define CL_HPP_ENABLE_EXCEPTIONS
+#define CL_HPP_TARGET_OPENCL_VERSION 200
+
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #else
@@ -46,7 +49,7 @@ private:
   cl_platform_id *platformIDs;  ///< CT_OPENCL: Array of platform IDs
   int targetPlatformID;         ///< CT_OPENCL: Index of target platform
   cl_uint numDevices;           ///< CT_OPENCL: Number of detected devices for selected platform
-  cl_device_ids *deviceIDs;     ///< CT_OPENCL: Array of device IDs for selected platform
+  cl_device_id *deviceIDs;      ///< CT_OPENCL: Array of device IDs for selected platform
   int targetDeviceID;           ///< CT_OPENCL: Index of target device for selected platform
   cl_context context;           ///< CT_OPENCL: OCL context
   cl_command_queue commandQueue;///< CT_OPENCL: OCL command queue

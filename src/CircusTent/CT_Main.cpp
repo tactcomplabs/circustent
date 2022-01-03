@@ -45,10 +45,10 @@
 void PrintTiming( double Timing, double GAMS );
 
 #ifdef _ENABLE_OPENCL_
-void RunBenchOCL() {
+void RunBenchOpenCL(CTOpts *Opts) {
   // Init the OpenCL Object
-  CT_OCL *CT = new CT_OCL(Opts->GetBenchType(),
-                          Opts->GetAtomType());
+  CT_OPENCL *CT = new CT_OPENCL(Opts->GetBenchType(),
+                          	Opts->GetAtomType());
 
   if ( !CT ) {
     std::cout << "ERROR: COULD NOT ALLOCATE CT_OCL OBJECTS" << std::endl;
@@ -139,8 +139,6 @@ void RunBenchOpenACC( CTOpts *Opts ){
   // Print the timing
   PrintTiming( Timing, GAMS );
 
-
-clean_up:
   // Free the data
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_OPENACC" << std::endl;
@@ -477,7 +475,7 @@ int main( int argc, char **argv ){
     RunBenchOpenACC(Opts);
 #endif
 #ifdef _ENABLE_OPENCL_
-    RunBenchOCL(Opts);
+    RunBenchOpenCL(Opts);
 #endif
   }
 
