@@ -33,6 +33,7 @@ CT_OPENCL::~CT_OPENCL() {}
 void CT_OPENCL::checkOCLError(const char* function, const char* filename, int line, cl_int error){
   if(error != CL_SUCCESS){
     printf("ERROR: %s FAILED! (FILE: %s LINE: %d)\n", function, filename, line);
+    printf("Error = %d\n,", error);
     FreeData();
     exit(-1);
   }
@@ -197,7 +198,8 @@ bool CT_OPENCL::Initialize(){
   checkOCLError("clCreateCommandQueue", __FILE__, __LINE__, error);
 
   // Create program
-  std::ifstream source_stream("CT_OPENCL_KERNELS.cl");
+  //TODO: Generalize file path
+  std::ifstream source_stream("/home/bwilliams/circustent/src/CircusTent/Impl/CT_OPENCL/CT_OPENCL_KERNELS.cl");
   std::string source_string((std::istreambuf_iterator<char>(source_stream)), std::istreambuf_iterator<char>());
   const char* strings[1] = { source_string.c_str() };
   program = clCreateProgramWithSource(context, 1, strings, NULL, &error);
@@ -223,7 +225,7 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
   cl_int error;                                         // OCL ret value
   cl_event kernelComplete;                              // OCL event for kernel execution
   size_t global_pes = (size_t) pes;
-
+  
   // determine the benchmark type
   if (BType == CT_RAND){
     switch (AType){
