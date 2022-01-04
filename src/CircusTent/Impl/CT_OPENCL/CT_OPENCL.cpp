@@ -33,7 +33,8 @@ CT_OPENCL::~CT_OPENCL() {}
 void CT_OPENCL::checkOCLError(const char* function, const char* filename, int line, cl_int error){
   if(error != CL_SUCCESS){
     printf("ERROR: %s FAILED! (FILE: %s LINE: %d)\n", function, filename, line);
-    printf("Error = %d\n,", error);
+    printf("Error = %d\n", error);
+    fflush(stdout);
     FreeData();
     exit(-1);
   }
@@ -188,7 +189,7 @@ bool CT_OPENCL::Initialize(){
   }
 
   // Create context
-  cl_context_properties contextProps[] = {CL_CONTEXT_PLATFORM, targetPlatformID, 0};
+  cl_context_properties contextProps[] = {CL_CONTEXT_PLATFORM, (cl_context_properties) platformIDs[targetPlatformID], 0};
   context = clCreateContext(contextProps, 1, &deviceIDs[targetDeviceID], NULL, NULL, &error);
   checkOCLError("clCreateContext", __FILE__, __LINE__, error);
 
