@@ -1,3 +1,5 @@
+#pragma OPENCL EXTENSION cl_khr_int64_base_atomics : enable
+
 __kernel void RAND_ADD( __global ulong* ARRAY,
                         __global ulong* IDX,
                         ulong iters,
@@ -87,7 +89,7 @@ __kernel void PTRCHASE_ADD( __global ulong* ARRAY,
 
   start =  (ulong) (get_global_id(0) * iters);
   for( i=0; i<iters; i++ ){
-    start = atom_add(&IDX[start], (ulong)(0x00ull));
+    start = atom_add(&IDX[start], (ulong)(0x00ul));
   }
 }
 
@@ -116,9 +118,9 @@ __kernel void SG_ADD( __global ulong* ARRAY,
 
   start = (ulong) (get_global_id(0) * iters);
   for( i=start; i<(start+iters); i++ ){
-    src = atom_add(&IDX[i], (ulong)(0x00ull));
-    dest = atom_add(&IDX[i+1], (ulong)(0x00ull));
-    val = atom_add(&ARRAY[src], (ulong)(0x01ull));
+    src = atom_add(&IDX[i], (ulong)(0x00ul));
+    dest = atom_add(&IDX[i+1], (ulong)(0x00ul));
+    val = atom_add(&ARRAY[src], (ulong)(0x01ul));
     atom_add(&ARRAY[dest], val);
   }
 }
@@ -175,8 +177,8 @@ __kernel void SCATTER_ADD( __global ulong* ARRAY,
 
   start = (ulong) (get_global_id(0) * iters);
   for( i=start; i<(start+iters); i++ ){
-    dest = atom_add(&IDX[i+1], (ulong)(0x00ull));
-    val = atom_add(&ARRAY[i], (ulong)(0x01ull));
+    dest = atom_add(&IDX[i+1], (ulong)(0x00ul));
+    val = atom_add(&ARRAY[i], (ulong)(0x01ul));
     atom_add(&ARRAY[dest], val);
   }
 }
@@ -209,8 +211,8 @@ __kernel void GATHER_ADD( __global ulong* ARRAY,
 
   start = (ulong)(get_global_id(0)) * iters;
   for( i=start; i<(start+iters); i++ ){
-    dest = atom_add(&IDX[i+1], (ulong)(0x00ull));
-    val = atom_add(&ARRAY[dest], (ulong)(0x01ull));
+    dest = atom_add(&IDX[i+1], (ulong)(0x00ul));
+    val = atom_add(&ARRAY[dest], (ulong)(0x01ul));
     atom_add(&ARRAY[i], val);
   }
 }

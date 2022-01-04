@@ -200,7 +200,7 @@ bool CT_OPENCL::Initialize(){
 
   // Create program
   //TODO: Generalize file path
-  std::ifstream source_stream("/home/bwilliams/circustent/src/CircusTent/Impl/CT_OPENCL/CT_OPENCL_KERNELS.cl");
+  std::ifstream source_stream("/home/brody/Desktop/circustent/src/CircusTent/Impl/CT_OPENCL/CT_OPENCL_KERNELS.cl");
   std::string source_string((std::istreambuf_iterator<char>(source_stream)), std::istreambuf_iterator<char>());
   const char* strings[1] = { source_string.c_str() };
   program = clCreateProgramWithSource(context, 1, strings, NULL, &error);
