@@ -198,9 +198,12 @@ bool CT_OPENCL::Initialize(){
   commandQueue = clCreateCommandQueueWithProperties(context, deviceIDs[targetDeviceID], queueProps, &error);
   checkOCLError("clCreateCommandQueue", __FILE__, __LINE__, error);
 
+  // Set absolute path of kernels source code
+  std::string kernelPath(__FILE__);
+  kernelPath.replace(kernelPath.find("CT_OPENCL.cpp"), 13, "CT_OPENCL_KERNELS.cl");
+
   // Create program
-  //TODO: Generalize file path
-  std::ifstream source_stream("/home/brody/Desktop/circustent/src/CircusTent/Impl/CT_OPENCL/CT_OPENCL_KERNELS.cl");
+  std::ifstream source_stream(kernelPath);
   std::string source_string((std::istreambuf_iterator<char>(source_stream)), std::istreambuf_iterator<char>());
   const char* strings[1] = { source_string.c_str() };
   program = clCreateProgramWithSource(context, 1, strings, NULL, &error);
@@ -226,7 +229,7 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
   cl_int error;                                         // OCL ret value
   cl_event kernelComplete;                              // OCL event for kernel execution
   size_t global_pes = (size_t) pes;
-  
+
   // determine the benchmark type
   if (BType == CT_RAND){
     switch (AType){
