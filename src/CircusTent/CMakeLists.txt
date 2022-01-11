@@ -46,6 +46,7 @@ endif()
 
 if (ENABLE_OPENCL)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OPENCL_OBJS>)
+  target_link_libraries(circustent OpenCL)
 endif()
 
 install(TARGETS circustent DESTINATION bin)
