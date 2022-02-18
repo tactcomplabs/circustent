@@ -59,7 +59,7 @@ void RunBenchOpenCL(CTOpts *Opts) {
   if ( !CT->Initialize() ){
     std::cout << "ERROR : COULD NOT INITIALIZE CT_OCL ENVIRONMENT" << std::endl;
     CT->FreeData();
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -70,7 +70,7 @@ void RunBenchOpenCL(CTOpts *Opts) {
                          Opts->GetStride())){
       std::cout << "ERROR: COULD NOT ALLOCATE MEMORY FOR CT_OCL" << std::endl;
       CT->FreeData();
-      free( CT );
+      delete CT;
       return;
   }
 
@@ -87,7 +87,7 @@ void RunBenchOpenCL(CTOpts *Opts) {
   // Free the data
   if ( !CT->FreeData() ) {
     std::cout << "ERROR: COULD NOT FREE THE MEMORY FOR CT_OCL" << std::endl;
-    free( CT );
+    delete CT;
     return;
   }
 
@@ -95,7 +95,7 @@ void RunBenchOpenCL(CTOpts *Opts) {
   PrintTiming( Timing, GAMS );
 
   // Free the structure
-  free( CT );
+  delete CT;
 }
 #endif
 
@@ -112,7 +112,7 @@ void RunBenchOpenACC( CTOpts *Opts ){
   // Set the target options
   if ( !CT->SetDevice() ){
     std::cout << "ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OPENACC" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -122,7 +122,7 @@ void RunBenchOpenACC( CTOpts *Opts ){
                          Opts->GetIters(),
                          Opts->GetStride() ) ){
     std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_OPENACC" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -132,7 +132,7 @@ void RunBenchOpenACC( CTOpts *Opts ){
   if( !CT->Execute(Timing,GAMS) ){
     std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_OPENACC" << std::endl;
     CT->FreeData();
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -142,12 +142,12 @@ void RunBenchOpenACC( CTOpts *Opts ){
   // Free the data
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_OPENACC" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
   // free the structure
-  free( CT );
+  delete CT;
 }
 #endif
 
@@ -167,7 +167,7 @@ void RunBenchPthreads( CTOpts *Opts ){
                          Opts->GetIters(),
                          Opts->GetStride() ) ){
     std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_PTHREADS" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -177,14 +177,14 @@ void RunBenchPthreads( CTOpts *Opts ){
   if( !CT->Execute(Timing,GAMS) ){
     std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_PTHREADS" << std::endl;
     CT->FreeData();
-    free( CT );
+    delete CT;
     return ;
   }
 
   // Free the data
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_PTHREADS" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -208,7 +208,7 @@ void RunBenchXBGAS( CTOpts *Opts ){
                          Opts->GetIters(),
                          Opts->GetStride() ) ){
     std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_XBGAS" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -219,14 +219,14 @@ void RunBenchXBGAS( CTOpts *Opts ){
     std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_XBGAS" << std::endl;
     CT->FreeData();
     xbrtime_close();
-    free( CT );
+    delete CT;
     return ;
   }
 
   // Free the data
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_XBGAS" << std::endl;
-    free( CT );
+    delete CT;
     xbrtime_close();
     return ;
   }
@@ -255,7 +255,7 @@ void RunBenchMPI( CTOpts *Opts ){
                          Opts->GetIters(),
                          Opts->GetStride() ) ){
     std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_MPI" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -266,7 +266,7 @@ void RunBenchMPI( CTOpts *Opts ){
     std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_MPI" << std::endl;
     CT->FreeData();
     MPI_Finalize();
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -274,7 +274,7 @@ void RunBenchMPI( CTOpts *Opts ){
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_MPI" << std::endl;
     MPI_Finalize();
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -286,7 +286,7 @@ void RunBenchMPI( CTOpts *Opts ){
   }
 
   MPI_Finalize();
-  free( CT );
+  delete CT;
 }
 #endif
 
@@ -306,7 +306,7 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
                          Opts->GetIters(),
                          Opts->GetStride() ) ){
     std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_SHMEM" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -317,7 +317,7 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
     std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_SHMEM" << std::endl;
     CT->FreeData();
     shmem_finalize();
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -325,7 +325,7 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_SHMEM" << std::endl;
     shmem_finalize();
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -334,7 +334,7 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
     PrintTiming( Timing, GAMS );
   }
   shmem_finalize();
-  free( CT );
+  delete CT;
 }
 #endif
 
@@ -351,7 +351,7 @@ void RunBenchOMPTarget( CTOpts *Opts ){
   // Set the target options
   if ( !CT->SetDevice() ){
     std::cout << "ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -361,7 +361,7 @@ void RunBenchOMPTarget( CTOpts *Opts ){
                          Opts->GetIters(),
                          Opts->GetStride() ) ){
     std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_OMP_TARGET" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -371,14 +371,14 @@ void RunBenchOMPTarget( CTOpts *Opts ){
   if( !CT->Execute(Timing,GAMS) ){
     std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_OMP_TARGET" << std::endl;
     CT->FreeData();
-    free( CT );
+    delete CT;
     return ;
   }
 
   // Free the data
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_OMP_TARGET" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -386,7 +386,7 @@ void RunBenchOMPTarget( CTOpts *Opts ){
   PrintTiming( Timing, GAMS );
 
   // free the structure
-  free( CT );
+  delete CT;
 }
 #endif
 
@@ -406,7 +406,7 @@ void RunBenchOMP( CTOpts *Opts ){
                          Opts->GetIters(),
                          Opts->GetStride() ) ){
     std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_OMP" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -416,14 +416,14 @@ void RunBenchOMP( CTOpts *Opts ){
   if( !CT->Execute(Timing,GAMS) ){
     std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_OMP" << std::endl;
     CT->FreeData();
-    free( CT );
+    delete CT;
     return ;
   }
 
   // Free the data
   if( !CT->FreeData() ){
     std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_OMP" << std::endl;
-    free( CT );
+    delete CT;
     return ;
   }
 
@@ -431,7 +431,7 @@ void RunBenchOMP( CTOpts *Opts ){
   PrintTiming( Timing, GAMS );
 
   // free the structure
-  free( CT );
+  delete CT;
 }
 #endif
 
