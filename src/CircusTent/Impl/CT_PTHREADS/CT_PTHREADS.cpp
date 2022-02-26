@@ -35,18 +35,23 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   double EndTime    = 0.; // end time
   double OPS        = 0.; // billions of operations
 
+  // Init barrier
+  pthread_barrier_t spawn_barrier;
+  pthread_barrier_init(&spawn_barrier, NULL, pes);
+
   // determine the benchmark type
   if( BType == CT_RAND ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      RAND_ADD( Array, Idx, iters, pes );
+      RAND_ADD(Array, Idx, iters, pes,
+               &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
     case CT_CAS:
       StartTime = this->MySecond();
-      RAND_CAS( Array, Idx, iters, pes );
+      RAND_CAS(Array, Idx, iters, pes,
+               &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -58,14 +63,14 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   }else if( BType == CT_STRIDE1 ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      STRIDE1_ADD( Array, Idx, iters, pes );
+      STRIDE1_ADD(Array, Idx, iters, pes,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
-      STRIDE1_CAS( Array, Idx, iters, pes );
+      STRIDE1_CAS(Array, Idx, iters, pes,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -77,14 +82,14 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   }else if( BType == CT_STRIDEN ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      STRIDEN_ADD( Array, Idx, iters, pes, stride );
+      STRIDEN_ADD(Array, Idx, iters, pes, stride,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
-      STRIDEN_CAS( Array, Idx, iters, pes, stride );
+      STRIDEN_CAS(Array, Idx, iters, pes, stride,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -96,14 +101,14 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   }else if( BType == CT_PTRCHASE ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      PTRCHASE_ADD( Array, Idx, iters, pes );
+      PTRCHASE_ADD(Array, Idx, iters, pes,
+                   &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
-      PTRCHASE_CAS( Array, Idx, iters, pes );
+      PTRCHASE_CAS(Array, Idx, iters, pes,
+                   &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -115,14 +120,14 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   }else if( BType == CT_SG ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      SG_ADD( Array, Idx, iters, pes );
+      SG_ADD(Array, Idx, iters, pes,
+             &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(4,iters,pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
-      SG_CAS( Array, Idx, iters, pes );
+      SG_CAS(Array, Idx, iters, pes,
+             &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(4,iters,pes);
       break;
@@ -134,14 +139,14 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   }else if( BType == CT_CENTRAL ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      CENTRAL_ADD( Array, Idx, iters, pes );
+      CENTRAL_ADD(Array, Idx, iters, pes,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
-      CENTRAL_CAS( Array, Idx, iters, pes );
+      CENTRAL_CAS(Array, Idx, iters, pes,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -153,14 +158,14 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   }else if( BType == CT_SCATTER ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      SCATTER_ADD( Array, Idx, iters, pes );
+      SCATTER_ADD(Array, Idx, iters, pes,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
-      SCATTER_CAS( Array, Idx, iters, pes );
+      SCATTER_CAS(Array, Idx, iters, pes,
+                  &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
       break;
@@ -172,14 +177,14 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
   }else if( BType == CT_GATHER ){
     switch( AType ){
     case CT_ADD:
-      StartTime = this->MySecond();
-      GATHER_ADD( Array, Idx, iters, pes );
+      GATHER_ADD(Array, Idx, iters, pes,
+                 &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
       break;
     case CT_CAS:
-      StartTime = this->MySecond();
-      GATHER_CAS( Array, Idx, iters, pes );
+      GATHER_CAS(Array, Idx, iters, pes,
+                 &spawn_barrier, &StartTime);
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
       break;
@@ -192,6 +197,9 @@ bool CT_PTHREADS::Execute(double &Timing, double &GAMS){
     this->ReportBenchError();
     return false;
   }
+
+  // Free barrier
+  pthread_barrier_destroy(&spawn_barrier);
 
   Timing = this->Runtime(StartTime,EndTime);
   GAMS   = OPS/Timing;

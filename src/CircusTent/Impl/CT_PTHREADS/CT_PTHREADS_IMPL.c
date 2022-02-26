@@ -8,19 +8,30 @@
  * See LICENSE in the top level directory for licensing details
  */
 
+
+#define _XOPEN_SOURCE 600
 #include <pthread.h>
 #include <stdint.h>
-
+#include <sys/time.h>
 
 // Struct holding unique function arguments for each thread
 typedef struct
 {
-	uint64_t thread_id;
+  uint64_t thread_id;
   uint64_t *ARRAY;
   uint64_t *IDX;
   uint64_t iters;
   uint64_t stride;
+  pthread_barrier_t *barrier;
+  double *start_time;
 }arg_struct;
+
+// Necessary for recording StartTime within kernels
+double MySecond(){
+  struct timeval tp;
+  gettimeofday( &tp, NULL );
+  return ( (double) tp.tv_sec + (double) tp.tv_usec * 1.e-6 );
+}
 
 /* Pthreads Benchmark Implementations
  *
@@ -41,6 +52,15 @@ void *thread_RAND_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -56,7 +76,9 @@ void *thread_RAND_ADD(void *thread_args){
 void RAND_ADD(uint64_t *restrict ARRAY,
               uint64_t *restrict IDX,
               uint64_t iters,
-              uint64_t pes){
+              uint64_t pes,
+              pthread_barrier_t *barrier,
+              double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -73,6 +95,8 @@ void RAND_ADD(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_RAND_ADD, (void*) &thread_args[i]);
   }
 
@@ -91,6 +115,15 @@ void *thread_RAND_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -106,7 +139,9 @@ void *thread_RAND_CAS(void *thread_args){
 void RAND_CAS(uint64_t *restrict ARRAY,
               uint64_t *restrict IDX,
               uint64_t iters,
-              uint64_t pes){
+              uint64_t pes,
+              pthread_barrier_t *barrier,
+              double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -123,6 +158,8 @@ void RAND_CAS(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_RAND_CAS, (void*) &thread_args[i]);
   }
 
@@ -140,6 +177,15 @@ void *thread_STRIDE1_ADD(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -155,7 +201,9 @@ void *thread_STRIDE1_ADD(void *thread_args){
 void STRIDE1_ADD(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
-                 uint64_t pes){
+                 uint64_t pes,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -171,6 +219,8 @@ void STRIDE1_ADD(uint64_t *restrict ARRAY,
     thread_args[i].thread_id = i;
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_STRIDE1_ADD, (void*) &thread_args[i]);
   }
 
@@ -188,6 +238,15 @@ void *thread_STRIDE1_CAS(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -203,7 +262,9 @@ void *thread_STRIDE1_CAS(void *thread_args){
 void STRIDE1_CAS(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
-                 uint64_t pes){
+                 uint64_t pes,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -219,6 +280,8 @@ void STRIDE1_CAS(uint64_t *restrict ARRAY,
     thread_args[i].thread_id = i;
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_STRIDE1_CAS, (void*) &thread_args[i]);
   }
 
@@ -237,6 +300,15 @@ void *thread_STRIDEN_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
   uint64_t stride = arg_ptr->stride;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -253,7 +325,9 @@ void STRIDEN_ADD(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
                  uint64_t pes,
-                 uint64_t stride){
+                 uint64_t stride,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -270,6 +344,8 @@ void STRIDEN_ADD(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].iters = iters;
     thread_args[i].stride = stride;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_STRIDEN_ADD, (void*) &thread_args[i]);
   }
 
@@ -288,6 +364,15 @@ void *thread_STRIDEN_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
   uint64_t stride = arg_ptr->stride;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -304,7 +389,9 @@ void STRIDEN_CAS(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
                  uint64_t pes,
-                 uint64_t stride){
+                 uint64_t stride,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -321,6 +408,8 @@ void STRIDEN_CAS(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].iters = iters;
     thread_args[i].stride = stride;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_STRIDEN_CAS, (void*) &thread_args[i]);
   }
 
@@ -338,6 +427,15 @@ void *thread_PTRCHASE_ADD(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -353,7 +451,9 @@ void *thread_PTRCHASE_ADD(void *thread_args){
 void PTRCHASE_ADD(uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   uint64_t iters,
-                  uint64_t pes){
+                  uint64_t pes,
+                  pthread_barrier_t *barrier,
+                  double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -369,6 +469,8 @@ void PTRCHASE_ADD(uint64_t *restrict ARRAY,
     thread_args[i].thread_id = i;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_PTRCHASE_ADD, (void*) &thread_args[i]);
   }
 
@@ -386,6 +488,15 @@ void *thread_PTRCHASE_CAS(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -401,7 +512,9 @@ void *thread_PTRCHASE_CAS(void *thread_args){
 void PTRCHASE_CAS(uint64_t *restrict ARRAY,
                   uint64_t *restrict IDX,
                   uint64_t iters,
-                  uint64_t pes){
+                  uint64_t pes,
+                  pthread_barrier_t *barrier,
+                  double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -417,6 +530,8 @@ void PTRCHASE_CAS(uint64_t *restrict ARRAY,
     thread_args[i].thread_id = i;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_PTRCHASE_CAS, (void*) &thread_args[i]);
   }
 
@@ -435,6 +550,15 @@ void *thread_SG_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i, src, dest, val;
@@ -453,7 +577,9 @@ void *thread_SG_ADD(void *thread_args){
 void SG_ADD(uint64_t *restrict ARRAY,
             uint64_t *restrict IDX,
             uint64_t iters,
-            uint64_t pes){
+            uint64_t pes,
+            pthread_barrier_t *barrier,
+            double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -470,6 +596,8 @@ void SG_ADD(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_SG_ADD, (void*) &thread_args[i]);
   }
 
@@ -488,6 +616,15 @@ void *thread_SG_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i, src, dest, val;
@@ -509,7 +646,9 @@ void *thread_SG_CAS(void *thread_args){
 void SG_CAS(uint64_t *restrict ARRAY,
             uint64_t *restrict IDX,
             uint64_t iters,
-            uint64_t pes){
+            uint64_t pes,
+            pthread_barrier_t *barrier,
+            double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -526,6 +665,8 @@ void SG_CAS(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_SG_CAS, (void*) &thread_args[i]);
   }
 
@@ -540,8 +681,18 @@ void *thread_CENTRAL_ADD(void *thread_args){
 
   // Readability/compatible types
   arg_struct* arg_ptr = (arg_struct*) thread_args;
+  uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -556,7 +707,9 @@ void *thread_CENTRAL_ADD(void *thread_args){
 void CENTRAL_ADD(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
-                 uint64_t pes){
+                 uint64_t pes,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -571,6 +724,8 @@ void CENTRAL_ADD(uint64_t *restrict ARRAY,
   for(i = 0; i < pes; i++){
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_CENTRAL_ADD, (void*) &thread_args[i]);
   }
 
@@ -585,8 +740,18 @@ void *thread_CENTRAL_CAS(void *thread_args){
 
   // Readability/compatible types
   arg_struct* arg_ptr = (arg_struct*) thread_args;
+  uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i;
@@ -601,7 +766,9 @@ void *thread_CENTRAL_CAS(void *thread_args){
 void CENTRAL_CAS(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
-                 uint64_t pes){
+                 uint64_t pes,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -616,6 +783,8 @@ void CENTRAL_CAS(uint64_t *restrict ARRAY,
   for(i = 0; i < pes; i++){
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_CENTRAL_CAS, (void*) &thread_args[i]);
   }
 
@@ -634,6 +803,15 @@ void *thread_SCATTER_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i, dest, val;
@@ -653,7 +831,9 @@ void *thread_SCATTER_ADD(void *thread_args){
 void SCATTER_ADD(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
-                 uint64_t pes){
+                 uint64_t pes,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -670,6 +850,8 @@ void SCATTER_ADD(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_SCATTER_ADD, (void*) &thread_args[i]);
   }
 
@@ -688,6 +870,15 @@ void *thread_SCATTER_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i, dest, val;
@@ -707,7 +898,9 @@ void *thread_SCATTER_CAS(void *thread_args){
 void SCATTER_CAS(uint64_t *restrict ARRAY,
                  uint64_t *restrict IDX,
                  uint64_t iters,
-                 uint64_t pes){
+                 uint64_t pes,
+                 pthread_barrier_t *barrier,
+                 double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -724,6 +917,8 @@ void SCATTER_CAS(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_SCATTER_CAS, (void*) &thread_args[i]);
   }
 
@@ -742,6 +937,15 @@ void *thread_GATHER_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i, dest, val;
@@ -761,7 +965,9 @@ void *thread_GATHER_ADD(void *thread_args){
 void GATHER_ADD(uint64_t *restrict ARRAY,
                 uint64_t *restrict IDX,
                 uint64_t iters,
-                uint64_t pes){
+                uint64_t pes,
+                pthread_barrier_t *barrier,
+                double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -778,6 +984,8 @@ void GATHER_ADD(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_GATHER_ADD, (void*) &thread_args[i]);
   }
 
@@ -796,6 +1004,15 @@ void *thread_GATHER_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
+  double *start_time = arg_ptr->start_time;
+
+  // Wait for all threads to be spawned
+  pthread_barrier_wait(barrier);
+  // Thread 0 write kernel StartTime
+  if(thread_id == 0){
+    *start_time = MySecond();
+  }
 
   // Perform atomic ops
   uint64_t i, dest, val;
@@ -815,7 +1032,9 @@ void *thread_GATHER_CAS(void *thread_args){
 void GATHER_CAS(uint64_t *restrict ARRAY,
                 uint64_t *restrict IDX,
                 uint64_t iters,
-                uint64_t pes){
+                uint64_t pes,
+                pthread_barrier_t *barrier,
+                double* start_time ){
 
   // Thread handles and arg structs
   pthread_t threads[pes];
@@ -832,6 +1051,8 @@ void GATHER_CAS(uint64_t *restrict ARRAY,
     thread_args[i].ARRAY = ARRAY;
     thread_args[i].IDX = IDX;
     thread_args[i].iters = iters;
+    thread_args[i].barrier = barrier;
+    thread_args[i].start_time = start_time;
     pthread_create(&threads[i], &def_attrs, thread_GATHER_CAS, (void*) &thread_args[i]);
   }
 
