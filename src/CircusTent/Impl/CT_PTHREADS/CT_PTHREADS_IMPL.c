@@ -8,9 +8,10 @@
  * See LICENSE in the top level directory for licensing details
  */
 
+
+#define _XOPEN_SOURCE 600
 #include <pthread.h>
 #include <stdint.h>
-#include <time.h>
 #include <sys/time.h>
 
 // Struct holding unique function arguments for each thread
@@ -28,9 +29,7 @@ typedef struct
 // Necessary for recording StartTime within kernels
 double MySecond(){
   struct timeval tp;
-  struct timezone tzp;
-
-  gettimeofday( &tp, &tzp );
+  gettimeofday( &tp, NULL );
   return ( (double) tp.tv_sec + (double) tp.tv_usec * 1.e-6 );
 }
 
@@ -53,7 +52,7 @@ void *thread_RAND_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -116,7 +115,7 @@ void *thread_RAND_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -178,7 +177,7 @@ void *thread_STRIDE1_ADD(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -239,7 +238,7 @@ void *thread_STRIDE1_CAS(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -301,7 +300,7 @@ void *thread_STRIDEN_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
   uint64_t stride = arg_ptr->stride;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -365,7 +364,7 @@ void *thread_STRIDEN_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
   uint64_t stride = arg_ptr->stride;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -428,7 +427,7 @@ void *thread_PTRCHASE_ADD(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -489,7 +488,7 @@ void *thread_PTRCHASE_CAS(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -551,7 +550,7 @@ void *thread_SG_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -617,7 +616,7 @@ void *thread_SG_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -685,7 +684,7 @@ void *thread_CENTRAL_ADD(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -744,7 +743,7 @@ void *thread_CENTRAL_CAS(void *thread_args){
   uint64_t thread_id = arg_ptr->thread_id;
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -804,7 +803,7 @@ void *thread_SCATTER_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -871,7 +870,7 @@ void *thread_SCATTER_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -938,7 +937,7 @@ void *thread_GATHER_ADD(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
@@ -1005,7 +1004,7 @@ void *thread_GATHER_CAS(void *thread_args){
   uint64_t* ARRAY = arg_ptr->ARRAY;
   uint64_t* IDX = arg_ptr->IDX;
   uint64_t iters = arg_ptr->iters;
-  pthread_barrier_t* = arg_ptr->barrier;
+  pthread_barrier_t *barrier = arg_ptr->barrier;
   double *start_time = arg_ptr->start_time;
 
   // Wait for all threads to be spawned
