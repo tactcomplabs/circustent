@@ -439,6 +439,30 @@ the OpenCL target platform and device, respectively
 | GATHER_ADD | yes |
 | GATHER_CAS | yes |
 
+### C++ Standard Threads & Atomics
+* CMake Build Flags: -DENABLE_CPP_STD=ON
+* Implementation Language: C++11
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
 ## Execution Parameters
 
 ### Parameters

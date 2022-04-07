@@ -49,4 +49,8 @@ if (ENABLE_OPENCL)
   target_link_libraries(circustent OpenCL)
 endif()
 
+if (ENABLE_CPP_STD)
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_CPP_STD_OBJS>)
+endif()
+
 install(TARGETS circustent DESTINATION bin)

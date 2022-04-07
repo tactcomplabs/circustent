@@ -165,13 +165,13 @@ void GATHER_CAS( uint64_t *ARRAY,
 
 class CT_PTHREADS : public CTBaseImpl{
 private:
-  uint64_t *Array;          ///< CT_OMP: Data array
-  uint64_t *Idx;            ///< CT_OMP: Index array
-  uint64_t memSize;         ///< CT_OMP: Memory size (in bytes)
-  uint64_t pes;             ///< CT_OMP: Number of processing elements
-  uint64_t iters;           ///< CT_OMP: Number of iterations per thread
-  uint64_t elems;           ///< CT_OMP: Number of u8 elements
-  uint64_t stride;          ///< CT_OMP: Stride in elements
+  uint64_t *Array;          ///< CT_PTHREADS: Data array
+  uint64_t *Idx;            ///< CT_PTHREADS: Index array
+  uint64_t memSize;         ///< CT_PTHREADS: Memory size (in bytes)
+  uint64_t pes;             ///< CT_PTHREADS: Number of processing elements
+  uint64_t iters;           ///< CT_PTHREADS: Number of iterations per thread
+  uint64_t elems;           ///< CT_PTHREADS: Number of u8 elements
+  uint64_t stride;          ///< CT_PTHREADS: Stride in elements
 
 public:
   /// CircusTent Pthreads constructor

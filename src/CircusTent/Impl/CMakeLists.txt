@@ -37,4 +37,8 @@ if (ENABLE_OPENCL)
   add_subdirectory(CT_OPENCL)
 endif()
 
+if (ENABLE_CPP_STD)
+  add_subdirectory(CT_CPP_STD)
+endif()
+
 # EOF

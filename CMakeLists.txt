@@ -126,6 +126,15 @@ else()
   message(STATUS "DISABLING OpenCL Implementation")
 endif()
 
+if (ENABLE_CPP_STD)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lpthread -D_ENABLE_CPP_STD_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -D_ENABLE_CPP_STD_")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+  message(STATUS "ENABLING C++ Standard Atomics Implementation")
+else()
+  message(STATUS "DISABLING C++ Standard Atomics Implementation")
+endif()
+
 #------------------------------------------------------------------------
 # Add package paths
 #------------------------------------------------------------------------
