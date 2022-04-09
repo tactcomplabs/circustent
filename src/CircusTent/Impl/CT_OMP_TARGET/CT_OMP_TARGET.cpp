@@ -44,12 +44,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      RAND_CAS( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(1,iters,pes);
-      break;
     default:
       this->ReportBenchError();
       return false;
@@ -60,12 +54,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       StartTime = this->MySecond();
       STRIDE1_ADD( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(1,iters,pes);
-      break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      STRIDE1_CAS( Array, Idx, iters, pes );
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -82,12 +70,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      STRIDEN_CAS( Array, Idx, iters, pes, stride );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(1,iters,pes);
-      break;
     default:
       this->ReportBenchError();
       return false;
@@ -98,12 +80,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       StartTime = this->MySecond();
       PTRCHASE_ADD( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(1,iters,pes);
-      break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      PTRCHASE_CAS( Array, Idx, iters, pes );
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -120,12 +96,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
       EndTime   = this->MySecond();
       OPS = this->GAM(4,iters,pes);
       break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      SG_CAS( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(4,iters,pes);
-      break;
     default:
       this->ReportBenchError();
       return false;
@@ -136,12 +106,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       StartTime = this->MySecond();
       CENTRAL_ADD( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(1,iters,pes);
-      break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      CENTRAL_CAS( Array, Idx, iters, pes );
       EndTime   = this->MySecond();
       OPS = this->GAM(1,iters,pes);
       break;
@@ -158,12 +122,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
       break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      SCATTER_CAS( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(3,iters,pes);
-      break;
     default:
       this->ReportBenchError();
       return false;
@@ -174,12 +132,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     case CT_ADD:
       StartTime = this->MySecond();
       GATHER_ADD( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(3,iters,pes);
-      break;
-    case CT_CAS:
-      StartTime = this->MySecond();
-      GATHER_CAS( Array, Idx, iters, pes );
       EndTime   = this->MySecond();
       OPS = this->GAM(3,iters,pes);
       break;

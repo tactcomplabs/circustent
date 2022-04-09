@@ -36,20 +36,8 @@ void RAND_ADD( uint64_t *ARRAY,
                uint64_t iters,
                uint64_t pes );
 
-/// RAND AMO CAS Benchmark
-void RAND_CAS( uint64_t *ARRAY,
-               uint64_t *IDX,
-               uint64_t iters,
-               uint64_t pes );
-
 /// STRIDE1 AMO ADD Benchmark
 void STRIDE1_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// STRIDE1 AMO CAS Benchmark
-void STRIDE1_CAS( uint64_t *ARRAY,
                   uint64_t *IDX,
                   uint64_t iters,
                   uint64_t pes );
@@ -61,21 +49,8 @@ void STRIDEN_ADD( uint64_t *ARRAY,
                   uint64_t pes,
                   uint64_t stride );
 
-/// STRIDEN AMO CAS Benchmark
-void STRIDEN_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes,
-                  uint64_t stride );
-
 /// PTRCHASE AMO ADD Benchmark
 void PTRCHASE_ADD( uint64_t *ARRAY,
-                   uint64_t *IDX,
-                   uint64_t iters,
-                   uint64_t pes );
-
-/// PTRCHASE AMO CAS Benchmark
-void PTRCHASE_CAS( uint64_t *ARRAY,
                    uint64_t *IDX,
                    uint64_t iters,
                    uint64_t pes );
@@ -86,20 +61,8 @@ void SG_ADD( uint64_t *ARRAY,
              uint64_t iters,
              uint64_t pes );
 
-/// SG AMO CAS Benchmark
-void SG_CAS( uint64_t *ARRAY,
-             uint64_t *IDX,
-             uint64_t iters,
-             uint64_t pes );
-
 /// CENTRAL AMO ADD Benchmark
 void CENTRAL_ADD( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
-/// CENTRAL AMO CAS Benchmark
-void CENTRAL_CAS( uint64_t *ARRAY,
                   uint64_t *IDX,
                   uint64_t iters,
                   uint64_t pes );
@@ -110,26 +73,13 @@ void SCATTER_ADD( uint64_t *ARRAY,
                   uint64_t iters,
                   uint64_t pes );
 
-/// SCATTER AMO CAS Benchmark
-void SCATTER_CAS( uint64_t *ARRAY,
-                  uint64_t *IDX,
-                  uint64_t iters,
-                  uint64_t pes );
-
 /// GATHER AMO ADD Benchmark
 void GATHER_ADD( uint64_t *ARRAY,
                  uint64_t *IDX,
                  uint64_t iters,
                  uint64_t pes );
 
-/// GATHER AMO CAS Benchmark
-void GATHER_CAS( uint64_t *ARRAY,
-                 uint64_t *IDX,
-                 uint64_t iters,
-                 uint64_t pes );
-
 }
-
 
 class CT_OPENACC : public CTBaseImpl{
 private:

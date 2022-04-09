@@ -226,33 +226,31 @@ for( i=0; i<iters; i++ ){
 ### OMP with Target Offloading
 * CMake Build Flags: -DENABLE_OMP_TARGET=ON -DOFFLOAD_TARGETS=target_options
 where "target_options" is passed to the GNU -foffload compiler flag
-* Implementation Language: C++ & C using GNU intrinsics
+* Implementation Language: C++ & C
 * Users may define $OMP_DEFAULT_DEVICE to select a different target device ID,
 otherwise the system default is utilized
 * Maps provided PEs argument to team-level parallelism, iterations for a given team
 are automatically subdivided across threads within each team
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
-* Utilizes \_\_ATOMIC\_RELAXED where appropriate
-* Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
 
 | Benchmark | Supported? |
 | ------ | ------ |
 | RAND_ADD | yes |
-| RAND_CAS | yes |
+| RAND_CAS | no |
 | STRIDE1_ADD | yes |
-| STRIDE1_CAS | yes |
+| STRIDE1_CAS | no |
 | STRIDEN_ADD | yes |
-| STRIDEN_CAS | yes |
+| STRIDEN_CAS | no |
 | PTRCHASE_ADD | yes |
-| PTRCHASE_CAS | yes |
+| PTRCHASE_CAS | no |
 | CENTRAL_ADD | yes |
-| CENTRAL_CAS | yes |
+| CENTRAL_CAS | no |
 | SG_ADD | yes |
-| SG_CAS | yes |
+| SG_CAS | no |
 | SCATTER_ADD | yes |
-| SCATTER_CAS | yes |
+| SCATTER_CAS | no |
 | GATHER_ADD | yes |
-| GATHER_CAS | yes |
+| GATHER_CAS | no |
 
 ### OpenSHMEM
 * CMake Build Flag: -DENABLE_OPENSHMEM=ON
@@ -359,32 +357,30 @@ fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
 ### OpenACC
 * CMake Build Flags: -DENABLE_OPENACC=ON -DOFFLOAD_TARGETS=target_options
 where "target_options" is passed to the GNU -foffload compiler flag
-* Implementation Language: C++ & C using GNU intrinsics
+* Implementation Language: C++ & C
 * Users must define both $ACC_DEVICE_TYPE and $ACC_DEVICE_ID to set
 the target device type and ID, respectively
 * Maps provided PEs argument to gang-level parallelism
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
-* Utilizes \_\_ATOMIC\_RELAXED where appropriate
-* Intrinsic documentation: [GNU Atomics](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
 
 | Benchmark | Supported? |
 | ------ | ------ |
 | RAND_ADD | yes |
-| RAND_CAS | yes |
+| RAND_CAS | no |
 | STRIDE1_ADD | yes |
-| STRIDE1_CAS | yes |
+| STRIDE1_CAS | no |
 | STRIDEN_ADD | yes |
-| STRIDEN_CAS | yes |
+| STRIDEN_CAS | no |
 | PTRCHASE_ADD | yes |
-| PTRCHASE_CAS | yes |
+| PTRCHASE_CAS | no |
 | CENTRAL_ADD | yes |
-| CENTRAL_CAS | yes |
+| CENTRAL_CAS | no |
 | SG_ADD | yes |
-| SG_CAS | yes |
+| SG_CAS | no |
 | SCATTER_ADD | yes |
-| SCATTER_CAS | yes |
+| SCATTER_CAS | no |
 | GATHER_ADD | yes |
-| GATHER_CAS | yes |
+| GATHER_CAS | no |
 
 ### Pthreads
 * CMake Build Flags: -DENABLE_PTHREADS=ON
@@ -443,6 +439,7 @@ the OpenCL target platform and device, respectively
 * CMake Build Flags: -DENABLE_CPP_STD=ON
 * Implementation Language: C++11
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Utilizes C++11 standard library threads and atomic operations
 
 | Benchmark | Supported? |
 | ------ | ------ |

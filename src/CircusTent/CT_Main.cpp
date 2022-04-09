@@ -152,9 +152,16 @@ void RunBenchOpenCL(CTOpts *Opts) {
 
 #ifdef _ENABLE_OPENACC_
 void RunBenchOpenACC( CTOpts *Opts ){
+
+  if(Opts->GetAtomType() == CTBaseImpl::CTAtomType::CT_CAS){
+    std::cout << "ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OPENACC" << std::endl;
+    return;
+  }
+
   // init the OpenACC object
   CT_OPENACC *CT = new CT_OPENACC(Opts->GetBenchType(),
                                   Opts->GetAtomType());
+
   if( !CT ){
     std::cout << "ERROR : COULD NOT ALLOCATE CT_OPENACC OBJECTS" << std::endl;
     return;
@@ -391,6 +398,12 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
 
 #ifdef _ENABLE_OMP_TARGET_
 void RunBenchOMPTarget( CTOpts *Opts ){
+
+  if(Opts->GetAtomType() == CTBaseImpl::CTAtomType::CT_CAS){
+    std::cout << "ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET" << std::endl;
+    return;
+  }
+
   // init the OpenMP Target object
   CT_OMP_TARGET *CT = new CT_OMP_TARGET(Opts->GetBenchType(),
                                         Opts->GetAtomType());
