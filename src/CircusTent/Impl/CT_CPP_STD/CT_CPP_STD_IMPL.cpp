@@ -38,7 +38,7 @@ void CT_CPP_STD::RAND_CAS(uint64_t thread_id,
                           std::atomic<std::uint64_t> *barrier_ctr,
                           double* start_time ){
 
-  // Set up array of expected uint64_t values to force RMW behavior
+  // Set up array of expected uint64_t values
   uint64_t i;
   uint64_t expected[iters];
   uint64_t start = thread_id * iters;
@@ -86,7 +86,7 @@ void CT_CPP_STD::STRIDE1_CAS(uint64_t thread_id,
                              std::atomic<std::uint64_t> *barrier_ctr,
                              double* start_time ){
 
-  // Set up array of expected uint64_t values to force RMW behavior
+  // Set up array of expected uint64_t values
   uint64_t i;
   uint64_t expected[iters];
   uint64_t start = thread_id * iters;
@@ -134,7 +134,7 @@ void CT_CPP_STD::STRIDEN_CAS(uint64_t thread_id,
                              std::atomic<std::uint64_t> *barrier_ctr,
                              double* start_time ){
 
-  // Set up array of expected uint64_t values to force RMW behavior
+  // Set up array of expected uint64_t values
   uint64_t i;
   uint64_t expected[iters];
   uint64_t start = thread_id * iters;
@@ -227,6 +227,14 @@ void CT_CPP_STD::SG_CAS(uint64_t thread_id,
                         std::atomic<std::uint64_t> *barrier_ctr,
                         double* start_time ){
 
+  // Set up array of expected uint64_t values
+  uint64_t i;
+  uint64_t expected[iters];
+  uint64_t start = thread_id * iters;
+  for(i = 0; i < iters; i++){
+    expected[i] = Array[Idx[start+i+1]];
+  }
+
   // Wait for all threads to be spawned
   MyBarrier(barrier_ctr);
 
@@ -236,17 +244,18 @@ void CT_CPP_STD::SG_CAS(uint64_t thread_id,
   }
 
   // Perform atomic ops
-  uint64_t i, src, dest, val, expected;
+  uint64_t src, dest, val;
   uint64_t start = thread_id * iters;
 	val   = 0x00ull;
 	src   = 0x00ull;
 	dest  = 0x00ull;
-  for(i = start; i < (start + iters); i++){
-    Idx[i].compare_exchange_strong(src, Idx[i], std::memory_order_relaxed);
-    Idx[i+1].compare_exchange_strong(dest, Idx[i+1], std::memory_order_relaxed);
+  for(i = 0; i < iters; i++){
+    Idx[start+i].compare_exchange_strong(src, Idx[start+i], std::memory_order_relaxed);
+    Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
     Array[src].compare_exchange_strong(val, Array[src], std::memory_order_relaxed);
-    expected = Array[dest];
-    Array[dest].compare_exchange_strong(expected, val, std::memory_order_relaxed);
+    // AMO #4 issue - expected may not equal Array[dest] due to previous ops
+    // Result: expected[i] <- Array[dest] rather than Array[dest] <- val
+    Array[dest].compare_exchange_strong(expected[i], val, std::memory_order_relaxed);
   }
 }
 
@@ -321,6 +330,14 @@ void CT_CPP_STD::SCATTER_CAS(uint64_t thread_id,
                              std::atomic<std::uint64_t> *barrier_ctr,
                              double* start_time ){
 
+  // Set up array of expected uint64_t values
+  uint64_t i;
+  uint64_t expected[iters];
+  uint64_t start = thread_id * iters;
+  for(i = 0; i < iters; i++){
+    expected[i] = Array[IDX[start+i+1]];
+  }
+
   // Wait for all threads to be spawned
   MyBarrier(barrier_ctr);
 
@@ -330,15 +347,15 @@ void CT_CPP_STD::SCATTER_CAS(uint64_t thread_id,
   }
 
   // Perform atomic ops
-  uint64_t i, dest, val, expected;
-  uint64_t start = thread_id * iters;
+  uint64_t dest, val;
 	val   = 0x00ull;
 	dest  = 0x00ull;
-  for(i = start; i < (start + iters); i++){
-    Idx[i+1].compare_exchange_strong(dest, Idx[i+1], std::memory_order_relaxed);
-    Array[i].compare_exchange_strong(val, Array[i], std::memory_order_relaxed);
-    expected = Array[dest];
-    Array[dest].compare_exchange_strong(expected, val, std::memory_order_relaxed);
+  for(i = 0; i < iters; i++){
+    Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
+    Array[start+i].compare_exchange_strong(val, Array[start+i], std::memory_order_relaxed);
+    // AMO #3 issue - expected may not equal Array[dest] due to previous ops
+    // Result: expected[i] <- Array[dest] rather than Array[dest] <- val
+    Array[dest].compare_exchange_strong(expected[i], val, std::memory_order_relaxed);
   }
 }
 
@@ -372,7 +389,7 @@ void CT_CPP_STD::GATHER_CAS(uint64_t thread_id,
                             std::atomic<std::uint64_t> *barrier_ctr,
                             double* start_time ){
 
-  // Set up array of expected uint64_t values to force RMW behavior
+  // Set up array of expected uint64_t values
   uint64_t i;
   uint64_t expected[iters];
   uint64_t start = thread_id * iters;

@@ -31,13 +31,13 @@
 
 class CT_CPP_STD : public CTBaseImpl{
 private:
-  std::atomic<std::uint64_t> *Array;          ///< CT_CPP_STD: Data array
-  std::atomic<std::uint64_t> *Idx;            ///< CT_CPP_STD: Index array
-  uint64_t memSize;                ///< CT_CPP_STD: Memory size (in bytes)
-  uint64_t pes;                    ///< CT_CPP_STD: Number of processing elements
-  uint64_t iters;                  ///< CT_CPP_STD: Number of iterations per thread
-  uint64_t elems;                  ///< CT_CPP_STD: Number of u8 elements
-  uint64_t stride;                 ///< CT_CPP_STD: Stride in elements
+  std::atomic<std::uint64_t> *Array;    ///< CT_CPP_STD: Data array
+  std::atomic<std::uint64_t> *Idx;      ///< CT_CPP_STD: Index array
+  uint64_t memSize;                     ///< CT_CPP_STD: Memory size (in bytes)
+  uint64_t pes;                         ///< CT_CPP_STD: Number of processing elements
+  uint64_t iters;                       ///< CT_CPP_STD: Number of iterations per thread
+  uint64_t elems;                       ///< CT_CPP_STD: Number of u8 elements
+  uint64_t stride;                      ///< CT_CPP_STD: Stride in elements
 
 public:
   /// CircusTent C++ standard atomics constructor
@@ -59,7 +59,7 @@ public:
   /// CircusTent C++ standard atomics data free function
   virtual bool FreeData() override;
 
-  /// Simple barrier Implementation (avoids need for c++20 support)
+  /// Simple barrier implementation (avoids need for c++20 support)
   /// Note that barrier_ctr must be reset to 0 manually before reuse
   void MyBarrier(std::atomic<std::uint64_t> *barrier_ctr);
 
