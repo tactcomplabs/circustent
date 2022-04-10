@@ -42,7 +42,7 @@ void RAND_ADD( uint64_t *restrict ARRAY,
 
       uint64_t ret;
       for( i=start; i<(start+iters_per_thread); i++ ){
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           ret = ARRAY[IDX[i]];
           ARRAY[IDX[i]] += 1;
@@ -73,7 +73,7 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
 
       uint64_t ret;
       for( i=start; i<(start+iters_per_thread); i++ ){
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           ret = ARRAY[i];
           ARRAY[i] += 1;
@@ -105,7 +105,7 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
 
       uint64_t ret;
       for( i=start; i<(start+iters_per_thread); i+=stride ){
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           ret = ARRAY[i];
           ARRAY[i] += 1;
@@ -135,7 +135,7 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
                                     (omp_get_thread_num() * (iters/num_threads)) );
 
       for( i=0; i<iters_per_thread; i++ ){
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           start = IDX[start];
           IDX[start] += 0;
@@ -169,25 +169,25 @@ void SG_ADD( uint64_t *restrict ARRAY,
 
       uint64_t ret;
       for( i=start; i<(start+iters_per_thread); i++ ){
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           src = IDX[i];
           IDX[i] += 0;
         }
 
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           dest = IDX[i+1];
           IDX[i+1] += 0;
         }
 
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           val = ARRAY[src];
           ARRAY[src] += 1;
         }
 
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           ret = ARRAY[dest];
           ARRAY[dest] += val;
@@ -216,7 +216,7 @@ void CENTRAL_ADD( uint64_t *restrict ARRAY,
 
       uint64_t ret;
       for( i=0; i<iters_per_thread; i++ ){
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           ret = ARRAY[0];
           ARRAY[0] += 1;
@@ -249,19 +249,19 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
 
       uint64_t ret;
       for( i=start; i<(start+iters_per_thread); i++ ){
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           dest = IDX[i+1];
           IDX[i+1] += 0;
         }
 
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           val = ARRAY[i];
           ARRAY[i] += 1;
         }
 
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           ret = ARRAY[dest];
           ARRAY[dest] += val;
@@ -294,19 +294,19 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
 
       uint64_t ret;
       for( i=start; i<(start+iters_per_thread); i++ ){
-        #pragma omp atomic capture relaxed
-        {
+        #pragma omp atomic capture
+      	{
           dest = IDX[i+1];
           IDX[i+1] += 0;
         }
 
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           val = ARRAY[dest];
           ARRAY[dest] += 1;
         }
 
-        #pragma omp atomic capture relaxed
+        #pragma omp atomic capture
         {
           ret = ARRAY[i];
           ARRAY[i] += val;
