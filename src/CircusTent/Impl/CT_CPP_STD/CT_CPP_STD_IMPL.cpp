@@ -245,10 +245,9 @@ void CT_CPP_STD::SG_CAS(uint64_t thread_id,
 
   // Perform atomic ops
   uint64_t src, dest, val;
-  uint64_t start = thread_id * iters;
-	val   = 0x00ull;
-	src   = 0x00ull;
-	dest  = 0x00ull;
+  val   = 0x00ull;
+  src   = 0x00ull;
+  dest  = 0x00ull;
   for(i = 0; i < iters; i++){
     Idx[start+i].compare_exchange_strong(src, Idx[start+i], std::memory_order_relaxed);
     Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
@@ -316,8 +315,8 @@ void CT_CPP_STD::SCATTER_ADD(uint64_t thread_id,
   // Perform atomic ops
   uint64_t i, dest, val;
   uint64_t start = thread_id * iters;
-	val   = 0x00ull;
-	dest  = 0x00ull;
+  val   = 0x00ull;
+  dest  = 0x00ull;
   for(i = start; i < (start + iters); i++){
     dest = Idx[i+1].fetch_add((uint64_t)(0x00ull), std::memory_order_relaxed);
     val = Array[i].fetch_add((uint64_t)(0x01ull), std::memory_order_relaxed);
@@ -335,7 +334,7 @@ void CT_CPP_STD::SCATTER_CAS(uint64_t thread_id,
   uint64_t expected[iters];
   uint64_t start = thread_id * iters;
   for(i = 0; i < iters; i++){
-    expected[i] = Array[IDX[start+i+1]];
+    expected[i] = Array[Idx[start+i+1]];
   }
 
   // Wait for all threads to be spawned
@@ -348,8 +347,8 @@ void CT_CPP_STD::SCATTER_CAS(uint64_t thread_id,
 
   // Perform atomic ops
   uint64_t dest, val;
-	val   = 0x00ull;
-	dest  = 0x00ull;
+  val   = 0x00ull;
+  dest  = 0x00ull;
   for(i = 0; i < iters; i++){
     Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
     Array[start+i].compare_exchange_strong(val, Array[start+i], std::memory_order_relaxed);
@@ -375,8 +374,8 @@ void CT_CPP_STD::GATHER_ADD(uint64_t thread_id,
   // Perform atomic ops
   uint64_t i, dest, val;
   uint64_t start = thread_id * iters;
-	val   = 0x00ull;
-	dest  = 0x00ull;
+  val   = 0x00ull;
+  dest  = 0x00ull;
   for(i = start; i < (start + iters); i++){
     dest = Idx[i+1].fetch_add((uint64_t)(0x00ull), std::memory_order_relaxed);
     val = Array[dest].fetch_add((uint64_t)(0x01ull), std::memory_order_relaxed);
@@ -407,8 +406,8 @@ void CT_CPP_STD::GATHER_CAS(uint64_t thread_id,
 
   // Perform atomic ops
   uint64_t dest, val;
-	val   = 0x00ull;
-	dest  = 0x00ull;
+  val   = 0x00ull;
+  dest  = 0x00ull;
   for(i = 0; i < iters; i++){
     Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
     Array[dest].compare_exchange_strong(val, Array[dest], std::memory_order_relaxed);
