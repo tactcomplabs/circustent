@@ -134,7 +134,8 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       isList = true;
       PrintBench();
       return true;
-    }else{
+    }//TODO: option for taking in the blocksPerGrid and threadsPerBlock for the CUDA implementation
+    else{
       std::cout << "Unknown option: " << s << std::endl;
       return false;
     }
@@ -167,7 +168,7 @@ void CTOpts::PrintBench(){
   std::cout << "===================================================================================" << std::endl;
 }
 
-void CTOpts::PrintHelp(){
+void CTOpts::PrintHelp(){ // TODO: include info about setting CUDA specific options
   unsigned major = CT_VERSION_MAJOR;
   unsigned minor = CT_VERSION_MINOR;
   std::cout << "=======================================================================" << std::endl;

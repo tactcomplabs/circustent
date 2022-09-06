@@ -46,7 +46,19 @@
 #include "Impl/CT_CPP_STD/CT_CPP_STD.h"
 #endif
 
+#ifdef _ENABLE_CUDA_
+// FIXME: make sure whether this should be .h or .cuh
+#include "Impl/CT_CUDA/CT_CUDA.cuh"
+#endif
+
 void PrintTiming( double Timing, double GAMS );
+
+#ifdef _ENABLE_CUDA_
+void RunBenchCuda(CTOpts *Opts) {
+  // TODO: RunBenchCuda(CTOpts *Opts)
+}
+
+#endif
 
 #ifdef _ENABLE_CPP_STD_
 void RunBenchCppStd(CTOpts *Opts) {
@@ -543,6 +555,9 @@ int main( int argc, char **argv ){
 #endif
 #ifdef _ENABLE_CPP_STD_
     RunBenchCppStd(Opts);
+#endif
+#ifdef _ENABLE_CUDA_
+    RunBenchCuda(Opts);
 #endif
   }
 

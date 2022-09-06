@@ -135,6 +135,22 @@ else()
   message(STATUS "DISABLING C++ Standard Atomics Implementation")
 endif()
 
+if (ENABLE_CUDA) # FIXME:linking
+  # enable_language(CUDA)
+  
+  # TODO: do something with path to CUDA linker
+  set(CMAKE_CUDA_COMPILER "nvcc")
+  set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_ENABLE_CUDA_")
+
+  set(CMAKE_C_FLAGS "{CMAKE_C_FLAGS} -D_ENABLE_CUDA")
+  set(CMAKE_CXX_FLAGS "{CMAKE_CXX_FLAGS} -D_ENABLE_CUDA")
+  set(CMAKE_EXE_LINKER_FLAGS "{CMAKE_EXE_LINKER_FLAGS}")
+  
+  message(STATUS "ENABLING CUDA Implementation")
+else()
+  message(STATUS "DISABLING CUDA Implementation")
+endif()
+
 #------------------------------------------------------------------------
 # Add package paths
 #------------------------------------------------------------------------

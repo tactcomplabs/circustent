@@ -53,4 +53,8 @@ if (ENABLE_CPP_STD)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_CPP_STD_OBJS>)
 endif()
 
+if (ENABLE_CUDA)
+  add_executable(circustent ${CTsrcs} $<TARGET_OBJECTS:CT_CUDA_OBJS>)
+endif()
+
 install(TARGETS circustent DESTINATION bin)
