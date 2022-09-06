@@ -134,7 +134,7 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       isList = true;
       PrintBench();
       return true;
-    }//TODO: option for taking in the blocksPerGrid and threadsPerBlock for the CUDA implementation
+    }
     else{
       std::cout << "Unknown option: " << s << std::endl;
       return false;
