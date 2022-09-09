@@ -19,11 +19,14 @@
 
 #ifdef _ENABLE_CUDA_
 
-#ifndef _CT_CUDA_H_
-#define _CT_CUDA_H_
+#ifndef _CT_CUDA_CUH_
+#define _CT_CUDA_CUH_
 
 // FIXME: check include path to CUDA runtime
 #include <cuda_runtime.h>
+// #include "/usr/local/cuda-11.0/include/cuda_runtime.h" // if cuda_runtime.h doesn't work on HPCC 
+#include <cuda.h>
+
 
 #include "CircusTent/CTBaseImpl.h"
 
@@ -32,11 +35,11 @@
 class CT_CUDA : public CTBaseImpl {
 private:
   // FIXME: I think we need device copies of some of these class attributes
-  uint64_t *Array;             ///< CT_CUDA: Data array
-  uint64_t *Idx;               ///< CT_CUDA: Index array
+  uint64_t *Array;             ///< CT_CUDA: Host data array
+  uint64_t *Idx;               ///< CT_CUDA: Host index array
 
-  uint64_t *d_Array;
-  uint64_t *d_Idx;
+  uint64_t *d_Array;           ///< CT_CUDA: Device copy of data array
+  uint64_t *d_Idx;             ///< CT_CUDA: Device copy of index array
 
   uint64_t memSize;            ///< CT_CUDA: Memory size (in bytes)
   uint64_t pes;                ///< CT_CUDA: Number of processing elements
@@ -46,7 +49,7 @@ private:
 
   // cudaDeviceProp prop;         ///< CT_CUDA: Variable that hold CUDA device properties
   int deviceID;                ///< CT_CUDA: CUDA device ID
-  int deviceCount;             ///< CT_CUDA: Number of usable CUDA devices
+  // int deviceCount;             ///< CT_CUDA: Number of usable CUDA devices
 
   // TODO: set these vars via command line options
   int blocksPerGrid;        ///< CT_CUDA: Number of blocks per Grid
@@ -62,9 +65,7 @@ public:
   ~CT_CUDA();
 
   // TODO: Helper functions
-  void printDeviceProperties();
-
-  // TODO 
+  void printDeviceProperties(int deviceID);
   void parseCUDAOpts(int argc, char **argv);
 
   // CircusTent CUDA execution function
@@ -81,5 +82,5 @@ public:
   virtual bool FreeData() override;
 }
 
-#endif  // CT_CUDA_H_
+#endif  // CT_CUDA_CUH_
 #endif  // _ENABLE_CUDA_
