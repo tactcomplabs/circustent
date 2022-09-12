@@ -42,11 +42,54 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
 
 CT_CUDA::~CT_CUDA() {}
 
-// TODO: helper functions
+// helper functions
+bool parseCUDAOpts(int argc, char **argv) {
+    l_argc = argc;
+    l_argv = argv;
+    for (int i=1; i < argc; i++) {
+        std::string s(argv[i]);
+
+        if ( (s=="-bpg") || (s=="-blocks") || (s=="--blocks") ) {
+            if ( i+1 > (argc-1) ) {
+                std::cout << "Error: --blocks requires an argument" << std::endl;
+                return false;
+            }
+            std::string P(argv[i+1]);
+            blocksPerGrid = atoll(P.c_str()); // FIXME: check this
+            i++;
+        }
+        else if (s=="-tpb") || (s=="-threads") || (s=="--threads") {
+            if ( i+1 > (argc-1) ) {
+                std::cout << "Error: --threads requires an argument" << std::endl;
+                return false;
+            }
+            std::string P(argv[i+1]);
+            threadsPerBlock = atoll(P.c_str()); // FIXME: check this
+            i++;
+        }
+    }
+
+    // sanity check the options
+    if ( blocksPerGrid <= 0 ) { // FIXME: check this
+        std::cout << "Error: --blocks must be greater than 0" << std::endl;
+        return false;
+    }
+
+    if ( threadsPerBlock <= 0 ) { // FIXME: check this
+        std::cout << "Error: --threads must be greater than 0" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+void printDeviceProperties(int deviceID) { // TODO: printDeviceProperties()
+    
+}
 
 
-bool CT_CUDA::Execute(double &Timing, double &GAMS) {
-    // TODO: CT_CUDA::Execute()
+
+bool CT_CUDA::Execute(double &Timing, double &GAMS) { // TODO: CT_CUDA::Execute()
 
     CTBaseImpl::CTBenchType BType   = this->GetBenchType(); // benchmark type
     CTBaseImpl::CTAtomType  AType   = this->GetAtomType();  // atomic type
@@ -55,7 +98,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     double Endtime   = 0.; // end time
     double OPS       = 0.; // billions of operations
 
-    // TODO: determine benchmark type
+    // TODO: determine benchmark type and launch the desired kernel
 }
 
 bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {

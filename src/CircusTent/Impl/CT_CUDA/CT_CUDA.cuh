@@ -65,8 +65,8 @@ public:
   ~CT_CUDA();
 
   // TODO: Helper functions
+  bool parseCUDAOpts(int argc, char **argv);
   void printDeviceProperties(int deviceID);
-  void parseCUDAOpts(int argc, char **argv);
 
   // CircusTent CUDA execution function
   virtual bool Execute(double &Timing, double &GAMS) override;

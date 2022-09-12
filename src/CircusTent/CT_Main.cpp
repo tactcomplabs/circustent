@@ -54,8 +54,7 @@
 void PrintTiming( double Timing, double GAMS );
 
 #ifdef _ENABLE_CUDA_
-void RunBenchCuda(CTOpts *Opts) {
-  // TODO: RunBenchCuda(CTOpts *Opts)
+void RunBenchCuda(CTOpts *Opts) { // TODO: RunBenchCuda(CTOpts *Opts)
 
   // Init the CUDA object
   CT_CUDA *CT = new CT_CUDA(
@@ -68,11 +67,26 @@ void RunBenchCuda(CTOpts *Opts) {
     return;
   }
 
+  // Take in options for blocksPerGrid and threadsPerBlock
+  if ( !CT->parseCUDAOpts(argc, argv) ) {
+    std::cout << "Failed to parse command line options" << std::endl;
+    delete CT;
+    return -1;
+  }
+
   // TODO: Set the target options
 
+  // TODO: Print device information
 
-  // TODO: Allocate the data
-
+  // Allocate the data
+  if( !CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride() ) ){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA" << std::endl;
+    delete CT;
+    return ;
+  }
 
   // Execute the benchmark
   double Timing = 0.;
