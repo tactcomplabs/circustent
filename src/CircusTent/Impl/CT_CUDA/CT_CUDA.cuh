@@ -66,10 +66,7 @@ public:
 
   // TODO: Helper functions
   bool parseCUDAOpts(int argc, char **argv);
-  void printDeviceProperties(int deviceID);
-
-  // CircusTent CUDA execution function
-  virtual bool Execute(double &Timing, double &GAMS) override;
+  void printCUDADeviceProperties(int deviceID);
 
   // CircusTent CUDA data allocation function
   // TODO: probably need to copy arrays to device here
@@ -78,9 +75,14 @@ public:
     uint64_t iters,
     uint64_t stride ) override;
 
+  // CircusTent CUDA execution function
+  virtual bool Execute(double &Timing, double &GAMS) override;
+
   // CircusTent CUDA data free function
   virtual bool FreeData() override;
-}
+};
 
-#endif  // CT_CUDA_CUH_
+#endif  // _CT_CUDA_CUH_
 #endif  // _ENABLE_CUDA_
+
+// EOF

@@ -16,14 +16,14 @@
 
 
 // Kernels meant to be run on the device
-__global__  void RAND_ADD(
-    uint64_t *ARRAY,
-    uint64_t *IDX,
-    uint64_t iters,
-    uint64_t pes
-) {
-    // TODO: RAND_ADD()
-}
+// __global__  void RAND_ADD(
+//     uint64_t *ARRAY,
+//     uint64_t *IDX,
+//     uint64_t iters,
+//     uint64_t pes
+// ) {
+//     // TODO: RAND_ADD()
+// }
 
 CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
     CTBaseImpl("CUDA", B, A),
@@ -43,9 +43,9 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
 CT_CUDA::~CT_CUDA() {}
 
 // helper functions
-bool parseCUDAOpts(int argc, char **argv) {
-    l_argc = argc;
-    l_argv = argv;
+bool CT_CUDA::parseCUDAOpts(int argc, char **argv) {
+    // CTOpts::l_argc = argc;
+    // CTOpts::l_argv = argv;
     for (int i=1; i < argc; i++) {
         std::string s(argv[i]);
 
@@ -55,27 +55,27 @@ bool parseCUDAOpts(int argc, char **argv) {
                 return false;
             }
             std::string P(argv[i+1]);
-            blocksPerGrid = atoll(P.c_str()); // FIXME: check this
+            blocksPerGrid = atoi(P.c_str());
             i++;
         }
-        else if (s=="-tpb") || (s=="-threads") || (s=="--threads") {
+        else if ((s=="-tpb") || (s=="-threads") || (s=="--threads")) {
             if ( i+1 > (argc-1) ) {
                 std::cout << "Error: --threads requires an argument" << std::endl;
                 return false;
             }
             std::string P(argv[i+1]);
-            threadsPerBlock = atoll(P.c_str()); // FIXME: check this
+            threadsPerBlock = atoi(P.c_str());
             i++;
         }
     }
 
     // sanity check the options
-    if ( blocksPerGrid <= 0 ) { // FIXME: check this
+    if ( blocksPerGrid <= 0 ) {
         std::cout << "Error: --blocks must be greater than 0" << std::endl;
         return false;
     }
 
-    if ( threadsPerBlock <= 0 ) { // FIXME: check this
+    if ( threadsPerBlock <= 0 ) {
         std::cout << "Error: --threads must be greater than 0" << std::endl;
         return false;
     }
@@ -83,30 +83,16 @@ bool parseCUDAOpts(int argc, char **argv) {
     return true;
 }
 
-void printDeviceProperties(int deviceID) { // TODO: printDeviceProperties()
-    
-}
+// void CT_CUDA::printCUDADeviceProperties(int deviceID) { // TODO: printDeviceProperties()
 
-
-
-bool CT_CUDA::Execute(double &Timing, double &GAMS) { // TODO: CT_CUDA::Execute()
-
-    CTBaseImpl::CTBenchType BType   = this->GetBenchType(); // benchmark type
-    CTBaseImpl::CTAtomType  AType   = this->GetAtomType();  // atomic type
-
-    double StartTime = 0.; // start time
-    double Endtime   = 0.; // end time
-    double OPS       = 0.; // billions of operations
-
-    // TODO: determine benchmark type and launch the desired kernel
-}
+// }
 
 bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     // save the data
     memSize = m;
     pes = p;
     iters = i;
-    srtide = s;
+    stride = s;
 
     // check args
     if ( pes == 0 ) {
@@ -135,20 +121,20 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
 
     // Allocate arrays on the host  
     Array = (uint64_t *) malloc(memSize);
-    if ( Array = nullptr ) {
+    if ( Array == nullptr ) {
         std::cout << "CT_CUDA::AllocateData : 'Array' could not be allocated" << std::endl;
         free(Array);
         return false;
     }
 
     Idx = (uint64_t *) malloc(memSize);
-    if ( Idx = nullptr ) {
+    if ( Idx == nullptr ) {
         std::cout << "CT_CUDA::AllocateData : 'Idx' could not be allocated" << std::endl;
         free(Idx);
         return false;
     }
 
-    // Randomize the arrays on the host
+    // TODO: Randomize the arrays on the host
     srand(time(NULL));
     if ( this->GetBenchType() == CT_PTRCHASE ) {
         for ( unsigned i = 0; i < ((pes+1) * iters); i++ ) {
@@ -160,8 +146,9 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
             Idx[i] = (uint64_t)(rand()%(elems-1));
         }
     }
+    // FIXME: 
     for ( unsigned i=0; i<elems; i++ ) {
-        HostArray[i] = (uint64_t)(rand());
+        Array[i] = (uint64_t)(rand()%(elems-1));
     }
 
     // FIXME: allocate data on the target device
@@ -180,4 +167,26 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     return true;
 }
 
+bool CT_CUDA::Execute(double &Timing, double &GAMS) { // TODO: CT_CUDA::Execute()
+
+    CTBaseImpl::CTBenchType BType   = this->GetBenchType(); // benchmark type
+    CTBaseImpl::CTAtomType  AType   = this->GetAtomType();  // atomic type
+
+    // double StartTime = 0.; // start time
+    // double Endtime   = 0.; // end time
+    // double OPS       = 0.; // billions of operations
+
+    // TODO: determine benchmark type and launch the desired kernel
+
+
+
+    return true;
+}
+
+bool CT_CUDA::FreeData() { // TODO: CT_CUDA::FreeData()
+    return true;
+}
+
 #endif // _CT_CUDA_CUH_
+
+// EOF
