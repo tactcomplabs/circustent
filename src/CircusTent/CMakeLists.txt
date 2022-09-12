@@ -55,7 +55,7 @@ endif()
 
 if (ENABLE_CUDA)
   add_executable(circustent ${CTsrcs} $<TARGET_OBJECTS:CT_CUDA_OBJS>)
-  # target_link_libraries(circustent /usr/local/cuda/lib64/libcudart.so)
+  target_link_libraries(circustent CUDA)
 endif()
 
 install(TARGETS circustent DESTINATION bin)

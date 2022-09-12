@@ -29,6 +29,8 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
     CTBaseImpl("CUDA", B, A),
     Array(nullptr),
     Idx(nullptr),
+    d_Array(nullptr),
+    d_Idx(nullptr),
     memSize(0),
     pes(0),
     iters(0),
@@ -134,7 +136,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         return false;
     }
 
-    // TODO: Randomize the arrays on the host
+    // Randomize the arrays on the host
     srand(time(NULL));
     if ( this->GetBenchType() == CT_PTRCHASE ) {
         for ( unsigned i = 0; i < ((pes+1) * iters); i++ ) {
@@ -146,9 +148,8 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
             Idx[i] = (uint64_t)(rand()%(elems-1));
         }
     }
-    // FIXME: 
     for ( unsigned i=0; i<elems; i++ ) {
-        Array[i] = (uint64_t)(rand()%(elems-1));
+        Array[i] = (uint64_t)(rand());
     }
 
     // FIXME: allocate data on the target device
@@ -160,9 +161,9 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     // FIXME: copy arrays from host to target device
     // TODO: Use cudaSuccess to check that this process is successful, otherwise print an error message
     // cudaMemcpy(d_Array, &Array, memSize, cudaMemcpyHostToDevice);
-    // cudaMemcpy(d_Idx, &Idx, memSize, cudaMemcpyHostToDevice);
+    // cudaMemcpy(d_Idx, &Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice);
     cudaMemcpy(d_Array, Array, memSize, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_Idx, Idx, memSize, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Idx, Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice);
 
     return true;
 }
@@ -183,7 +184,20 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) { // TODO: CT_CUDA::Execute(
     return true;
 }
 
-bool CT_CUDA::FreeData() { // TODO: CT_CUDA::FreeData()
+bool CT_CUDA::FreeData() {
+    if ( Array ) {
+        free(Array);
+    }
+    if ( Idx ) {
+        free(Idx);
+    }
+    if ( d_Array ) {
+        cudaFree(d_Array);
+    }
+    if ( d_Idx ) {
+        cudaFree(d_Idx);
+    }
+
     return true;
 }
 

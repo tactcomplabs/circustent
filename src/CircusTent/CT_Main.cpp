@@ -71,7 +71,7 @@ void RunBenchCuda(CTOpts *Opts) { // TODO: RunBenchCuda(CTOpts *Opts)
   if ( !CT->parseCUDAOpts(argc, argv) ) {
     std::cout << "Failed to parse command line options" << std::endl;
     delete CT;
-    return -1;
+    return ;
   }
 
   // TODO: Set the target options
