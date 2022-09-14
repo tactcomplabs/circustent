@@ -54,7 +54,7 @@ if (ENABLE_CPP_STD)
 endif()
 
 if (ENABLE_CUDA)
-  add_executable(circustent ${CTsrcs} $<TARGET_OBJECTS:CT_CUDA_OBJS>)
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_CUDA_OBJS>)
   target_link_libraries(circustent CUDA)
 endif()
 
