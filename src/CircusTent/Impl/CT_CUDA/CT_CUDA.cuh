@@ -1,6 +1,6 @@
 /*
  * FIXME: ensure proper file extension is used throughout the head of this file.
- * CT_CUDA_CUH
+ * _CT_CUDA_CUH_
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -23,18 +23,20 @@
 #define _CT_CUDA_CUH_
 
 // FIXME: check include path to CUDA runtime
-#include <cuda_runtime.h>
-// #include "/usr/local/cuda-11.0/include/cuda_runtime.h" // if cuda_runtime.h doesn't work on HPCC 
-#include <cuda.h>
+// #include <cuda_runtime.h>
+#include "/usr/local/cuda-11.0/include/cuda_runtime.h" // if cuda_runtime.h doesn't work on HPCC 
+// #include <cuda.h>
 
 
 #include "CircusTent/CTBaseImpl.h"
 
 // TODO: Benchmark Kernel Prototypes
+// extern "C" {
+
+// }
 
 class CT_CUDA : public CTBaseImpl {
 private:
-  // FIXME: I think we need device copies of some of these class attributes
   uint64_t *Array;             ///< CT_CUDA: Host data array
   uint64_t *Idx;               ///< CT_CUDA: Host index array
 
@@ -47,13 +49,11 @@ private:
   uint64_t elems;              ///< CT_CUDA: Number of u8 elements
   uint64_t stride;             ///< CT_CUDA: Stride in elements
 
-  // cudaDeviceProp prop;         ///< CT_CUDA: Variable that hold CUDA device properties
   int deviceID;                ///< CT_CUDA: CUDA device ID
-  // int deviceCount;             ///< CT_CUDA: Number of usable CUDA devices
+  int deviceCount;             ///< CT_CUDA: Number of usable CUDA devices
 
-  // TODO: set these vars via command line options
-  int blocksPerGrid;        ///< CT_CUDA: Number of blocks per Grid
-  int threadsPerBlock;      ///< CT_CUDA: Number of threads per block
+  int blocksPerGrid;           ///< CT_CUDA: Number of blocks per Grid
+  int threadsPerBlock;         ///< CT_CUDA: Number of threads per block
 
 
 public:
@@ -64,12 +64,12 @@ public:
   // CircusTent CUDA destructor
   ~CT_CUDA();
 
-  // TODO: Helper functions
-  bool parseCUDAOpts(int argc, char **argv);
-  void printCUDADeviceProperties(int deviceID);
+  // Helper functions
+  bool PrintCUDADeviceProperties(int deviceID, int deviceCount);
+  bool ParseCUDAOpts(int argc, char **argv);
+  // bool SetCUDADevice();
 
   // CircusTent CUDA data allocation function
-  // TODO: probably need to copy arrays to device here
   virtual bool AllocateData( uint64_t memSize,
     uint64_t pes,
     uint64_t iters,
@@ -80,6 +80,13 @@ public:
 
   // CircusTent CUDA data free function
   virtual bool FreeData() override;
+
+  // Retrieve the deviceID value
+  int GetCUDAdeviceID() { return deviceID; }
+
+  // Retrieve threadsPerBlock
+  int GetCUDAdeviceCount() { return deviceCount; }
+
 };
 
 #endif  // _CT_CUDA_CUH_

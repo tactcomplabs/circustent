@@ -1,6 +1,6 @@
 /*
  * FIXME: ensure proper file exension is used throughout this file
- * _CT_CUDA_CU
+ * _CT_CUDA_CU_
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
  * All Rights Reserved
@@ -12,9 +12,6 @@
 #include "CT_CUDA.cuh"
 #ifdef _CT_CUDA_CUH_
 
-
-
-
 // Kernels meant to be run on the device
 // __global__  void RAND_ADD(
 //     uint64_t *ARRAY,
@@ -22,7 +19,6 @@
 //     uint64_t iters,
 //     uint64_t pes
 // ) {
-//     // TODO: RAND_ADD()
 // }
 
 CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
@@ -36,8 +32,8 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
     iters(0),
     elems(0),
     stride(0),
-    // TODO: make sure these are all set by the user
     deviceID(-1),
+    deviceCount(0),
     blocksPerGrid(-1),
     threadsPerBlock(-1)
     {}
@@ -45,9 +41,34 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
 CT_CUDA::~CT_CUDA() {}
 
 // helper functions
-bool CT_CUDA::parseCUDAOpts(int argc, char **argv) {
-    // CTOpts::l_argc = argc;
-    // CTOpts::l_argv = argv;
+bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) {
+    cudaGetDeviceCount(&deviceCount);
+    std::cout << "\nCT_CUDA::printCUDADeviceProperties : Number of CUDA enabled devices detected: " << deviceCount << std::endl;
+
+    if (getenv("CUDA_VISIBLE_DEVICES") == nullptr) {
+        std::cout << "CT_CUDA::printCUDADeviceProperties : CUDA_VISIBLE_DEVICES environment variable not set, defaulting to cudaSetDevice(1)" << std::endl;
+        deviceID = cudaSetDevice(1);
+    }
+
+    if (!deviceID && getenv("CUDA_VISIBLE_DEVICES") == nullptr) {
+        std::cout << "CT_CUDA::printCUDADeviceProperties : No target devices detected!" << std::endl;
+        return false;
+    }
+    else {
+        cudaDeviceProp prop;
+        cudaGetDeviceProperties(&prop, deviceID);
+
+        std::cout << "CT_CUDA::printCUDADeviceProperties : Target CUDA deviceID : " << deviceID << std::endl;
+        std::cout << "CT_CUDA::printCUDADeviceProperties : Device Name: " << prop.name << std::endl;
+        std::cout << "CT_CUDA::printCUDADeviceProperties : Memory Clock Rate (KHz): " << prop.memoryClockRate << std::endl;
+        std::cout << "CT_CUDA::printCUDADeviceProperties : Memory Bus Width (bits): " << prop.memoryBusWidth << std::endl;
+        // FIXME: std::cout << "CT_CUDA::printCUDADeviceProperties : Peak Memory Bandwidth (GB/s): " << (2.0 * prop.memoryClockRate * (prop.memoryBusWidth / 8) / 1000000) << std:endl;
+    }
+
+    return true;
+}
+
+bool CT_CUDA::ParseCUDAOpts(int argc, char **argv) {
     for (int i=1; i < argc; i++) {
         std::string s(argv[i]);
 
@@ -84,10 +105,6 @@ bool CT_CUDA::parseCUDAOpts(int argc, char **argv) {
 
     return true;
 }
-
-// void CT_CUDA::printCUDADeviceProperties(int deviceID) { // TODO: printDeviceProperties()
-
-// }
 
 bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     // save the data
@@ -160,15 +177,15 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
 
     // FIXME: copy arrays from host to target device
     // TODO: Use cudaSuccess to check that this process is successful, otherwise print an error message
-    // cudaMemcpy(d_Array, &Array, memSize, cudaMemcpyHostToDevice);
-    // cudaMemcpy(d_Idx, &Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_Array, Array, memSize, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_Idx, Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Array, &Array, memSize, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Idx, &Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice);
+    // cudaMemcpy(d_Array, Array, memSize, cudaMemcpyHostToDevice);
+    // cudaMemcpy(d_Idx, Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice);
 
     return true;
 }
 
-bool CT_CUDA::Execute(double &Timing, double &GAMS) { // TODO: CT_CUDA::Execute()
+bool CT_CUDA::Execute(double &Timing, double &GAMS) {
 
     CTBaseImpl::CTBenchType BType   = this->GetBenchType(); // benchmark type
     CTBaseImpl::CTAtomType  AType   = this->GetAtomType();  // atomic type

@@ -47,14 +47,13 @@
 #endif
 
 #ifdef _ENABLE_CUDA_
-// FIXME: make sure whether this should be .h or .cuh
 #include "Impl/CT_CUDA/CT_CUDA.cuh"
 #endif
 
 void PrintTiming( double Timing, double GAMS );
 
 #ifdef _ENABLE_CUDA_
-void RunBenchCuda(CTOpts *Opts) { // TODO: RunBenchCuda(CTOpts *Opts)
+void RunBenchCuda(CTOpts *Opts) {
 
   // Init the CUDA object
   CT_CUDA *CT = new CT_CUDA(
@@ -68,7 +67,7 @@ void RunBenchCuda(CTOpts *Opts) { // TODO: RunBenchCuda(CTOpts *Opts)
   }
 
   // Take in options for blocksPerGrid and threadsPerBlock
-  if ( !CT->parseCUDAOpts(argc, argv) ) {
+  if ( !CT->ParseCUDAOpts( Opts->GetArgc(), Opts->GetArgv() ) ) {
     std::cout << "Failed to parse command line options" << std::endl;
     delete CT;
     return ;
@@ -76,7 +75,12 @@ void RunBenchCuda(CTOpts *Opts) { // TODO: RunBenchCuda(CTOpts *Opts)
 
   // TODO: Set the target options
 
-  // TODO: Print device information
+  // Print device information
+  if ( !CT->PrintCUDADeviceProperties( CT->GetCUDAdeviceID(), CT->GetCUDAdeviceCount() ) ) {
+    std::cout << "ERROR: COULD NOT PRINT CUDA DEVICE PROPERTIES FOR CT_CUDA" << std::endl;
+    delete CT;
+    return;
+  }
 
   // Allocate the data
   if( !CT->AllocateData( Opts->GetMemSize(),

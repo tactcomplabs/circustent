@@ -136,15 +136,34 @@ else()
 endif()
 
 if (ENABLE_CUDA)
+    find_package(CUDA 9.0 REQUIRED)
+
     project(circustent LANGUAGES CUDA CXX C)
 
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -L/usr/local/cuda/lib64/ -lcudart -D_ENABLE_CUDA_")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L/usr/local/cuda/lib64/ -lcudart -D_ENABLE_CUDA_")
+    # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -L/usr/local/cuda/lib64/ -lcudart -D_ENABLE_CUDA_")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L/usr/local/cuda/lib64/ -lcudart -D_ENABLE_CUDA_")
+
+    # set(CMAKE_CUDA_COMPILER "nvcc")
+    # set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_ENABLE_CUDA_")
+
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/cuda/lib64 -lcudart")
+
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -L/usr/local/cuda/lib64/ -lcudadevrt -D_ENABLE_CUDA_")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L/usr/local/cuda/lib64/ -lcudadevrt -D_ENABLE_CUDA_")
 
     set(CMAKE_CUDA_COMPILER "nvcc")
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_ENABLE_CUDA_")
 
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/cuda/lib64 -lcudart")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/cuda/lib64 -lcudadevrt")
+
+    # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -L/usr/local/cuda/lib64/ -lcudadevrt -lcudart -lcuda -D_ENABLE_CUDA_")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L/usr/local/cuda/lib64/ -lcudadevrt -lcudart -lcuda -D_ENABLE_CUDA_")
+
+    # set(CMAKE_CUDA_COMPILER "nvcc")
+    # set(CMAKE_CUDA_HOST_COMPILER )
+    # set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_ENABLE_CUDA_ -lcudadevrt -lcudart -lcuda")
+
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/cuda/lib64 -lcudadevrt -lcudart -lcuda")
     
     message(STATUS "ENABLING CUDA Implementation")
 else()
