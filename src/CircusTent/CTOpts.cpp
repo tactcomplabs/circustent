@@ -134,6 +134,10 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       isList = true;
       PrintBench();
       return true;
+    } else if ( (s=="-bpg") || (s=="-blocks") || (s=="--blocks") ) {
+      i++;
+    } else if ((s=="-tpb") || (s=="-threads") || (s=="--threads")) {
+      i++;
     }
     else{
       std::cout << "Unknown option: " << s << std::endl;

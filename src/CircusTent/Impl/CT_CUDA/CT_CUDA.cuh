@@ -23,8 +23,9 @@
 
 // FIXME: check include path to CUDA runtime
 // #include <cuda_runtime.h>
-#include "/usr/local/cuda-11.0/include/cuda_runtime.h" // if cuda_runtime.h doesn't work on HPCC 
 // #include <cuda.h>
+#include "/usr/local/cuda-11.0/include/cuda_runtime.h" // if cuda_runtime.h doesn't work on HPCC 
+#include "/usr/local/cuda-11.0/include/cuda.h" // if cuda.h doesn't work on HPCC 
 
 
 #include "CircusTent/CTBaseImpl.h"

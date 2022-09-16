@@ -40,31 +40,41 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
 CT_CUDA::~CT_CUDA() {}
 
 // helper functions
-bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) {
+bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) { // TODO: look at prop to get better printout info
     cudaGetDeviceCount(&deviceCount);
-    std::cout << "\nCT_CUDA::printCUDADeviceProperties : Number of CUDA enabled devices detected: " << deviceCount << std::endl;
+
+    std::cout << "\n====================================================================================" << std::endl;
+    std::cout << "                             CUDA Device Properties"          << std::endl;
+    std::cout << "====================================================================================" << std::endl;
+
+    std::cout << "Number of CUDA enabled devices detected: " << deviceCount << std::endl;
 
     if (getenv("CUDA_VISIBLE_DEVICES") == nullptr) {
-        std::cout << "CT_CUDA::printCUDADeviceProperties : CUDA_VISIBLE_DEVICES environment variable not set, defaulting to cudaSetDevice(1)" << std::endl;
+        std::cout << "CUDA_VISIBLE_DEVICES environment variable not set, defaulting to cudaSetDevice(1)\n" << std::endl;
         deviceID = cudaSetDevice(1);
     }
 
     if (!deviceID && getenv("CUDA_VISIBLE_DEVICES") == nullptr) {
-        std::cout << "CT_CUDA::printCUDADeviceProperties : No target devices detected!" << std::endl;
+        std::cout << "No target devices detected!" << std::endl;
         return false;
     }
     else {
-        cudaDeviceProp prop;
-        cudaGetDeviceProperties(&prop, deviceID);
+            cudaDeviceProp prop;
+            cudaGetDeviceProperties(&prop, deviceID);
 
-        std::cout << "CT_CUDA::printCUDADeviceProperties : Target CUDA deviceID : " << deviceID << std::endl;
-        std::cout << "CT_CUDA::printCUDADeviceProperties : Device Name: " << prop.name << std::endl;
-        std::cout << "CT_CUDA::printCUDADeviceProperties : Memory Clock Rate (KHz): " << prop.memoryClockRate << std::endl;
-        std::cout << "CT_CUDA::printCUDADeviceProperties : Memory Bus Width (bits): " << prop.memoryBusWidth << std::endl;
-        // FIXME: std::cout << "CT_CUDA::printCUDADeviceProperties : Peak Memory Bandwidth (GB/s): " << (2.0 * prop.memoryClockRate * (prop.memoryBusWidth / 8) / 1000000) << std:endl;
-    }
+            std::cout << "Target CUDA deviceID : " << deviceID << std::endl;
+            std::cout << "Device Name: " << prop.name << std::endl;
 
-    return true;
+            std::cout << "Total Global Memory: " << prop.totalGlobalMem << std::endl;
+            std::cout << "Memory Clock Rate (MHz): " << prop.memoryClockRate/1024 << std::endl;
+
+            std::cout << "Maximum Threads per Block: " << prop.maxThreadsPerBlock << std::endl;
+            std::cout << "Warp Size: " << prop.warpSize << std::endl;
+        }
+
+        std::cout << "" << std::endl;
+
+        return true;
 }
 
 bool CT_CUDA::ParseCUDAOpts(int argc, char **argv) { // FIXME:
@@ -156,13 +166,13 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
 
     // Randomize the arrays on the host
     srand(time(NULL));
-    if ( this->GetBenchType() == CT_PTRCHASE ) {
+    if ( this->GetBenchType() == CT_PTRCHASE ) { // FIXME: ptrchase looks clunky
         for ( unsigned i = 0; i < ((pes+1) * iters); i++ ) {
             Idx[i] = (uint64_t)(rand()%((pes+1)*iters));
         }
     }
     else {
-        for ( unsigned i = 0; i < ((pes+1) * iters); i++ ) {
+        for ( unsigned i = 0; i < elems; i++ ) {
             Idx[i] = (uint64_t)(rand()%(elems-1));
         }
     }
@@ -179,7 +189,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         return false;
     } // cudaMalloc(&d_Array, memSize);
 
-    if ( cudaMalloc(&d_Idx, memSize) != cudaSuccess ) {
+    if ( cudaMalloc(&d_Idx, 2 * memSize) != cudaSuccess ) {
         std::cout << "CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device" << std::endl;
         cudaFree(d_Array);
         cudaFree(d_Idx);
@@ -200,7 +210,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     } // cudaMemcpy(d_Array, &Array, memSize, cudaMemcpyHostToDevice);
 
 
-    if ( cudaMemcpy(d_Idx, Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice) != cudaSuccess ) {
+    if ( cudaMemcpy(d_Idx, Idx, 2 * memSize, cudaMemcpyHostToDevice) != cudaSuccess ) {
         std::cout << "CT_CUDA::AllocateData : 'd_Idx' could not be copied to device" << std::endl;
         cudaFree(d_Array);
         cudaFree(d_Idx);

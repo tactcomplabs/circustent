@@ -55,8 +55,6 @@ endif()
 
 if (ENABLE_CUDA)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_CUDA_OBJS>)
-  # target_link_libraries(circustent /usr/local/cuda/lib64/libcudadevrt.a)
-  # target_link_libraries(circustent ${CUDA_LIBRARIES})
 endif()
 
 install(TARGETS circustent DESTINATION bin)

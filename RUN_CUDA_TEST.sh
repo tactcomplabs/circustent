@@ -8,5 +8,5 @@ export EXE=$CT_BUILD/src/CircusTent/circustent
 # $EXE --help
 # echo
 
-$EXE --bench RAND_ADD --memsize 1024 --pes 1 -i 1000 --blocks 1 --threads 1
+$EXE --bench RAND_ADD --memsize 1024 --pes 1 -i 100 --blocks 1 --threads 1
 
