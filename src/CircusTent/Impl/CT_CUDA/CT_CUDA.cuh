@@ -1,5 +1,4 @@
 /*
- * FIXME: ensure proper file extension is used throughout the head of this file.
  * _CT_CUDA_CUH_
  *
  * Copyright (C) 2017-2021 Tactical Computing Laboratories, LLC
@@ -30,10 +29,120 @@
 
 #include "CircusTent/CTBaseImpl.h"
 
-// TODO: Benchmark Kernel Prototypes
-// extern "C" {
+// Benchmark Kernel Prototypes
+extern "C" {
+  __global__ void RAND_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
 
-// }
+  __global__ void RAND_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void STRIDE1_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void STRIDE1_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void STRIDEN_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes,
+    uint64_t stride
+  );
+
+  __global__ void STRIDEN_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes,
+    uint64_t stride
+  );
+
+  __global__ void CENTRAL_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void CENTRAL_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void PTRCHASE_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void PTRCHASE_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void SG_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void SG_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void SCATTER_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void SCATTER_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void GATHER_ADD(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+
+  __global__ void GATHER_CAS(
+    uint64_t* __restrict__ ARRAY,
+    uint64_t* __restrict__ IDX,
+    uint64_t iters,
+    uint64_t pes
+  );
+}
 
 class CT_CUDA : public CTBaseImpl {
 private:

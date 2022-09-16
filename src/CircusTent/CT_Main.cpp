@@ -68,7 +68,7 @@ void RunBenchCuda(CTOpts *Opts) {
 
   // Take in options for blocksPerGrid and threadsPerBlock
   if ( !CT->ParseCUDAOpts( Opts->GetArgc(), Opts->GetArgv() ) ) {
-    std::cout << "Failed to parse command line options" << std::endl;
+    std::cout << "Failed to parse CUDA command line options" << std::endl;
     delete CT;
     return ;
   }
@@ -583,7 +583,7 @@ int main( int argc, char **argv ){
     return -1;
   }
 
-  if( (!Opts->IsHelp()) && (!Opts->IsList()) ){
+  if( (!Opts->IsHelp()) && (!Opts->IsList()) )3{
     // execute the benchmarks
 #ifdef _ENABLE_OMP_
     RunBenchOMP(Opts);

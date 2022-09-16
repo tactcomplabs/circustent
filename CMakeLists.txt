@@ -136,7 +136,7 @@ else()
 endif()
 
 if (ENABLE_CUDA)
-    find_package(CUDA 9.0 REQUIRED)
+    find_package(CUDA)
 
     project(circustent LANGUAGES CUDA CXX C)
 
