@@ -583,7 +583,7 @@ int main( int argc, char **argv ){
     return -1;
   }
 
-  if( (!Opts->IsHelp()) && (!Opts->IsList()) )3{
+  if( (!Opts->IsHelp()) && (!Opts->IsList()) ){
     // execute the benchmarks
 #ifdef _ENABLE_OMP_
     RunBenchOMP(Opts);
