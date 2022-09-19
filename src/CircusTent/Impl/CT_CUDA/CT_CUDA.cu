@@ -121,6 +121,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     pes = p;
     iters = i;
     stride = s;
+    uint64_t idxMemSize = 2 * memSize;
 
     // check args
     if ( pes == 0 ) {
@@ -138,6 +139,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
 
     // calculate the number of elements
     elems = (memSize/8);
+    uint64_t idxElems = (idxMemSize/8);
 
     // test to see whether we'll stride out of bounds
     uint64_t end = (pes * iters * stride) - stride;
@@ -155,7 +157,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         return false;
     }
 
-    Idx = (uint64_t *) malloc(memSize);
+    Idx = (uint64_t *) malloc(idxMemSize);
     if ( Idx == nullptr ) {
         std::cout << "CT_CUDA::AllocateData : 'Idx' could not be allocated" << std::endl;
         free(Array);
@@ -166,13 +168,13 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     // Randomize the arrays on the host
     srand(time(NULL));
     if ( this->GetBenchType() == CT_PTRCHASE ) { // FIXME: ptrchase looks clunky
-        for ( unsigned i = 0; i < ((pes+1) * iters); i++ ) {
-            Idx[i] = (uint64_t)(rand()%((pes+1)*iters));
+        for ( unsigned i = 0; i < idxElems; i++ ) {
+            Idx[i] = (uint64_t)(rand()%(idxElems - 1));
         }
     }
     else {
         for ( unsigned i = 0; i < elems; i++ ) {
-            Idx[i] = (uint64_t)(rand()%(elems-1));
+            Idx[i] = (uint64_t)(rand()%(elems - 1));
         }
     }
     for ( unsigned i=0; i<elems; i++ ) {
@@ -188,7 +190,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         return false;
     } // cudaMalloc(&d_Array, memSize);
 
-    if ( cudaMalloc(&d_Idx, 2 * memSize) != cudaSuccess ) {
+    if ( cudaMalloc(&d_Idx, idxMemSize) != cudaSuccess ) {
         std::cout << "CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device" << std::endl;
         cudaFree(d_Array);
         cudaFree(d_Idx);
@@ -209,7 +211,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     } // cudaMemcpy(d_Array, &Array, memSize, cudaMemcpyHostToDevice);
 
 
-    if ( cudaMemcpy(d_Idx, Idx, 2 * memSize, cudaMemcpyHostToDevice) != cudaSuccess ) {
+    if ( cudaMemcpy(d_Idx, Idx, idxMemSize, cudaMemcpyHostToDevice) != cudaSuccess ) {
         std::cout << "CT_CUDA::AllocateData : 'd_Idx' could not be copied to device" << std::endl;
         cudaFree(d_Array);
         cudaFree(d_Idx);
