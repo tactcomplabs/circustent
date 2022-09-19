@@ -77,7 +77,7 @@ bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) { // TODO
         return true;
 }
 
-bool CT_CUDA::ParseCUDAOpts(int argc, char **argv) { // FIXME:
+bool CT_CUDA::ParseCUDAOpts(int argc, char **argv) {
     for (int i=1; i < argc; i++) {
         std::string s(argv[i]);
 
@@ -99,7 +99,6 @@ bool CT_CUDA::ParseCUDAOpts(int argc, char **argv) { // FIXME:
             threadsPerBlock = atoi(P.c_str());
             i++;
         }
-        // TODO: add option to print CUDA device info without having to execute a kernel
     }
 
     // sanity check the options
@@ -180,7 +179,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         Array[i] = (uint64_t)(rand());
     }
 
-    // FIXME: allocate data on the target device
+    // allocate data on the target device
     if ( cudaMalloc(&d_Array, memSize) != cudaSuccess ) {
         std::cout << "CT_CUDA::AllocateData : 'd_Array' could not be allocated on device" << std::endl;
         cudaFree(d_Array);
@@ -199,7 +198,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     } // cudaMalloc(&d_Idx, memSize); 
 
 
-    // FIXME: copy arrays from host to target device
+    // copy arrays from host to target device
     if ( cudaMemcpy(d_Array, Array, memSize, cudaMemcpyHostToDevice) != cudaSuccess ) {
         std::cout << "CT_CUDA::AllocateData : 'd_Array' could not be copied to device" << std::endl;
         cudaFree(d_Array);

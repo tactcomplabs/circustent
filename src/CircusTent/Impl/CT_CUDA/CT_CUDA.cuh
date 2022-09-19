@@ -21,7 +21,6 @@
 #ifndef _CT_CUDA_CUH_
 #define _CT_CUDA_CUH_
 
-// FIXME: check include path to CUDA runtime
 // #include <cuda_runtime.h>
 // #include <cuda.h>
 #include "/usr/local/cuda-11.0/include/cuda_runtime.h" // if cuda_runtime.h doesn't work on HPCC 
