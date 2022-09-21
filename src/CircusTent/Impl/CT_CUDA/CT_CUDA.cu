@@ -11,15 +11,6 @@
 #include "CT_CUDA.cuh"
 #ifdef _CT_CUDA_CUH_
 
-// Kernels meant to be run on the device
-// __global__  void RAND_ADD(
-//     uint64_t *ARRAY,
-//     uint64_t *IDX,
-//     uint64_t iters,
-//     uint64_t pes
-// ) {
-// }
-
 CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
     CTBaseImpl("CUDA", B, A),
     Array(nullptr),
@@ -40,15 +31,12 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
 CT_CUDA::~CT_CUDA() {}
 
 // helper functions
-bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) { // TODO: look at prop to get better printout info
+bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) {
     cudaGetDeviceCount(&deviceCount);
-
-    std::cout << "\n====================================================================================" << std::endl;
-    std::cout << "                             CUDA Device Properties"          << std::endl;
-    std::cout << "====================================================================================" << std::endl;
-
-    std::cout << "Number of CUDA enabled devices detected: " << deviceCount << std::endl;
-
+    // std::cout << "====================================================================================" << std::endl;
+    // std::cout << "                             CUDA Device Properties"          << std::endl;
+    // std::cout << "====================================================================================" << std::endl;
+    std::cout << "\nNumber of CUDA enabled devices detected: " << deviceCount << std::endl;
     if (getenv("CUDA_VISIBLE_DEVICES") == nullptr) {
         std::cout << "CUDA_VISIBLE_DEVICES environment variable not set, defaulting to cudaSetDevice(1)\n" << std::endl;
         deviceID = cudaSetDevice(1);
@@ -58,22 +46,17 @@ bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) { // TODO
         std::cout << "No target devices detected!" << std::endl;
         return false;
     }
-    else {
-            cudaDeviceProp prop;
-            cudaGetDeviceProperties(&prop, deviceID);
-
-            std::cout << "Target CUDA deviceID : " << deviceID << std::endl;
-            std::cout << "Device Name: " << prop.name << std::endl;
-
-            std::cout << "Total Global Memory: " << prop.totalGlobalMem << std::endl;
-            std::cout << "Memory Clock Rate (MHz): " << prop.memoryClockRate/1024 << std::endl;
-
-            std::cout << "Maximum Threads per Block: " << prop.maxThreadsPerBlock << std::endl;
-            std::cout << "Warp Size: " << prop.warpSize << std::endl;
-        }
-
-        std::cout << "" << std::endl;
-
+    // else {
+    //         cudaDeviceProp prop;
+    //         cudaGetDeviceProperties(&prop, deviceID);
+    //         std::cout << "Target CUDA deviceID : " << deviceID << std::endl;
+    //         std::cout << "Device Name: " << prop.name << std::endl;
+    //         std::cout << "Total Global Memory: " << prop.totalGlobalMem << std::endl;
+    //         std::cout << "Memory Clock Rate (MHz): " << prop.memoryClockRate/1024 << std::endl;
+    //         std::cout << "Maximum Threads per Block: " << prop.maxThreadsPerBlock << std::endl;
+    //         std::cout << "Warp Size: " << prop.warpSize << std::endl;
+    //     }
+        // std::cout << "" << std::endl;
         return true;
 }
 
@@ -106,7 +89,6 @@ bool CT_CUDA::ParseCUDAOpts(int argc, char **argv) {
         std::cout << "Error: --blocks must be greater than 0" << std::endl;
         return false;
     }
-
     if ( threadsPerBlock <= 0 ) {
         std::cout << "Error: --threads must be greater than 0" << std::endl;
         return false;
@@ -188,7 +170,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         free(Array);
         free(Idx);
         return false;
-    } // cudaMalloc(&d_Array, memSize);
+    }
 
     if ( cudaMalloc(&d_Idx, idxMemSize) != cudaSuccess ) {
         std::cout << "CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device" << std::endl;
@@ -197,7 +179,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         free(Array);
         free(Idx);
         return false;
-    } // cudaMalloc(&d_Idx, memSize); 
+    }
 
 
     // copy arrays from host to target device
@@ -208,7 +190,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         free(Array);
         free(Idx);
         return false;
-    } // cudaMemcpy(d_Array, &Array, memSize, cudaMemcpyHostToDevice);
+    }
 
 
     if ( cudaMemcpy(d_Idx, Idx, idxMemSize, cudaMemcpyHostToDevice) != cudaSuccess ) {
@@ -218,7 +200,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
         free(Array);
         free(Idx);
         return false;
-    } // cudaMemcpy(d_Idx, &Idx, sizeof(uint64_t)*(pes+1)*iters, cudaMemcpyHostToDevice);
+    }
 
     return true;
 }
@@ -235,14 +217,17 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     if ( BType == CT_RAND ) {
         switch ( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 RAND_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
             case CT_CAS:
                 StartTime = this->MySecond();
                 RAND_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
@@ -255,14 +240,18 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     else if ( BType == CT_STRIDE1 ) {
         switch( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 STRIDE1_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
             case CT_CAS:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 STRIDE1_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
@@ -275,14 +264,18 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     else if ( BType == CT_STRIDEN ) {
         switch( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 STRIDEN_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes, stride );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
             case CT_CAS:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 STRIDEN_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes, stride );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
@@ -295,14 +288,18 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     else if ( BType == CT_PTRCHASE ) {
         switch( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 PTRCHASE_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
             case CT_CAS:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 PTRCHASE_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
@@ -315,14 +312,18 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     else if ( BType == CT_SG ) {
         switch( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 SG_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(4, iters, pes);
                 break;
             case CT_CAS:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 SG_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(4, iters, pes);
                 break;
@@ -335,14 +336,18 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     else if ( BType == CT_CENTRAL ) {
         switch( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 CENTRAL_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
             case CT_CAS:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 CENTRAL_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(1, iters, pes);
                 break;
@@ -355,14 +360,18 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     else if ( BType == CT_SCATTER ) {
         switch( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 SCATTER_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(3, iters, pes);
                 break;
             case CT_CAS:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 SCATTER_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(3, iters, pes);
                 break;
@@ -375,14 +384,18 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
     else if ( BType == CT_GATHER ) {
         switch( AType ) {
             case CT_ADD:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 GATHER_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(3, iters, pes);
                 break;
             case CT_CAS:
+                cudaDeviceSynchronize();
                 StartTime = this->MySecond();
                 GATHER_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
+                cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
                 OPS = this->GAM(3, iters, pes);
                 break;
@@ -416,7 +429,6 @@ bool CT_CUDA::FreeData() {
     if ( d_Idx ) {
         cudaFree(d_Idx);
     }
-
     return true;
 }
 

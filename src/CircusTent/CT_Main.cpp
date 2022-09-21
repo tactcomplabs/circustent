@@ -73,8 +73,6 @@ void RunBenchCuda(CTOpts *Opts) {
     return ;
   }
 
-  // TODO: Set the target options
-
   // Print device information
   if ( !CT->PrintCUDADeviceProperties( CT->GetCUDAdeviceID(), CT->GetCUDAdeviceCount() ) ) {
     std::cout << "ERROR: COULD NOT PRINT CUDA DEVICE PROPERTIES FOR CT_CUDA" << std::endl;

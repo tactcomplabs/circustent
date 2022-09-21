@@ -22,10 +22,7 @@
 #define _CT_CUDA_CUH_
 
 // #include <cuda_runtime.h>
-// #include <cuda.h>
-#include "/usr/local/cuda-11.0/include/cuda_runtime.h" // if cuda_runtime.h doesn't work on HPCC 
-#include "/usr/local/cuda-11.0/include/cuda.h" // if cuda.h doesn't work on HPCC 
-
+#include "/usr/local/cuda-11.0/include/cuda_runtime.h"
 
 #include "CircusTent/CTBaseImpl.h"
 
@@ -166,6 +163,7 @@ private:
 
 
 public:
+  
   // CircusTent CUDA constructor
   CT_CUDA(CTBaseImpl::CTBenchType B,
     CTBaseImpl::CTAtomType A);
@@ -195,7 +193,7 @@ public:
 
   // Retrieve threadsPerBlock
   int GetCUDAdeviceCount() { return deviceCount; }
-
+  
 };
 
 #endif  // _CT_CUDA_CUH_

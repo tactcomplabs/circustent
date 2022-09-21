@@ -134,12 +134,11 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       isList = true;
       PrintBench();
       return true;
-    } else if ( (s=="-bpg") || (s=="-blocks") || (s=="--blocks") ) {
+    }else if ( (s=="-bpg") || (s=="-blocks") || (s=="--blocks") ) {
       i++;
-    } else if ((s=="-tpb") || (s=="-threads") || (s=="--threads")) {
+    }else if ((s=="-tpb") || (s=="-threads") || (s=="--threads")) {
       i++;
-    }
-    else{
+    }else{
       std::cout << "Unknown option: " << s << std::endl;
       return false;
     }
@@ -172,7 +171,7 @@ void CTOpts::PrintBench(){
   std::cout << "===================================================================================" << std::endl;
 }
 
-void CTOpts::PrintHelp(){ // TODO: include info about setting CUDA specific options
+void CTOpts::PrintHelp(){
   unsigned major = CT_VERSION_MAJOR;
   unsigned minor = CT_VERSION_MINOR;
   std::cout << "=======================================================================" << std::endl;
@@ -184,6 +183,9 @@ void CTOpts::PrintHelp(){ // TODO: include info about setting CUDA specific opti
   std::cout << " -p|-pes|--pes PES                         : Sets the number of PEs" << std::endl;
   std::cout << " -i|-iters|--iters ITERATIONS              : Sets the number of iterations per PE" << std::endl;
   std::cout << " -s|-stride|--stride STRIDE (elems)        : Sets the stride in 'elems'" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << " -bpg|-blocks|--blocks BLOCKS PER GRID     : Set the blocks per grid (CUDA only)" << std::endl;
+  std::cout << " -tpb|-threads|--threads THREADS PER BLOCK : Set threads per block (CUDA only)" << std::endl;
   std::cout << "=======================================================================" << std::endl;
   std::cout << " -h|-help|--help                           : Prints this help menu" << std::endl;
   std::cout << " -l|-list|--list                           : List benchmarks" << std::endl;

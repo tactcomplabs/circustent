@@ -10,9 +10,7 @@ set(CTCUDASrcs
 )
 
 if (ENABLE_CUDA)
-  # FIXME: ensure the proper file extensions are used
   set(CTCUDASrcs ${CTCUDASrcs} CT_CUDA.cuh CT_CUDA.cu CT_CUDA_IMPL.cu)
-  # TODO: set proper flags
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ")
 endif()
 
