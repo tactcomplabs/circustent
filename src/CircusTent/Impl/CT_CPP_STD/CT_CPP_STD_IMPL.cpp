@@ -123,8 +123,8 @@ void CT_CPP_STD::STRIDEN_ADD(uint64_t thread_id,
 
   // Perform atomic ops
   uint64_t i;
-  uint64_t start = thread_id * iters;
-  for(i = start; i < (start + iters); i += stride){
+  uint64_t start = thread_id * iters * stride;
+  for(i = start; i < (start + iters * stride); i += stride){
     Array[i].fetch_add((uint64_t)(0xF), std::memory_order_relaxed);
   }
 }
@@ -137,7 +137,7 @@ void CT_CPP_STD::STRIDEN_CAS(uint64_t thread_id,
   // Set up array of expected uint64_t values
   uint64_t i;
   uint64_t expected[iters];
-  uint64_t start = thread_id * iters;
+  uint64_t start = thread_id * iters * stride;
   for(i = 0; i < iters; i++){
     expected[i] = Array[start+(stride*i)];
   }
