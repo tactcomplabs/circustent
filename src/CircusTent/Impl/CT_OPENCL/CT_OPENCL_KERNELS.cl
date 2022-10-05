@@ -60,8 +60,8 @@ __kernel void STRIDEN_ADD( __global ulong* ARRAY,
   ulong i      = 0;
   ulong start  = 0;
 
-  start = (ulong) (get_global_id(0) * iters);
-  for( i=start; i<(start+iters); i+=stride ){
+  start = (ulong) (get_global_id(0) * iters * stride);
+  for( i=start; i<(start+iters*stride); i+=stride ){
     atom_add(&ARRAY[i], (ulong)(0xF));
   }
 }
@@ -74,8 +74,8 @@ __kernel void STRIDEN_CAS( __global ulong* ARRAY,
   ulong i      = 0;
   ulong start  = 0;
 
-  start = (ulong) (get_global_id(0) * iters);
-  for( i=start; i<(start+iters); i+=stride ){
+  start = (ulong) (get_global_id(0) * iters * stride);
+  for( i=start; i<(start+iters*stride); i+=stride ){
     atom_cmpxchg(&ARRAY[i], ARRAY[i], ARRAY[i]);
   }
 }
