@@ -103,8 +103,8 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
 
   #pragma omp parallel private(start,i)
   {
-    start = (uint64_t)(omp_get_thread_num()) * iters;
-    for( i=start; i<(start+iters); i+=stride ){
+    start = (uint64_t)(omp_get_thread_num()) * iters * stride;
+    for( i=start; i<(start+iters*stride); i+=stride ){
       __atomic_fetch_add( &ARRAY[i], (uint64_t)(0xF), __ATOMIC_RELAXED );
     }
   }
@@ -120,8 +120,8 @@ void STRIDEN_CAS( uint64_t *restrict ARRAY,
 
   #pragma omp parallel private(start,i)
   {
-    start = (uint64_t)(omp_get_thread_num()) * iters;
-    for( i=start; i<(start+iters); i+=stride ){
+    start = (uint64_t)(omp_get_thread_num()) * iters * stride;
+    for( i=start; i<(start+iters*stride); i+=stride ){
       __atomic_compare_exchange_n( &ARRAY[i], &ARRAY[i], ARRAY[i],
                                    0, __ATOMIC_RELAXED, __ATOMIC_RELAXED );
     }
