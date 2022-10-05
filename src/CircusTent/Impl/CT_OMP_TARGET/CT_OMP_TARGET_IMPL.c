@@ -97,14 +97,15 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
 
       // Divide iters across number of threads per team & set start
       uint64_t num_threads = (uint64_t) omp_get_num_threads();
-      uint64_t iters_per_thread = (omp_get_thread_num() == num_threads - 1) ?
-                                  (iters / num_threads) + (iters % num_threads) :
-                                  (iters / num_threads);
-      uint64_t start = (uint64_t) ( (omp_get_team_num() * iters) +
-                                    (omp_get_thread_num() * (iters/num_threads) * stride) );
+      uint64_t num_teams = (uint64_t) omp_get_num_teams();
+      uint64_t iters_per_thread = (uint64_t) iters / num_threads;
+      uint64_t start = (uint64_t) (omp_get_team_num() * num_threads + omp_get_thread_num()) * iters_per_thread * stride;
+
+      if(omp_get_thread_num() == num_threads - 1 && omp_get_team_num() == num_teams - 1)
+        iters_per_thread += (uint64_t) (iters % num_threads);
 
       uint64_t ret;
-      for( i=start; i<(start+iters_per_thread); i+=stride ){
+      for( i=start; i<(start+iters_per_thread*stride); i+=stride ){
         #pragma omp atomic capture
         {
           ret = ARRAY[i];
