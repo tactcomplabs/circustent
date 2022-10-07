@@ -264,7 +264,7 @@ bool CT_CPP_STD::AllocateData(uint64_t m,
   elems = (memSize/8);
 
   // test to see whether we'll stride out of bounds
-  uint64_t end = (pes * iters * stride)-stride;
+  uint64_t end = (pes * iters * stride);
   if( end > elems ){
     std::cout << "CT_CPP_STD::AllocateData : 'Array' is not large enough for pes="
               << pes << "; iters=" << iters << ";stride =" << stride
