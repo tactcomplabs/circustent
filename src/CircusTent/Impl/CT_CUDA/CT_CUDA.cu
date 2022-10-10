@@ -124,7 +124,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     uint64_t idxElems = (idxMemSize/8);
 
     // test to see whether we'll stride out of bounds
-    uint64_t end = (pes * iters * stride) - stride;
+    uint64_t end = (pes * iters * stride);
     if ( end > elems ) {
         std::cout << "CT_CUDA::AllocateData : `Array` is not large enough for pes="
         << pes << "; iters=" << iters << "; stride=" << stride << std::endl;

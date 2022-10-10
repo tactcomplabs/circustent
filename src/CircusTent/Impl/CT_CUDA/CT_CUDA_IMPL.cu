@@ -79,13 +79,13 @@ __global__ void STRIDEN_ADD( uint64_t* __restrict__ ARRAY, uint64_t* __restrict_
     uint64_t i;
     uint64_t num_threads = (uint64_t) blockDim.x * gridDim.x;
     uint64_t iters_per_thread = iters/num_threads;
-    uint64_t start = (threadIdx.x + blockIdx.x * blockDim.x) * iters_per_thread;
+    uint64_t start = (threadIdx.x + blockIdx.x * blockDim.x) * iters_per_thread * stride;
 
     if(threadIdx.x == blockDim.x - 1 && blockIdx.x == gridDim.x - 1) {
         iters_per_thread += iters % num_threads;
     }
 
-    for( i = start; i < (start + iters_per_thread); i += stride ) {
+    for( i = start; i < (start + iters_per_thread * stride); i += stride ) {
         atomicAdd( (unsigned long long int *) &ARRAY[i], (unsigned long long int) 0x1 );
     }
 }
@@ -95,13 +95,13 @@ __global__ void STRIDEN_CAS( uint64_t* __restrict__ ARRAY, uint64_t* __restrict_
     uint64_t i;
     uint64_t num_threads = (uint64_t) blockDim.x * gridDim.x;
     uint64_t iters_per_thread = iters/num_threads;
-    uint64_t start = (threadIdx.x + blockIdx.x * blockDim.x) * iters_per_thread;
+    uint64_t start = (threadIdx.x + blockIdx.x * blockDim.x) * iters_per_thread * stride;
 
     if(threadIdx.x == blockDim.x - 1 && blockIdx.x == gridDim.x - 1) {
         iters_per_thread += iters % num_threads;
     }
 
-    for( i = start; i < (start + iters_per_thread); i += stride ) {
+    for( i = start; i < (start + iters_per_thread * stride); i += stride ) {
         atomicCAS( (unsigned long long int *) &ARRAY[i], (unsigned long long int) ARRAY[i], (unsigned long long int) ARRAY[i] );
     }
 }
