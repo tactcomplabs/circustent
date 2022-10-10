@@ -46,7 +46,73 @@
 #include "Impl/CT_CPP_STD/CT_CPP_STD.h"
 #endif
 
+#ifdef _ENABLE_CUDA_
+#include "Impl/CT_CUDA/CT_CUDA.cuh"
+#endif
+
 void PrintTiming( double Timing, double GAMS );
+
+#ifdef _ENABLE_CUDA_
+void RunBenchCuda(CTOpts *Opts) {
+
+  // Init the CUDA object
+  CT_CUDA *CT = new CT_CUDA(
+    Opts->GetBenchType(),
+    Opts->GetAtomType()
+  );
+
+  if ( !CT ) {
+    std::cout << "ERROR: COULD NOT ALLOCATE CT_CUDA OBJECTS" << std::endl;
+    return;
+  }
+
+  // Take in options for blocksPerGrid and threadsPerBlock
+  if ( !CT->ParseCUDAOpts( Opts->GetArgc(), Opts->GetArgv() ) ) {
+    std::cout << "Failed to parse CUDA command line options" << std::endl;
+    delete CT;
+    return ;
+  }
+
+  // Print device information
+  if ( !CT->PrintCUDADeviceProperties( CT->GetCUDAdeviceID(), CT->GetCUDAdeviceCount() ) ) {
+    std::cout << "ERROR: COULD NOT PRINT CUDA DEVICE PROPERTIES FOR CT_CUDA" << std::endl;
+    delete CT;
+    return;
+  }
+
+  // Allocate the data
+  if( !CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride() ) ){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA" << std::endl;
+    delete CT;
+    return ;
+  }
+
+  // Execute the benchmark
+  double Timing = 0.;
+  double GAMS   = 0.;
+
+  if ( !CT->Execute(Timing, GAMS) ) {
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_CUDA" << std::endl;
+  }
+
+  // Print the timing
+  PrintTiming( Timing, GAMS );
+
+  // Free the data
+  if ( !CT->FreeData() ) {
+    std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_CUDA" << std::endl;
+    delete CT;
+    return ;
+  }
+
+  // Free the structure
+  delete CT;
+}
+
+#endif
 
 #ifdef _ENABLE_CPP_STD_
 void RunBenchCppStd(CTOpts *Opts) {
@@ -543,6 +609,9 @@ int main( int argc, char **argv ){
 #endif
 #ifdef _ENABLE_CPP_STD_
     RunBenchCppStd(Opts);
+#endif
+#ifdef _ENABLE_CUDA_
+    RunBenchCuda(Opts);
 #endif
   }
 

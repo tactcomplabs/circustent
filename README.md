@@ -460,6 +460,40 @@ the OpenCL target platform and device, respectively
 | GATHER_ADD | yes |
 | GATHER_CAS | yes |
 
+### CUDA
+* CMake Build Flag: -DENABLE_CUDA=ON
+* Implementation Language: CUDA C++
+* Utilizes unsigned 64-bit integers 
+* Utilizes [CUDA API-level atomic operations](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#atomic-functions)
+* Desired taget device can be set with $CUDA_VISIBLE_DEVICES, otherwise the default CUDA-enabled device will be used
+* `-p` MUST be set to 1 at runtime
+* Requires CUDA-specific runtime flags used in the kernel launch configuration:
+    * `--blocks` : blocks per grid
+    * `--threads`: threads per block
+* Sample Execution:
+```
+circustent -b RAND_ADD -m 1024 -p 1 -i 1000 --blocks 100 --threads 512
+```
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
 ## Execution Parameters
 
 ### Parameters
@@ -552,6 +586,7 @@ CircustTent is licensed under an Apache-style license see the [LICENSE](LICENSE)
 ## Authors
 * *Brody Williams* - *PhD Student* - [Texas Tech University](https://discl.cs.ttu.edu/doku.php)
 * *Michael Beebe* - *PhD Student* - [Texas Tech University](https://discl.cs.ttu.edu/doku.php)
+* *Pedro Barros* - *Undergraduate Student* - [Instituto Militar de Engenharia](https://www.linkedin.com/in/pbbdasilva/)
 * *John Leidel* - *Chief Scientist* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 * *David Donofrio* - *Chief Hardware Architect* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 
