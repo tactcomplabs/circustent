@@ -312,8 +312,8 @@ void *thread_STRIDEN_ADD(void *thread_args){
 
   // Perform atomic ops
   uint64_t i;
-  uint64_t start = thread_id * iters;
-  for(i = start; i < (start + iters); i += stride){
+  uint64_t start = thread_id * iters * stride;
+  for(i = start; i < (start + iters * stride); i += stride){
     __atomic_fetch_add(&ARRAY[i], (uint64_t)(0xF), __ATOMIC_RELAXED);
   }
 
@@ -376,8 +376,8 @@ void *thread_STRIDEN_CAS(void *thread_args){
 
   // Perform atomic ops
   uint64_t i;
-  uint64_t start = thread_id * iters;
-  for(i = start; i < (start + iters); i += stride){
+  uint64_t start = thread_id * iters * stride;
+  for(i = start; i < (start + iters * stride); i += stride){
     __atomic_compare_exchange_n(&ARRAY[i], &ARRAY[i], ARRAY[i], 0, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
   }
 

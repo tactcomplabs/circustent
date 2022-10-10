@@ -110,10 +110,10 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
-      uint64_t start = gangID * iters;
+      uint64_t start = gangID * iters * stride;
 
       uint64_t ret;
-      for( i=start; i<(start+iters); i+=stride ){
+      for( i=start; i<(start+iters*stride); i+=stride ){
         #pragma acc atomic capture
         {
           ret = ARRAY[i];
