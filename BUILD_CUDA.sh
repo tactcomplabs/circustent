@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CT_ROOT=/home/mibeebe/ct/circustent_cuda
+export CT_ROOT=/home/mibeebe/ct/circustent_dev_main
 export CT_BUILD=$CT_ROOT/build
 
 if [ -d $CT_BUILD ] ; then

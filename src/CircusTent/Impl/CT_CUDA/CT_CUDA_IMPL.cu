@@ -157,7 +157,7 @@ __global__ void PTRCHASE_CAS( uint64_t* __restrict__ ARRAY, uint64_t* __restrict
     uint64_t i;
     uint64_t num_threads = (uint64_t) blockDim.x * gridDim.x;
     uint64_t iters_per_thread = iters/num_threads;
-    uint64_t start = (threadIdx.x + blockIdx.x * blockDim.x) * iters_per_thread; //@TO-DO ask if should be 0
+    uint64_t start = (threadIdx.x + blockIdx.x * blockDim.x) * iters_per_thread;
 
     if(threadIdx.x == blockDim.x - 1 && blockIdx.x == gridDim.x - 1) {
         iters_per_thread += iters % num_threads;
