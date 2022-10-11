@@ -226,8 +226,8 @@ bool CT_OMP::AllocateData( uint64_t m,
   elems = (memSize/8);
 
   // test to see whether we'll stride out of bounds
-  uint64_t end = (pes * iters * stride);
-  if( end > elems ){
+  uint64_t end = (pes * iters * stride) - stride;
+  if( end >= elems ){
     std::cout << "CT_OMP::AllocateData : 'Array' is not large enough for pes="
               << pes << "; iters=" << iters << ";stride =" << stride
               << std::endl;
