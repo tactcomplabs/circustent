@@ -285,6 +285,13 @@ bool CT_CPP_STD::AllocateData(uint64_t m,
     return false;
   }
 
+  expected = new (std::nothrow) uint64_t[iters*pes];
+  if( expected == nullptr ) {
+    std::cout << "CT_CPP_STD::AllocateData : 'expected' could not be allocated" << std::endl;
+    delete[] expected;
+    return false;
+  }
+
   // initiate the random array
   srand(time(NULL));
   if( this->GetBenchType() == CT_PTRCHASE ){
@@ -312,6 +319,10 @@ bool CT_CPP_STD::FreeData(){
   if( Idx ){
     delete[] Idx;
   }
+  if( expected ){
+    delete[] expected;
+  }
+
   return true;
 }
 

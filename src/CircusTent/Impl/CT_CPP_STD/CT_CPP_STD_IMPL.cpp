@@ -40,10 +40,9 @@ void CT_CPP_STD::RAND_CAS(uint64_t thread_id,
 
   // Set up array of expected uint64_t values
   uint64_t i;
-  uint64_t expected[iters];
   uint64_t start = thread_id * iters;
   for(i = 0; i < iters; i++){
-    expected[i] = Array[Idx[start+i]];
+    expected[(thread_id*iters)+i] = Array[Idx[start+i]];
   }
 
   // Wait for all threads to be spawned
@@ -56,7 +55,7 @@ void CT_CPP_STD::RAND_CAS(uint64_t thread_id,
 
   // Perform atomic ops
   for(i = 0; i < iters; i++){
-    Array[Idx[start+i]].compare_exchange_strong(expected[i], Array[Idx[start+i]], std::memory_order_relaxed);
+    Array[Idx[start+i]].compare_exchange_strong(expected[(thread_id*iters)+i], Array[Idx[start+i]], std::memory_order_relaxed);
   }
 }
 
@@ -88,10 +87,9 @@ void CT_CPP_STD::STRIDE1_CAS(uint64_t thread_id,
 
   // Set up array of expected uint64_t values
   uint64_t i;
-  uint64_t expected[iters];
   uint64_t start = thread_id * iters;
   for(i = 0; i < iters; i++){
-    expected[i] = Array[start+i];
+    expected[(thread_id*iters)+i] = Array[start+i];
   }
 
   // Wait for all threads to be spawned
@@ -104,7 +102,7 @@ void CT_CPP_STD::STRIDE1_CAS(uint64_t thread_id,
 
   // Perform atomic ops
   for(i = 0; i < iters; i++){
-    Array[start+i].compare_exchange_strong(expected[i], Array[start+i], std::memory_order_relaxed);
+    Array[start+i].compare_exchange_strong(expected[(thread_id*iters)+i], Array[start+i], std::memory_order_relaxed);
   }
 }
 
@@ -136,10 +134,9 @@ void CT_CPP_STD::STRIDEN_CAS(uint64_t thread_id,
 
   // Set up array of expected uint64_t values
   uint64_t i;
-  uint64_t expected[iters];
   uint64_t start = thread_id * iters * stride;
   for(i = 0; i < iters; i++){
-    expected[i] = Array[start+(stride*i)];
+    expected[(thread_id*iters)+i] = Array[start+(stride*i)];
   }
 
   // Wait for all threads to be spawned
@@ -152,7 +149,7 @@ void CT_CPP_STD::STRIDEN_CAS(uint64_t thread_id,
 
   // Perform atomic ops
   for(i = 0; i < iters; i++){
-    Array[start+(stride*i)].compare_exchange_strong(expected[i], Array[start+(stride*i)], std::memory_order_relaxed);
+    Array[start+(stride*i)].compare_exchange_strong(expected[(thread_id*iters)+i], Array[start+(stride*i)], std::memory_order_relaxed);
   }
 }
 
@@ -229,10 +226,9 @@ void CT_CPP_STD::SG_CAS(uint64_t thread_id,
 
   // Set up array of expected uint64_t values
   uint64_t i;
-  uint64_t expected[iters];
   uint64_t start = thread_id * iters;
   for(i = 0; i < iters; i++){
-    expected[i] = Array[Idx[start+i+1]];
+    expected[(thread_id*iters)+i] = Array[Idx[start+i+1]];
   }
 
   // Wait for all threads to be spawned
@@ -253,8 +249,8 @@ void CT_CPP_STD::SG_CAS(uint64_t thread_id,
     Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
     Array[src].compare_exchange_strong(val, Array[src], std::memory_order_relaxed);
     // AMO #4 issue - expected may not equal Array[dest] due to previous ops
-    // Result: expected[i] <- Array[dest] rather than Array[dest] <- val
-    Array[dest].compare_exchange_strong(expected[i], val, std::memory_order_relaxed);
+    // Result: expected[(thread_id*iters)+i] <- Array[dest] rather than Array[dest] <- val
+    Array[dest].compare_exchange_strong(expected[(thread_id*iters)+i], val, std::memory_order_relaxed);
   }
 }
 
@@ -331,10 +327,9 @@ void CT_CPP_STD::SCATTER_CAS(uint64_t thread_id,
 
   // Set up array of expected uint64_t values
   uint64_t i;
-  uint64_t expected[iters];
   uint64_t start = thread_id * iters;
   for(i = 0; i < iters; i++){
-    expected[i] = Array[Idx[start+i+1]];
+    expected[(thread_id*iters)+i] = Array[Idx[start+i+1]];
   }
 
   // Wait for all threads to be spawned
@@ -353,8 +348,8 @@ void CT_CPP_STD::SCATTER_CAS(uint64_t thread_id,
     Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
     Array[start+i].compare_exchange_strong(val, Array[start+i], std::memory_order_relaxed);
     // AMO #3 issue - expected may not equal Array[dest] due to previous ops
-    // Result: expected[i] <- Array[dest] rather than Array[dest] <- val
-    Array[dest].compare_exchange_strong(expected[i], val, std::memory_order_relaxed);
+    // Result: expected[(thread_id*iters)+i] <- Array[dest] rather than Array[dest] <- val
+    Array[dest].compare_exchange_strong(expected[(thread_id*iters)+i], val, std::memory_order_relaxed);
   }
 }
 
@@ -390,10 +385,9 @@ void CT_CPP_STD::GATHER_CAS(uint64_t thread_id,
 
   // Set up array of expected uint64_t values
   uint64_t i;
-  uint64_t expected[iters];
   uint64_t start = thread_id * iters;
   for(i = 0; i < iters; i++){
-    expected[i] = Array[start+i];
+    expected[(thread_id*iters)+i] = Array[start+i];
   }
 
   // Wait for all threads to be spawned
@@ -411,7 +405,7 @@ void CT_CPP_STD::GATHER_CAS(uint64_t thread_id,
   for(i = 0; i < iters; i++){
     Idx[start+i+1].compare_exchange_strong(dest, Idx[start+i+1], std::memory_order_relaxed);
     Array[dest].compare_exchange_strong(val, Array[dest], std::memory_order_relaxed);
-    Array[start+i].compare_exchange_strong(expected[i], val, std::memory_order_relaxed);
+    Array[start+i].compare_exchange_strong(expected[(thread_id*iters)+i], val, std::memory_order_relaxed);
   }
 }
 
