@@ -1,7 +1,3 @@
 .DS_Store
 .vscode
 build
-
-RUN_CUDA_TEST.sh
-
-BUILD_CUDA.sh
