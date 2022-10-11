@@ -271,7 +271,7 @@ bool CT_MPI::AllocateData( uint64_t m,
 
   // test to see whether we'll stride out of bounds
   uint64_t end = (iters * stride)-stride;
-  if( end > elems ){
+  if( end >= elems ){
     std::cout << "CT_MPI::AllocateData : 'Array' is not large enough for pes="
               << pes << "; iters=" << iters << ";stride =" << stride
               << std::endl;

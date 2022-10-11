@@ -264,8 +264,8 @@ bool CT_CPP_STD::AllocateData(uint64_t m,
   elems = (memSize/8);
 
   // test to see whether we'll stride out of bounds
-  uint64_t end = (pes * iters * stride);
-  if( end > elems ){
+  uint64_t end = (pes * iters * stride) - stride;
+  if( end >= elems ){
     std::cout << "CT_CPP_STD::AllocateData : 'Array' is not large enough for pes="
               << pes << "; iters=" << iters << ";stride =" << stride
               << std::endl;
@@ -282,6 +282,13 @@ bool CT_CPP_STD::AllocateData(uint64_t m,
   if( Idx == nullptr ){
     std::cout << "CT_CPP_STD::AllocateData : 'Idx' could not be allocated" << std::endl;
     delete[] Array;
+    return false;
+  }
+
+  expected = new (std::nothrow) uint64_t[iters*pes];
+  if( expected == nullptr ) {
+    std::cout << "CT_CPP_STD::AllocateData : 'expected' could not be allocated" << std::endl;
+    delete[] expected;
     return false;
   }
 
@@ -312,6 +319,10 @@ bool CT_CPP_STD::FreeData(){
   if( Idx ){
     delete[] Idx;
   }
+  if( expected ){
+    delete[] expected;
+  }
+
   return true;
 }
 

@@ -38,6 +38,7 @@ private:
   uint64_t iters;                       ///< CT_CPP_STD: Number of iterations per thread
   uint64_t elems;                       ///< CT_CPP_STD: Number of u8 elements
   uint64_t stride;                      ///< CT_CPP_STD: Stride in elements
+  uint64_t* expected;                   ///< CT_CPP_STD: Expected Array for CAS kernels
 
 public:
   /// CircusTent C++ standard atomics constructor
