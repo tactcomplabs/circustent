@@ -11,8 +11,6 @@
 #include "CT_CUDA.cuh"
 #ifdef _CT_CUDA_CUH_
 
-#include <string>
-
 CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
     CTBaseImpl("CUDA", B, A),
     Array(nullptr),
