@@ -11,6 +11,8 @@
 #include "CT_CUDA.cuh"
 #ifdef _CT_CUDA_CUH_
 
+#include <string>
+
 CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
     CTBaseImpl("CUDA", B, A),
     Array(nullptr),
@@ -30,15 +32,11 @@ CT_CUDA::CT_CUDA(CTBaseImpl::CTBenchType B, CTBaseImpl::CTAtomType A) :
 
 CT_CUDA::~CT_CUDA() {}
 
-// helper functions
 bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) {
     cudaGetDeviceCount(&deviceCount);
-    // std::cout << "====================================================================================" << std::endl;
-    // std::cout << "                             CUDA Device Properties"          << std::endl;
-    // std::cout << "====================================================================================" << std::endl;
     std::cout << "\nNumber of CUDA enabled devices detected: " << deviceCount << std::endl;
     if (getenv("CUDA_VISIBLE_DEVICES") == nullptr) {
-        std::cout << "CUDA_VISIBLE_DEVICES environment variable not set, defaulting to cudaSetDevice(1)\n" << std::endl;
+        std::cout << "CUDA_VISIBLE_DEVICES environment variable not set, defaulting to cudaSetDevice(1)" << std::endl;
         deviceID = cudaSetDevice(1);
     }
 
@@ -46,18 +44,7 @@ bool CT_CUDA::PrintCUDADeviceProperties(int deviceID, int deviceCount) {
         std::cout << "No target devices detected!" << std::endl;
         return false;
     }
-    // else {
-    //         cudaDeviceProp prop;
-    //         cudaGetDeviceProperties(&prop, deviceID);
-    //         std::cout << "Target CUDA deviceID : " << deviceID << std::endl;
-    //         std::cout << "Device Name: " << prop.name << std::endl;
-    //         std::cout << "Total Global Memory: " << prop.totalGlobalMem << std::endl;
-    //         std::cout << "Memory Clock Rate (MHz): " << prop.memoryClockRate/1024 << std::endl;
-    //         std::cout << "Maximum Threads per Block: " << prop.maxThreadsPerBlock << std::endl;
-    //         std::cout << "Warp Size: " << prop.warpSize << std::endl;
-    //     }
-        // std::cout << "" << std::endl;
-        return true;
+    return true;
 }
 
 bool CT_CUDA::ParseCUDAOpts(int argc, char **argv) {
@@ -149,7 +136,7 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
 
     // Randomize the arrays on the host
     srand(time(NULL));
-    if ( this->GetBenchType() == CT_PTRCHASE ) { // FIXME: ptrchase looks clunky
+    if ( this->GetBenchType() == CT_PTRCHASE ) {
         for ( unsigned i = 0; i < idxElems; i++ ) {
             Idx[i] = (uint64_t)(rand()%(idxElems - 1));
         }
