@@ -109,10 +109,10 @@ bool CT_CUDA::AllocateData(uint64_t m, uint64_t p, uint64_t i, uint64_t s) {
     uint64_t idxElems = (idxMemSize/8);
 
     // test to see whether we'll stride out of bounds
-    uint64_t end = (pes * iters * stride) - stride;
+    uint64_t end = (blocksPerGrid * iters * stride) - stride;
     if ( end >= elems ) {
-        std::cout << "CT_CUDA::AllocateData : `Array` is not large enough for pes="
-        << pes << "; iters=" << iters << "; stride=" << stride << std::endl;
+        std::cout << "CT_CUDA::AllocateData : `Array` is not large enough for blocksPerGrid="
+        << blocksPerGrid << "; iters=" << iters << "; stride=" << stride << std::endl;
         return false;
     }
 
@@ -207,14 +207,14 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 RAND_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 StartTime = this->MySecond();
                 RAND_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
@@ -230,7 +230,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 STRIDE1_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 cudaDeviceSynchronize();
@@ -238,7 +238,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 STRIDE1_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
@@ -254,7 +254,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 STRIDEN_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes, stride );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 cudaDeviceSynchronize();
@@ -262,7 +262,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 STRIDEN_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes, stride );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
@@ -278,7 +278,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 PTRCHASE_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 cudaDeviceSynchronize();
@@ -286,7 +286,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 PTRCHASE_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
@@ -302,7 +302,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 SG_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(4, iters, pes);
+                OPS = this->GAM(4, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 cudaDeviceSynchronize();
@@ -310,7 +310,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 SG_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(4, iters, pes);
+                OPS = this->GAM(4, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
@@ -326,7 +326,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 CENTRAL_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 cudaDeviceSynchronize();
@@ -334,7 +334,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 CENTRAL_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(1, iters, pes);
+                OPS = this->GAM(1, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
@@ -350,7 +350,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 SCATTER_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(3, iters, pes);
+                OPS = this->GAM(3, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 cudaDeviceSynchronize();
@@ -358,7 +358,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 SCATTER_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(3, iters, pes);
+                OPS = this->GAM(3, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
@@ -374,7 +374,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 GATHER_ADD<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(3, iters, pes);
+                OPS = this->GAM(3, iters, blocksPerGrid);
                 break;
             case CT_CAS:
                 cudaDeviceSynchronize();
@@ -382,7 +382,7 @@ bool CT_CUDA::Execute(double &Timing, double &GAMS) {
                 GATHER_CAS<<< blocksPerGrid, threadsPerBlock >>>( d_Array, d_Idx, iters, pes );
                 cudaDeviceSynchronize();
                 EndTime   = this->MySecond();
-                OPS = this->GAM(3, iters, pes);
+                OPS = this->GAM(3, iters, blocksPerGrid);
                 break;
             default:
                 this->ReportBenchError();
