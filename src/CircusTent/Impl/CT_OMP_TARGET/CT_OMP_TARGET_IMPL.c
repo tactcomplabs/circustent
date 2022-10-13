@@ -99,9 +99,9 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
       uint64_t num_teams = (uint64_t) omp_get_num_teams();
       uint64_t num_threads = (uint64_t) omp_get_num_threads();
       uint64_t iters_per_thread = (uint64_t) ( ( (omp_get_thread_num()) == (num_threads-1) ) ?
-                                               ( (iters/num_threads) + (iters%num_threads) )
+                                               ( (iters/num_threads) + (iters%num_threads) ) :
                                                (iters/num_threads) );
-      uint64_t start= (omp_get_team_num() * iters * stride) + (omp_get_thread_num() * (iters/num_threads) * stride);
+      uint64_t start = (omp_get_team_num() * iters * stride) + (omp_get_thread_num() * (iters/num_threads) * stride);
 
       uint64_t ret;
       for( i=start; i<(start+iters_per_thread*stride); i+=stride ){
