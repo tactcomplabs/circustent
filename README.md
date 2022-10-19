@@ -41,8 +41,7 @@ Optional packages include:
 ### Building
 
 The following steps are generic build instructions.  You may need to
-modify these steps if you desire to enable external backends
-and/or utilize non-GCC compilers.
+modify these steps for your target system and compiler.
 
 1. Clone the CircusTent repository
 ```
@@ -56,8 +55,11 @@ cd build
 ```
 3. Execute CMake to generate the makefiles (where XXX refers to the backend that you want to enable)
 ```
-cmake -DENABLE_XXX=ON ../
+cmake -DENABLE_XXX=ON -DCT_CFLAGS="..." -DCT_CXXFLAGS="..." -DCT_LINKER_FLAGS="..." ../
 ```
+Note that it will most often be necessary to pass the compiler specific flags needed for your chosen backend
+implementation to the CMake infrastructure via the CT_CFLAGS, CT_CXXFLAGS, and CT_LINKER_FLAGS options as shown above.
+
 4. Execute the build
 ```
 make
@@ -73,10 +75,8 @@ make install
 The following are additional build options supported by the CircusTent CMake script
 * CC : Utilize the target C compiler
 * CXX : Utilize the target C++ compiler
-* -DCMAKE\_C\_FLAGS : Set the C compiler flags
-* -DCMAKE\_CXX\_FLAGS : Set the C++ compiler flags
-* -DCT\_CFLAGS : Append the CT\_CFLAGS to the standard C\_FLAGS for the target Impl
-* -DCT\_CXXFLAGS : Append the CT\_CXXFLAGS to the standard CXX\_FLAGS for the target Impl
+* -DCMAKE\_C\_FLAGS : Set the standard C compiler flags
+* -DCMAKE\_CXX\_FLAGS : Set the standard C++ compiler flags
 * -DCMAKE\_INSTALL\_PREFIX : installation target (make install)
 * -DCIRCUSTENT\_BUILD\_RPM : Builds an RPM package
 * -DCIRCUSTENT\_BUILD\_DEB : Builds a DEB package
@@ -224,8 +224,7 @@ for( i=0; i<iters; i++ ){
 | GATHER_CAS | yes |
 
 ### OMP with Target Offloading
-* CMake Build Flags: -DENABLE_OMP_TARGET=ON -DOFFLOAD_TARGETS=target_options
-where "target_options" is passed to the GNU -foffload compiler flag
+* CMake Build Flags: -DENABLE_OMP_TARGET=ON
 * Implementation Language: C++ & C
 * Users may define $OMP_DEFAULT_DEVICE to select a different target device ID,
 otherwise the system default is utilized
@@ -322,11 +321,6 @@ fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
 
 ### xBGAS
 * CMake Build Flag: -DENABLE_XBGAS=ON
-* Users must ensure the $RISCV environment variable is set to the path of the installed xBGAS toolchain.
-* Users must specify the xBGAS compiler alongside the CMake command as follows:
-```
-CC=riscv64-unknown-elf-gcc CXX=riscv64-unknown-elf-g++ cmake -DENABLE_XBGAS=ON ../
-```
 * Implementation  Language: C++ and C using xBGAS functions
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 * Target PE's for all benchmarks except PTRCHASE are initialized in a stride-1 ring pattern.  This implies
@@ -355,8 +349,7 @@ fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
 | GATHER_CAS | yes |
 
 ### OpenACC
-* CMake Build Flags: -DENABLE_OPENACC=ON -DOFFLOAD_TARGETS=target_options
-where "target_options" is passed to the GNU -foffload compiler flag
+* CMake Build Flags: -DENABLE_OPENACC=ON
 * Implementation Language: C++ & C
 * Users must define both $ACC_DEVICE_TYPE and $ACC_DEVICE_ID to set
 the target device type and ID, respectively

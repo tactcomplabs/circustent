@@ -11,7 +11,6 @@ set(CTOPENACCSrcs
 
 if (ENABLE_OPENACC)
   set(CTOPENACCSrcs ${CTOPENACCSrcs} CT_OPENACC.h CT_OPENACC.cpp CT_OPENACC_IMPL.c)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
 include_directories(${CT_INCLUDE_PATH})

@@ -11,7 +11,6 @@ set(CTMPISrcs
 
 if (ENABLE_MPI)
   set(CTMPISrcs ${CTMPISrcs} CT_MPI.h CT_MPI.cpp CT_MPI_IMPL.c)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
 include_directories(${CT_INCLUDE_PATH})

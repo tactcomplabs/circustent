@@ -11,7 +11,6 @@ set(CTXBGASSrcs
 
 if (ENABLE_XBGAS)
   set(CTXBGASSrcs ${CTXBGASSrcs} CT_XBGAS.h CT_XBGAS.cpp CT_XBGAS_IMPL.c)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
 include_directories(${CT_INCLUDE_PATH})

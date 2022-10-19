@@ -33,7 +33,6 @@ endif()
 
 if (ENABLE_XBGAS)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_XBGAS_OBJS>)
-  target_link_libraries(circustent $ENV{RISCV}/lib/libxbrtime.a)
 endif()
 
 if (ENABLE_PTHREADS)
@@ -46,7 +45,6 @@ endif()
 
 if (ENABLE_OPENCL)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_OPENCL_OBJS>)
-  target_link_libraries(circustent OpenCL)
 endif()
 
 if (ENABLE_CPP_STD)
