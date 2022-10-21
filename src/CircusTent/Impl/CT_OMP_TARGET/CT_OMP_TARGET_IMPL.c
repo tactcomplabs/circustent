@@ -96,7 +96,6 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
       uint64_t i = 0;
 
       // Divide iters across number of threads per team & set start
-      uint64_t num_teams = (uint64_t) omp_get_num_teams();
       uint64_t num_threads = (uint64_t) omp_get_num_threads();
       uint64_t iters_per_thread = (uint64_t) ( ( (omp_get_thread_num()) == (num_threads-1) ) ?
                                                ( (iters/num_threads) + (iters%num_threads) ) :
@@ -122,6 +121,10 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
 
   #pragma omp target teams num_teams(pes) is_device_ptr(ARRAY, IDX) map(to:iters, pes)
   {
+    /* Avoids invalid atomic exprssion *
+     * with some compilers for += 0    */
+     uint64_t zero = 0;
+
     #pragma omp parallel
     {
       uint64_t i = 0;
@@ -138,7 +141,7 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
         #pragma omp atomic capture
         {
           start = IDX[start];
-          IDX[start] += 0;
+          IDX[start] += zero;
         }
       }
     }
@@ -152,6 +155,10 @@ void SG_ADD( uint64_t *restrict ARRAY,
 
   #pragma omp target teams num_teams(pes) is_device_ptr(ARRAY, IDX) map(to:iters, pes)
   {
+    /* Avoids invalid atomic exprssion *
+     * with some compilers for += 0    */
+     uint64_t zero = 0;
+
     #pragma omp parallel
     {
       uint64_t i = 0;
@@ -172,13 +179,13 @@ void SG_ADD( uint64_t *restrict ARRAY,
         #pragma omp atomic capture
         {
           src = IDX[i];
-          IDX[i] += 0;
+          IDX[i] += zero;
         }
 
         #pragma omp atomic capture
         {
           dest = IDX[i+1];
-          IDX[i+1] += 0;
+          IDX[i+1] += zero;
         }
 
         #pragma omp atomic capture
@@ -233,6 +240,10 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
 
   #pragma omp target teams num_teams(pes) is_device_ptr(ARRAY, IDX) map(to:iters, pes)
   {
+    /* Avoids invalid atomic exprssion *
+     * with some compilers for += 0    */
+     uint64_t zero = 0;
+
     #pragma omp parallel
     {
       uint64_t i = 0;
@@ -252,7 +263,7 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
         #pragma omp atomic capture
         {
           dest = IDX[i+1];
-          IDX[i+1] += 0;
+          IDX[i+1] += zero;
         }
 
         #pragma omp atomic capture
@@ -278,6 +289,10 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
 
   #pragma omp target teams num_teams(pes) is_device_ptr(ARRAY, IDX) map(to:iters, pes)
   {
+    /* Avoids invalid atomic exprssion *
+     * with some compilers for += 0    */
+     uint64_t zero = 0;
+
     #pragma omp parallel
     {
       uint64_t i = 0;
@@ -297,7 +312,7 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
         #pragma omp atomic capture
       	{
           dest = IDX[i+1];
-          IDX[i+1] += 0;
+          IDX[i+1] += zero;
         }
 
         #pragma omp atomic capture

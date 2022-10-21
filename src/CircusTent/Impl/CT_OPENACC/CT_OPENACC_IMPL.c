@@ -128,9 +128,13 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
                    uint64_t *restrict IDX,
                    uint64_t iters,
                    uint64_t pes ){
-
+  
   #pragma acc data deviceptr(ARRAY, IDX) copyin(iters, pes)
   {
+    /* Avoids invalid atomic exprssion *
+     * with some compilers for += 0    */
+    uint64_t zero = 0;
+
     // target global variable for assigning gang IDs
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
@@ -150,7 +154,7 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
         #pragma acc atomic capture
         {
           start = IDX[start];
-          IDX[start] += 0;
+          IDX[start] += zero;
         }
       }
     }
@@ -164,6 +168,10 @@ void SG_ADD( uint64_t *restrict ARRAY,
 
   #pragma acc data deviceptr(ARRAY, IDX) copyin(iters, pes)
   {
+    /* Avoids invalid atomic exprssion *
+     * with some compilers for += 0    */
+    uint64_t zero = 0;
+
     // target global variable for assigning gang IDs
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
@@ -187,13 +195,13 @@ void SG_ADD( uint64_t *restrict ARRAY,
         #pragma acc atomic capture
         {
           src = IDX[i];
-          IDX[i] += 0;
+          IDX[i] += zero;
         }
 
         #pragma acc atomic capture
         {
           dest = IDX[i+1];
-          IDX[i+1] += 0;
+          IDX[i+1] += zero;
         }
 
         #pragma acc atomic capture
@@ -244,6 +252,10 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
+      /* Avoids invalid atomic exprssion *
+       * with some compilers for += 0    */
+      uint64_t zero = 0;
+
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -261,7 +273,7 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
         #pragma acc atomic capture
         {
           dest = IDX[i+1];
-          IDX[i+1] += 0;
+          IDX[i+1] += zero;
         }
 
         #pragma acc atomic capture
@@ -291,6 +303,10 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
+      /* Avoids invalid atomic exprssion *
+       * with some compilers for += 0    */
+      uint64_t zero = 0;
+
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -308,7 +324,7 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
         #pragma acc atomic capture
         {
           dest = IDX[i+1];
-          IDX[i+1] += 0;
+          IDX[i+1] += zero;
         }
 
         #pragma acc atomic capture

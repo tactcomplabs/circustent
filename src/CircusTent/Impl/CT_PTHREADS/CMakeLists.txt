@@ -11,7 +11,6 @@ set(CTPTHREADSSrcs
 
 if (ENABLE_PTHREADS)
   set(CTPTHREADSSrcs ${CTPTHREADSSrcs} CT_PTHREADS.h CT_PTHREADS.cpp CT_PTHREADS_IMPL.c)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
 include_directories(${CT_INCLUDE_PATH})

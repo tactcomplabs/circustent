@@ -11,7 +11,6 @@ set(CTOPENCLSrcs
 
 if (ENABLE_OPENCL)
   set(CTOPENCLSrcs ${CTOPENCLSrcs} CT_OPENCL.h CT_OPENCL.cpp)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
 include_directories(${CT_INCLUDE_PATH})

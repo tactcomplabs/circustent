@@ -47,7 +47,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else if( BType == CT_STRIDE1 ){
     switch( AType ){
@@ -60,7 +59,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else if( BType == CT_STRIDEN ){
     switch( AType ){
@@ -73,7 +71,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else if( BType == CT_PTRCHASE ){
     switch( AType ){
@@ -86,7 +83,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else if( BType == CT_SG ){
     switch( AType ){
@@ -99,7 +95,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else if( BType == CT_CENTRAL ){
     switch( AType ){
@@ -112,7 +107,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else if( BType == CT_SCATTER ){
     switch( AType ){
@@ -125,7 +119,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else if( BType == CT_GATHER ){
     switch( AType ){
@@ -138,7 +131,6 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }else{
     this->ReportBenchError();
@@ -194,8 +186,8 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
   uint64_t *HostArray = (uint64_t *) malloc(memSize);
 
   if( ( Array == nullptr ) || ( HostArray == nullptr ) ){
-	std::cout << "Array = " << Array << " HostArray = " << HostArray << std::endl;
     std::cout << "CT_OMP_TARGET::AllocateData : 'Array' could not be allocated" << std::endl;
+    std::cout << "Array = " << Array << " HostArray = " << HostArray << std::endl;
     omp_target_free(Array, deviceID);
     free(HostArray);
     return false;

@@ -11,7 +11,6 @@ set(CTOMPTargetSrcs
 
 if (ENABLE_OMP_TARGET)
   set(CTOMPTargetSrcs ${CTOMPTargetSrcs} CT_OMP_TARGET.h CT_OMP_TARGET.cpp CT_OMP_TARGET_IMPL.c)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
 include_directories(${CT_INCLUDE_PATH})

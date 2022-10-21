@@ -280,7 +280,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else if (BType == CT_STRIDE1){
@@ -332,7 +331,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else if (BType == CT_STRIDEN){
@@ -388,7 +386,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else if (BType == CT_PTRCHASE){
@@ -440,7 +437,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else if (BType == CT_SG){
@@ -492,7 +488,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else if (BType == CT_CENTRAL){
@@ -544,7 +539,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else if (BType == CT_SCATTER){
@@ -596,7 +590,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else if (BType == CT_GATHER){
@@ -648,7 +641,6 @@ bool CT_OPENCL::Execute(double &Timing, double &GAMS){
     default:
       this->ReportBenchError();
       return false;
-      break;
     }
   }
   else{

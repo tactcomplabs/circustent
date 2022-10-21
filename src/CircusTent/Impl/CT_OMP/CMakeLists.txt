@@ -11,7 +11,6 @@ set(CTOMPSrcs
 
 if (ENABLE_OMP)
   set(CTOMPSrcs ${CTOMPSrcs} CT_OMP.h CT_OMP.cpp CT_OMP_IMPL.c)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
 include_directories(${CT_INCLUDE_PATH})
