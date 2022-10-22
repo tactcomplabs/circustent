@@ -90,9 +90,7 @@ private:
   uint64_t iters;              ///< CT_OPENACC: Number of iterations per thread
   uint64_t elems;              ///< CT_OPENACC: Number of u8 elements
   uint64_t stride;             ///< CT_OPENACC: Stride in elements
-  std::string deviceTypeStr;   ///< CT_OPENACC: Envrionment defined device type
   acc_device_t deviceTypeEnum; ///< CT_OPENACC: acct_device_t device type enumeration
-  int deviceID;                ///< CT_OPENACC: Target device ID
 
 public:
   /// CircusTent OpenACC constructor

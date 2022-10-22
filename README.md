@@ -351,8 +351,11 @@ fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
 ### OpenACC
 * CMake Build Flags: -DENABLE_OPENACC=ON
 * Implementation Language: C++ & C
-* Users must define both $ACC_DEVICE_TYPE and $ACC_DEVICE_ID to set
-the target device type and ID, respectively
+* Users may define $ACC_DEVICE_TYPE and/or $ACC_DEVICE_ID to set
+the target device type and ID, respectively. However, since these values
+may be overidden or ignored by your OpenACC implementation, we recommend
+the user verify their desired device matches the one selected by checking
+the CircusTent output messages printed during device initiailization.
 * Maps provided PEs argument to gang-level parallelism
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 
