@@ -237,18 +237,18 @@ bool CT_OPENACC::SetDevice(){
 
   // Print ACC_DEVICE_TYPE if set
   if(getenv("ACC_DEVICE_TYPE") == nullptr){
-      std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_TYPE is not set, using default." << std::endl;
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_TYPE is not set, using default." << std::endl;
   }
   else{
-     std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to " << getenv("ACC_DEVICE_TYPE") << std::endl;
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to " << getenv("ACC_DEVICE_TYPE") << std::endl;
   }
   
   // Print ACC_DEVICE_NUM if set
   if(getenv("ACC_DEVICE_NUM") == nullptr){
-      std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_NUM is not set, using default." << std::endl;
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_NUM is not set, using default." << std::endl;
   }
   else{
-     std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to " << getenv("ACC_DEVICE_NUM") << std::endl;
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to " << getenv("ACC_DEVICE_NUM") << std::endl;
   }
 
   /* Retrieve and print the information for the device *
