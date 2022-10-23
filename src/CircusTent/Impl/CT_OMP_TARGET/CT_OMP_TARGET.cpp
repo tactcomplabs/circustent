@@ -246,20 +246,26 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
 
 bool CT_OMP_TARGET::SetDevice(){
 
-  // Check that target devices are detected
+  // Ensure that target devices are present on the platform for offloading
   if(!omp_get_num_devices()){
     std::cout << "CT_OMP_TARGET::SetDevice : No target devices detected!" << std::endl;
     return false;
   }
-
-  // Check if target device ID is overridden in the environment
-  if(getenv("OMP_DEFAULT_DEVICE") == nullptr){
-    std::cout << "CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set." << std::endl;
+  else{
+    std::cout << "CT_OMP_TARGET::SetDevice : Found " << omp_get_num_devices()
+              << " available offload targets." << std::endl;
   }
 
+  // Check if OMP_DEFAULT_DEVICE has been specified
+  if(getenv("OMP_DEFAULT_DEVICE") == nullptr){
+    std::cout << "CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default." << std::endl;
+  }
+  else{
+    std::cout << "CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to " << getenv("OMP_DEFAULT_DEVICE") << std::endl;
+  }
+
+  // Set deviceID
   deviceID = omp_get_default_device();
-  std::cout << "CT_OMP_TARGET::SetDevice : Target device ID = " << deviceID << " of " \
-            << omp_get_num_devices() << " total detected devices." << std::endl;
 
   return true;
 }

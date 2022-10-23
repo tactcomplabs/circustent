@@ -226,10 +226,9 @@ for( i=0; i<iters; i++ ){
 ### OMP with Target Offloading
 * CMake Build Flags: -DENABLE_OMP_TARGET=ON
 * Implementation Language: C++ & C
-* Users may define $OMP_DEFAULT_DEVICE to select a different target device ID,
-otherwise the system default is utilized
+* Users may define a particular $OMP_DEFAULT_DEVICE, otherwise the default is utilized
 * Maps provided PEs argument to team-level parallelism, iterations for a given team
-are automatically subdivided across threads within each team
+are manually subdivided across threads within each team
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 
 | Benchmark | Supported? |
@@ -351,8 +350,11 @@ fetch the index for a given iteration (ex, RAND_ADD, RAND_CAS)
 ### OpenACC
 * CMake Build Flags: -DENABLE_OPENACC=ON
 * Implementation Language: C++ & C
-* Users must define both $ACC_DEVICE_TYPE and $ACC_DEVICE_ID to set
-the target device type and ID, respectively
+* Users may define $ACC_DEVICE_TYPE and/or $ACC_DEVICE_ID to set
+the target device type and ID, respectively. However, since these values
+may be overidden or ignored by your OpenACC implementation, we recommend
+the user verify their desired device matches the one selected by checking
+the CircusTent output messages printed during device initiailization.
 * Maps provided PEs argument to gang-level parallelism
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 

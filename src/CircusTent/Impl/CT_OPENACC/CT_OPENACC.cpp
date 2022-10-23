@@ -20,9 +20,7 @@ CT_OPENACC::CT_OPENACC(CTBaseImpl::CTBenchType B,
                                            pes(0),
                                            iters(0),
                                            elems(0),
-                                           stride(0),
-                                           deviceTypeStr(""),
-                                           deviceID(-1) {
+                                           stride(0) {
 }
 
 CT_OPENACC::~CT_OPENACC(){
@@ -234,44 +232,35 @@ bool CT_OPENACC::AllocateData( uint64_t m,
 
 bool CT_OPENACC::SetDevice(){
 
-  // Check that target device type is set in the environment
+  std::string devName, devVendor;
+  int selectedDevID;
+
+  // Print ACC_DEVICE_TYPE if set
   if(getenv("ACC_DEVICE_TYPE") == nullptr){
-      std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_TYPE is not set!" << std::endl;
-      return false;
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_TYPE is not set, using default." << std::endl;
   }
-
-  deviceTypeStr.assign(getenv("ACC_DEVICE_TYPE"));
-  std::cout << "Target device type set to " << deviceTypeStr << std::endl;
-
-  // Check that target devices of this type are found
-  deviceTypeEnum = acc_get_device_type();
-  int numDevs = acc_get_num_devices(deviceTypeEnum);
-  if(!numDevs){
-      std::cout << "CT_OPENACC::SetDevice : Unable to locate target devices of type "
-                << deviceTypeStr << std::endl;
-      return false;
+  else{
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to " << getenv("ACC_DEVICE_TYPE") << std::endl;
   }
-
-  // Check that target device ID is set in the environment
+  
+  // Print ACC_DEVICE_NUM if set
   if(getenv("ACC_DEVICE_NUM") == nullptr){
-      std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_NUM is not set!" << std::endl;
-      return false;
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_NUM is not set, using default." << std::endl;
+  }
+  else{
+    std::cout << "CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to " << getenv("ACC_DEVICE_NUM") << std::endl;
   }
 
-  deviceID = atoi(getenv("ACC_DEVICE_NUM"));
+  /* Retrieve and print the information for the device *
+   * the OpenACC implementation has acutally selected  */
+  deviceTypeEnum = acc_get_device_type();
+  selectedDevID = acc_get_device_num(deviceTypeEnum);
+  devName.assign(acc_get_property_string(selectedDevID, deviceTypeEnum, acc_property_name));
+  devVendor.assign(acc_get_property_string(selectedDevID, deviceTypeEnum, acc_property_vendor));
 
-  // Check that we are set to run on target device ID
-  if(acc_get_device_num(deviceTypeEnum) != deviceID){
-      std::cout << "CT_OPENACC::SetDevice : Unable to set target ID " \
-                << deviceID << std::endl;
-      return false;
-  }
-
-  // Print target ID
-  std::cout << "Target device ID set to " << deviceID \
-            << " of " << acc_get_num_devices(deviceTypeEnum) \
-            << " total devices" << std::endl;
-
+  std::cout << "Running on Vendor: " << devVendor << " "
+            << "Device: " << devName << std::endl;
+  
   // Init OpenACC
   acc_init(deviceTypeEnum);
 
