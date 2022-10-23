@@ -226,9 +226,9 @@ for( i=0; i<iters; i++ ){
 ### OMP with Target Offloading
 * CMake Build Flags: -DENABLE_OMP_TARGET=ON
 * Implementation Language: C++ & C
-* Users may define a particular $OMP_DEFAULT_DEVICE, otherwise target device ID=1 is utilized
+* Users may define a particular $OMP_DEFAULT_DEVICE, otherwise the default is utilized
 * Maps provided PEs argument to team-level parallelism, iterations for a given team
-are automatically subdivided across threads within each team
+are manually subdivided across threads within each team
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 
 | Benchmark | Supported? |
