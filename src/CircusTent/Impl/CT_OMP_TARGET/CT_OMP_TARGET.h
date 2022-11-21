@@ -78,7 +78,6 @@ void GATHER_ADD( uint64_t *ARRAY,
                  uint64_t *IDX,
                  uint64_t iters,
                  uint64_t pes );
-
 }
 
 class CT_OMP_TARGET : public CTBaseImpl{
@@ -86,7 +85,7 @@ private:
   uint64_t *Array;          ///< CT_OMP_TARGET: Data array
   uint64_t *Idx;            ///< CT_OMP_TARGET: Index array
   uint64_t memSize;         ///< CT_OMP_TARGET: Memory size (in bytes)
-  uint64_t pes;             ///< CT_OMP_TARGET: Number of processing elements
+  uint64_t pes;             ///< CT_OMP_TARGET: Number of teams
   uint64_t iters;           ///< CT_OMP_TARGET: Number of iterations per team
   uint64_t elems;           ///< CT_OMP_TARGET: Number of u8 elements
   uint64_t stride;          ///< CT_OMP_TARGET: Stride in elements

@@ -258,7 +258,7 @@ bool CT_XBGAS::AllocateData( uint64_t m,
   uint64_t end = (iters * stride)-stride;
   if( end >= elems ){
     std::cout << "CT_XBGAS::AllocateData : 'Array' is not large enough for pes="
-              << pes << "; iters=" << iters << ";stride =" << stride
+              << pes << "; iters=" << iters << "; stride =" << stride
               << std::endl;
     return false;
   }

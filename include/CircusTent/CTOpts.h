@@ -38,8 +38,8 @@ private:
   bool isList;                ///< list the benchmarks
 
   uint64_t memSize;           ///< size of the memory array in bytes
-  uint64_t iters;             ///< number of iterations per thread
-  uint64_t pes;               ///< number of pe's
+  uint64_t iters;             ///< number of iterations per processing element
+  uint64_t pes;               ///< number of pes
   uint64_t stride;            ///< stride between accesses
   int l_argc;                 ///< main argc
   char **l_argv;              ///< main argv

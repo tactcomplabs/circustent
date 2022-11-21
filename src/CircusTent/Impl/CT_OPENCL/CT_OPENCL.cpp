@@ -700,7 +700,7 @@ bool CT_OPENCL::AllocateData( cl_ulong m,
   cl_ulong end = (pes * iters * stride) - stride;
   if (end >= elems){
     std::cout << "CT_OCL::AllocateData : 'Array' is not large enough for pes="
-              << pes << "; iters=" << iters << ";stride =" << stride
+              << pes << "; iters=" << iters << "; stride =" << stride
               << std::endl;
     return false;
   }
