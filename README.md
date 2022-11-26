@@ -227,8 +227,8 @@ for( i=0; i<iters; i++ ){
 * CMake Build Flags: -DENABLE_OMP_TARGET=ON
 * Implementation Language: C++ & C
 * Users may define a particular $OMP_DEFAULT_DEVICE, otherwise the default is utilized
-* Maps provided PEs argument to team-level parallelism, iterations for a given team
-are manually subdivided across threads within each team
+* Maps the provided PEs argument to OpenMP teams wherein the number of iterations specified are executed by each team. Iterations for a given team are workshared using thread and vector level parallelism based on the behavior of the user's OpenMP implementation and compiler.
+* In order to preserve the intended memory access pattern, the PTRCHASE kernels utilize only teams level parallelism.
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 
 | Benchmark | Supported? |
@@ -355,7 +355,8 @@ the target device type and ID, respectively. However, since these values
 may be overidden or ignored by your OpenACC implementation, we recommend
 the user verify their desired device matches the one selected by checking
 the CircusTent output messages printed during device initiailization.
-* Maps provided PEs argument to gang-level parallelism
+* Maps the provided PEs argument to OpenACC gangs wherein the number of iterations specified are executed by each gang. Iterations for a given gang are workshared using worker and vector level parallelism based on the behavior of the user's OpenACC implementation and compiler.
+* In order to preserve the intended memory access pattern, the PTRCHASE kernels utilize only gangs level parallelism.
 * Utilizes unsigned 64-bit integers for the ARRAY and IDX values
 
 | Benchmark | Supported? |
@@ -457,16 +458,18 @@ the OpenCL target platform and device, respectively
 
 ## Execution Parameters
 
-### Parameters
+### Backend Independent Parameters
 
-The following list comprises the current set of command line options for CircusTent:
+The following list details the current set of command line options common to all CircusTent backends:
 * --bench BENCH : specifies the target benchmark to run
 * --memsize BYTES : sets the size of the memory array to allocate in bytes (general rule is 1/2 of physical memory)
-* --pes PEs : sets the number of parallel execution units (threads, ranks, etc...)
-* --iters ITERATIONS : sets the number of algorithmic iterations per PE.  Total iterations = (PEs x ITERATIONS)
-* --stride STRIDE : sets the stride (in elements) for the target algorithm.  Not all algorithms require the stride to be specified.  If this value is not required, the algorithm will ignore it.
+* --iters ITERATIONS : sets the number of algorithmic iterations per PE. Total iterations = (PEs x ITERATIONS)
+* --stride STRIDE : sets the stride (in elements) for the target algorithm. Not all algorithms require the stride to be specified. If this value is not required, the algorithm will ignore it.
 * --help : prints the help menu
 * --list : prints a list of the target benchmarks
+
+In addition to the options above, backends not explictly listed below also utilize the "pes" command line option as shown. 
+* --pes PEs : sets the number of parallel execution units (threads, ranks, etc...)
 
 ### Sample Execution
 

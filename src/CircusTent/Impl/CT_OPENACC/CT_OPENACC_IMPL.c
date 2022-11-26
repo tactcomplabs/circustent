@@ -32,8 +32,6 @@ void RAND_ADD( uint64_t *restrict ARRAY,
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
-      uint64_t i = 0;
-
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -41,9 +39,11 @@ void RAND_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
+      
+      uint64_t i = 0, ret;
       uint64_t start = gangID * iters;
 
-      uint64_t ret;
+      #pragma loop worker vector independent private(ret)
       for( i=start; i<(start+iters); i++ ){
         #pragma acc atomic capture
         {
@@ -66,8 +66,6 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
-      uint64_t i = 0;
-
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -75,9 +73,11 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
+      
+      uint64_t i = 0, ret;
       uint64_t start = gangID * iters;
 
-      uint64_t ret;
+      #pragma loop worker vector independent private(ret)
       for( i=start; i<(start+iters); i++ ){
         #pragma acc atomic capture
         {
@@ -101,8 +101,6 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
-      uint64_t i = 0;
-
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -110,10 +108,12 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
+      
+      uint64_t i = 0, ret;
       uint64_t start = gangID * iters * stride;
 
-      uint64_t ret;
-      for( i=start; i<(start+iters*stride); i+=stride ){
+      #pragma loop worker vector independent private(ret)
+      for( i=start; i<(start+(iters*stride)); i+=stride ){
         #pragma acc atomic capture
         {
           ret = ARRAY[i];
@@ -124,6 +124,10 @@ void STRIDEN_ADD( uint64_t *restrict ARRAY,
   }
 }
 
+/* Note that the PTRCHASE kernel utilizes only gang-level    *
+ * parallelism and does not further subdivide the iterations *
+ * of a given gang across workers/vectors because doing so   *
+ * would destroy the intended semantics                      */
 void PTRCHASE_ADD( uint64_t *restrict ARRAY,
                    uint64_t *restrict IDX,
                    uint64_t iters,
@@ -131,16 +135,10 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
   
   #pragma acc data deviceptr(ARRAY, IDX) copyin(iters, pes)
   {
-    /* Avoids invalid atomic exprssion *
-     * with some compilers for += 0    */
-    uint64_t zero = 0;
-
     // target global variable for assigning gang IDs
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
-      uint64_t i = 0;
-
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -148,6 +146,12 @@ void PTRCHASE_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
+
+      /* Avoids invalid atomic exprssion *
+       * with some compilers for += 0    */
+      uint64_t zero = 0;
+      
+      uint64_t i = 0;
       uint64_t start = gangID * iters;
 
       for( i=0; i<iters; i++ ){
@@ -168,15 +172,10 @@ void SG_ADD( uint64_t *restrict ARRAY,
 
   #pragma acc data deviceptr(ARRAY, IDX) copyin(iters, pes)
   {
-    /* Avoids invalid atomic exprssion *
-     * with some compilers for += 0    */
-    uint64_t zero = 0;
-
     // target global variable for assigning gang IDs
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
-
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -184,13 +183,18 @@ void SG_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
-      uint64_t i = 0;
+      
+      /* Avoids invalid atomic exprssion *
+       * with some compilers for += 0    */
+      uint64_t zero = 0;
+  
+      uint64_t i = 0, ret;
       uint64_t src = 0;
       uint64_t dest = 0;
       uint64_t val = 0;
       uint64_t start = gangID * iters;
 
-      uint64_t ret;
+      #pragma loop worker vector independent private(ret, src, dest, val)
       for( i=start; i<(start+iters); i++ ){
         #pragma acc atomic capture
         {
@@ -230,6 +234,8 @@ void CENTRAL_ADD( uint64_t *restrict ARRAY,
     #pragma acc parallel num_gangs(pes)
     {
       uint64_t i, ret;
+      
+      #pragma loop worker vector independent private(ret)
       for( i=0; i<iters; i++ ){
         #pragma acc atomic capture
         {
@@ -252,10 +258,6 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
-      /* Avoids invalid atomic exprssion *
-       * with some compilers for += 0    */
-      uint64_t zero = 0;
-
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -263,12 +265,17 @@ void SCATTER_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
-      uint64_t i = 0;
+
+      /* Avoids invalid atomic exprssion *
+       * with some compilers for += 0    */
+      uint64_t zero = 0;
+
+      uint64_t i = 0, ret;
       uint64_t dest = 0;
       uint64_t val = 0;
       uint64_t start = gangID * iters;
 
-      uint64_t ret;
+      #pragma loop worker vector independent private(ret, dest, val)
       for( i=start; i<(start+iters); i++ ){
         #pragma acc atomic capture
         {
@@ -303,10 +310,6 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
     uint64_t gangCtr = 0;
     #pragma acc parallel num_gangs(pes)
     {
-      /* Avoids invalid atomic exprssion *
-       * with some compilers for += 0    */
-      uint64_t zero = 0;
-
       // Atomic F&A to order gangs
       uint64_t gangID;
       #pragma acc atomic capture
@@ -314,12 +317,17 @@ void GATHER_ADD( uint64_t *restrict ARRAY,
         gangID = gangCtr;
         gangCtr++;
       }
-      uint64_t i = 0;
+      
+      /* Avoids invalid atomic exprssion *
+       * with some compilers for += 0    */
+      uint64_t zero = 0;
+
+      uint64_t i = 0, ret;
       uint64_t dest = 0;
       uint64_t val = 0;
       uint64_t start = gangID * iters;
 
-      uint64_t ret;
+      #pragma loop worker vector independent private(ret, dest, val)
       for( i=start; i<(start+iters); i++ ){
         #pragma acc atomic capture
         {

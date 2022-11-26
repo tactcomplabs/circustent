@@ -86,8 +86,8 @@ private:
   uint64_t *Array;             ///< CT_OPENACC: Data array
   uint64_t *Idx;               ///< CT_OPENACC: Index array
   uint64_t memSize;            ///< CT_OPENACC: Memory size (in bytes)
-  uint64_t pes;                ///< CT_OPENACC: Number of processing elements
-  uint64_t iters;              ///< CT_OPENACC: Number of iterations per thread
+  uint64_t pes;                ///< CT_OPENACC: Number of gangs
+  uint64_t iters;              ///< CT_OPENACC: Number of iterations per gang
   uint64_t elems;              ///< CT_OPENACC: Number of u8 elements
   uint64_t stride;             ///< CT_OPENACC: Stride in elements
   acc_device_t deviceTypeEnum; ///< CT_OPENACC: acct_device_t device type enumeration

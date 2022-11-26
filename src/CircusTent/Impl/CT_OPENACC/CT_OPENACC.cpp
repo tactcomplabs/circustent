@@ -173,7 +173,7 @@ bool CT_OPENACC::AllocateData( uint64_t m,
   uint64_t end = (pes * iters * stride) - stride;
   if( end >= elems ){
     std::cout << "CT_OPENACC::AllocateData : 'Array' is not large enough for pes="
-              << pes << "; iters=" << iters << ";stride =" << stride
+              << pes << "; iters=" << iters << "; stride =" << stride
               << std::endl;
     return false;
   }
@@ -185,7 +185,9 @@ bool CT_OPENACC::AllocateData( uint64_t m,
   if( ( Array == nullptr ) || ( HostArray == nullptr ) ){
     std::cout << "CT_OPENACC::AllocateData : 'Array' could not be allocated" << std::endl;
     acc_free(Array);
-    free(HostArray);
+    if(HostArray != nullptr){
+      free(HostArray);
+    }
     return false;
   }
 
@@ -195,9 +197,13 @@ bool CT_OPENACC::AllocateData( uint64_t m,
   if( ( Idx == nullptr ) || ( HostIdx == nullptr ) ){
     std::cout << "CT_OPENACC::AllocateData : 'Idx' could not be allocated" << std::endl;
     acc_free(Array);
-    free(HostArray);
     acc_free(Idx);
-    free(HostIdx);
+    if(HostArray != nullptr){
+      free(HostArray);
+    }
+    if(HostIdx != nullptr){
+      free(HostIdx);
+    }
     return false;
   }
 
@@ -224,8 +230,17 @@ bool CT_OPENACC::AllocateData( uint64_t m,
   free(HostArray);
   free(HostIdx);
 
-  printf("RUNNING WITH NUM_GANGS = %lu\n", pes);
-
+  // Find the number of gangs that will run
+  // on the device and print the result
+  uint64_t gangCtr = 0;
+  #pragma acc parallel num_gangs(pes) copyin(gangCtr) copyout(gangCtr)
+  {
+    #pragma acc atomic update
+    {
+      gangCtr++;
+    }
+  }
+  std::cout << "RUNNING WITH NUM_GANGS = " << gangCtr << std::endl;
 
   return true;
 }
@@ -268,12 +283,8 @@ bool CT_OPENACC::SetDevice(){
 }
 
 bool CT_OPENACC::FreeData(){
-  if( Array ){
-    acc_free(Array);
-  }
-  if( Idx ){
-    acc_free(Idx);
-  }
+  acc_free(Array);
+  acc_free(Idx);
 
   // Close OpenACC
   acc_shutdown(deviceTypeEnum);

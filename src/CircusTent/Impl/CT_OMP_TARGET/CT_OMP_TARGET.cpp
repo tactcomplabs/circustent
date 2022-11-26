@@ -174,11 +174,10 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
   uint64_t end = (pes * iters * stride) - stride;
   if( end >= elems ){
     std::cout << "CT_OMP_TARGET::AllocateData : 'Array' is not large enough for pes="
-              << pes << "; iters=" << iters << ";stride =" << stride
+              << pes << "; iters=" << iters << "; stride =" << stride
               << std::endl;
     return false;
   }
-
 
   // allocate the data on the target device
   Array = (uint64_t *) omp_target_alloc(memSize, deviceID);
@@ -189,7 +188,9 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
     std::cout << "CT_OMP_TARGET::AllocateData : 'Array' could not be allocated" << std::endl;
     std::cout << "Array = " << Array << " HostArray = " << HostArray << std::endl;
     omp_target_free(Array, deviceID);
-    free(HostArray);
+    if(HostArray != nullptr){
+      free(HostArray);
+    }
     return false;
   }
 
@@ -201,8 +202,12 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
     std::cout << "CT_OMP_TARGET::AllocateData : 'Idx' could not be allocated" << std::endl;
     omp_target_free(Array, deviceID);
     omp_target_free(Idx, deviceID);
-    free(HostArray);
-    free(HostIdx);
+    if(HostArray != nullptr){
+      free(HostArray);
+    }
+    if(HostIdx != nullptr){
+      free(HostIdx);
+    }
     return false;
   }
 
@@ -229,15 +234,15 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
   free(HostArray);
   free(HostIdx);
 
-  // Set the number of teams on device
-  // Need OpenMP 5.1 support, for now using num_teams clause at kernel directives
-  //omp_set_num_teams(pes);
+  // Set the number of teams on the device
+  // Need OpenMP 5.1 support for omp_set_num_teams(), for now using num_teams clause at kernel directives
+  //omp_set_num_teams(teams);
 
   // Sanity check on target
   #pragma omp target teams num_teams(pes)
   {
     if(omp_get_team_num() == 0){
-        printf("RUNNING WITH NUM_TEAMS = %d\n", omp_get_num_teams());
+      printf("RUNNING WITH NUM_TEAMS = %d\n", omp_get_num_teams());
     }
   }
 

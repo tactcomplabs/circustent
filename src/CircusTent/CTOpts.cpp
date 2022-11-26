@@ -85,7 +85,8 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       isHelp = true;
       PrintHelp();
       return true;
-    }else if( (s=="-b") || (s=="-bench") || (s=="--bench") ){
+    }
+    else if( (s=="-b") || (s=="-bench") || (s=="--bench") ){
       if( i+1 > (argc-1) ){
         std::cout << "Error : --bench requires an argument" << std::endl;
         return false;
@@ -94,7 +95,8 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       if( !EnableBench( P ) )
         return false;
       i++;
-    }else if( (s=="-m") || (s=="-memsize") || (s=="--memsize") ){
+    }
+    else if( (s=="-m") || (s=="-memsize") || (s=="--memsize") ){
       if( i+1 > (argc-1) ){
         std::cout << "Error : --memsize requires an argument" << std::endl;
         return false;
@@ -102,7 +104,8 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       std::string P(argv[i+1]);
       memSize = atoll(P.c_str());
       i++;
-    }else if( (s=="-i") || (s=="-iters") || (s=="--iters") ){
+    }
+    else if( (s=="-i") || (s=="-iters") || (s=="--iters") ){
       if( i+1 > (argc-1) ){
         std::cout << "Error : --iters requires an argument" << std::endl;
         return false;
@@ -110,15 +113,8 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       std::string P(argv[i+1]);
       iters = atoll(P.c_str());
       i++;
-    }else if( (s=="-p") || (s=="-pes") || (s=="--pes") ){
-      if( i+1 > (argc-1) ){
-        std::cout << "Error : --pes requires an argument" << std::endl;
-        return false;
-      }
-      std::string P(argv[i+1]);
-      pes = atoll(P.c_str());
-      i++;
-    }else if( (s=="-s") || (s=="-stride") || (s=="--stride") ){
+    }
+    else if( (s=="-s") || (s=="-stride") || (s=="--stride") ){
       if( i+1 > (argc-1) ){
         std::cout << "Error : --stride requires an argument" << std::endl;
         return false;
@@ -130,11 +126,22 @@ bool CTOpts::ParseOpts(int argc, char **argv){
         return false;
       }
       i++;
-    }else if( (s=="-l") || (s=="-list") || (s=="--list") ){
+    }
+    else if( (s=="-l") || (s=="-list") || (s=="--list") ){
       isList = true;
       PrintBench();
       return true;
-    }else{
+    }
+    else if( (s=="-p") || (s=="-pes") || (s=="--pes") ){
+      if( i+1 > (argc-1) ){
+        std::cout << "Error : --pes requires an argument" << std::endl;
+        return false;
+      }
+      std::string P(argv[i+1]);
+      pes = atoll(P.c_str());
+      i++;
+    }
+    else{
       std::cout << "Unknown option: " << s << std::endl;
       return false;
     }
@@ -176,9 +183,9 @@ void CTOpts::PrintHelp(){
   std::cout << "=======================================================================" << std::endl;
   std::cout << " -b|-bench|--bench TEST                    : Sets the benchmark to run" << std::endl;
   std::cout << " -m|-memsize|--memsize BYTES               : Sets the size of the array" << std::endl;
-  std::cout << " -p|-pes|--pes PES                         : Sets the number of PEs" << std::endl;
   std::cout << " -i|-iters|--iters ITERATIONS              : Sets the number of iterations per PE" << std::endl;
   std::cout << " -s|-stride|--stride STRIDE (elems)        : Sets the stride in 'elems'" << std::endl;
+  std::cout << " -p|-pes|--pes PES                         : Sets the number of PEs" << std::endl;
   std::cout << "=======================================================================" << std::endl;
   std::cout << " -h|-help|--help                           : Prints this help menu" << std::endl;
   std::cout << " -l|-list|--list                           : List benchmarks" << std::endl;

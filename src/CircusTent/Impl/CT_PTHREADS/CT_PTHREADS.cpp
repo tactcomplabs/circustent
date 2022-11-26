@@ -230,7 +230,7 @@ bool CT_PTHREADS::AllocateData( uint64_t m,
   uint64_t end = (pes * iters * stride) - stride;
   if( end >= elems ){
     std::cout << "CT_PTHREADS::AllocateData : 'Array' is not large enough for pes="
-              << pes << "; iters=" << iters << ";stride =" << stride
+              << pes << "; iters=" << iters << "; stride =" << stride
               << std::endl;
     return false;
   }
