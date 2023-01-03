@@ -46,7 +46,169 @@
 #include "Impl/CT_CPP_STD/CT_CPP_STD.h"
 #endif
 
-void PrintTiming( double Timing, double GAMS );
+#ifdef _ENABLE_CUDA_
+#include "Impl/CT_CUDA/CT_CUDA.cuh"
+#endif
+
+void PrintTiming(double Timing, double GAMS, CTBaseImpl::CTBenchType BType, CTBaseImpl::CTAtomType AType){
+  std::string benchmark;
+  if ( BType == CTBaseImpl::CT_RAND ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "RAND_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "RAND_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  else if ( BType == CTBaseImpl::CT_STRIDE1 ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "STRIDE1_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "STRIDE1_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  else if ( BType == CTBaseImpl::CT_STRIDEN ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "STRIDEN_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "STRIDEN_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  else if ( BType == CTBaseImpl::CT_PTRCHASE ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "PTRCHASE_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "PTRCHASE_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  else if ( BType == CTBaseImpl::CT_SG ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "SG_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "SG_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  else if ( BType == CTBaseImpl::CT_CENTRAL ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "CENTRAL_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "CENTRAL_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  else if ( BType == CTBaseImpl::CT_SCATTER ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "SCATTER_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "SCATTER_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  else if ( BType == CTBaseImpl::CT_GATHER ) {
+      switch( AType ) {
+          case CTBaseImpl::CT_ADD:
+              benchmark = "GATHER_ADD";
+              break;
+          case CTBaseImpl::CT_CAS:
+              benchmark = "GATHER_CAS";
+              break;
+          case CTBaseImpl::CT_NA:
+              break;
+      }
+  }
+  std::cout << "================================================" << std::endl;
+  std::cout << " Benchmark Kernel     : " << benchmark            << std::endl;
+  std::cout << " Timing (secs)        : " << Timing               << std::endl;
+  std::cout << " Giga AMOs/sec (GAMS) : " << GAMS                 << std::endl;
+  std::cout << "================================================" << std::endl;
+}
+
+#ifdef _ENABLE_CUDA_
+void RunBenchCuda(CTOpts *Opts) {
+
+  // Init the CUDA object
+  CT_CUDA *CT = new CT_CUDA(Opts->GetBenchType(),
+                            Opts->GetAtomType());
+
+  if (!CT) {
+    std::cout << "ERROR: COULD NOT ALLOCATE CT_CUDA OBJECTS" << std::endl;
+    return;
+  }
+
+  // Print device information
+  if (!CT->PrintCUDADeviceProperties()) {
+    std::cout << "ERROR: COULD NOT PRINT CUDA DEVICE PROPERTIES FOR CT_CUDA" << std::endl;
+    delete CT;
+    return;
+  }
+  // Allocate the data
+  if(!CT->AllocateData(Opts->GetMemSize(),
+                       Opts->GetThreadBlocks(),
+                       Opts->GetThreadsPerBlock(),
+                       Opts->GetIters(),
+                       Opts->GetStride())){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA" << std::endl;
+    CT->FreeData();
+    delete CT;
+    return;
+  }
+
+  // Execute the benchmark
+  double Timing = 0.;
+  double GAMS   = 0.;
+  if (!CT->Execute(Timing, GAMS)) {
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_CUDA" << std::endl;
+    CT->FreeData();
+    delete CT;
+    return;
+  }
+
+  // Print the timing
+  PrintTiming(Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType());
+
+  // Free the data
+  if (!CT->FreeData()) {
+    std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_CUDA" << std::endl;
+    delete CT;
+    return;
+  }
+
+  // Free the structure
+  delete CT;
+}
+#endif
 
 #ifdef _ENABLE_CPP_STD_
 void RunBenchCppStd(CTOpts *Opts) {
@@ -88,7 +250,7 @@ void RunBenchCppStd(CTOpts *Opts) {
   }
 
   // Print the timing
-  PrintTiming( Timing, GAMS );
+  PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
 
   // Free the structure
   delete CT;
@@ -143,7 +305,7 @@ void RunBenchOpenCL(CTOpts *Opts) {
   }
 
   // Print the timing
-  PrintTiming( Timing, GAMS );
+  PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
 
   // Free the structure
   delete CT;
@@ -195,7 +357,7 @@ void RunBenchOpenACC( CTOpts *Opts ){
   }
 
   // Print the timing
-  PrintTiming( Timing, GAMS );
+  PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
 
   // Free the data
   if( !CT->FreeData() ){
@@ -246,7 +408,7 @@ void RunBenchPthreads( CTOpts *Opts ){
     return;
   }
 
-  PrintTiming( Timing, GAMS );
+  PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
 }
 #endif
 
@@ -291,7 +453,7 @@ void RunBenchXBGAS( CTOpts *Opts ){
 
   // Print the timing
   if( xbrtime_mype() == 0 ){
-    PrintTiming( Timing, GAMS );
+    PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
   }
   xbrtime_close();
 }
@@ -340,7 +502,7 @@ void RunBenchMPI( CTOpts *Opts ){
   int rank = -1;
   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
   if( rank == 0 ){
-    PrintTiming( Timing, GAMS );
+    PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
   }
 
   MPI_Finalize();
@@ -389,7 +551,7 @@ void RunBenchOpenSHMEM( CTOpts *Opts ){
 
   // Print the timing
   if( shmem_my_pe() == 0 ){
-    PrintTiming( Timing, GAMS );
+    PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
   }
   shmem_finalize();
   delete CT;
@@ -447,7 +609,7 @@ void RunBenchOMPTarget( CTOpts *Opts ){
   }
 
   // Print the timing
-  PrintTiming( Timing, GAMS );
+  PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
 
   // free the structure
   delete CT;
@@ -492,19 +654,12 @@ void RunBenchOMP( CTOpts *Opts ){
   }
 
   // Print the timing
-  PrintTiming( Timing, GAMS );
+  PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
 
   // free the structure
   delete CT;
 }
 #endif
-
-void PrintTiming(double Timing, double GAMS){
-  std::cout << "================================================" << std::endl;
-  std::cout << " Timing (secs)        : " << Timing << std::endl;
-  std::cout << " Giga AMOs/sec (GAMS) : " << GAMS << std::endl;
-  std::cout << "================================================" << std::endl;
-}
 
 int main( int argc, char **argv ){
   CTOpts *Opts = new CTOpts();
@@ -543,6 +698,9 @@ int main( int argc, char **argv ){
 #endif
 #ifdef _ENABLE_CPP_STD_
     RunBenchCppStd(Opts);
+#endif
+#ifdef _ENABLE_CUDA_
+    RunBenchCuda(Opts);
 #endif
   }
 

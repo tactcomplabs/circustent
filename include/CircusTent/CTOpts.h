@@ -39,10 +39,15 @@ private:
 
   uint64_t memSize;           ///< size of the memory array in bytes
   uint64_t iters;             ///< number of iterations per processing element
-  uint64_t pes;               ///< number of pes
   uint64_t stride;            ///< stride between accesses
   int l_argc;                 ///< main argc
   char **l_argv;              ///< main argv
+#if defined(_ENABLE_CUDA_)
+  uint64_t threadBlocks;      ///< number of thread blocks
+  uint64_t threadsPerBlock;   ///< number of threads in each thread block
+#else
+  uint64_t pes;               ///< number of pes
+#endif
 
   /// Prints the help menu
   void PrintHelp();
@@ -82,9 +87,6 @@ public:
   /// Retrieve the number of iterations
   uint64_t GetIters() { return iters; }
 
-  /// Retrieve the number of PEs
-  uint64_t GetPEs() { return pes; }
-
   /// Retrieve the stride in elems
   uint64_t GetStride() { return stride; }
 
@@ -93,6 +95,17 @@ public:
 
   /// Retrieve the argv value
   char **GetArgv() { return l_argv; }
+
+#if defined(_ENABLE_CUDA_)
+  /// Retrieve the number of thread blocks
+  uint64_t GetThreadBlocks() { return threadBlocks; }
+  
+  /// Retrieve the number of threads per block
+  uint64_t GetThreadsPerBlock() { return threadsPerBlock; }
+#else
+  /// Retrieve the number of PEs
+  uint64_t GetPEs() { return pes; }
+#endif
 };
 
 #endif
