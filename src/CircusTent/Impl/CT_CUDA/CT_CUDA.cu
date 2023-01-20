@@ -33,6 +33,10 @@ bool CT_CUDA::PrintCUDADeviceProperties() {
     int device, deviceCount;
     cudaDeviceProp properties;
     
+    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << "            CUDA Device Properties" << std::endl;
+    std::cout << "------------------------------------------------" << std::endl;
+    
     // Get and print the number of CUDA devices on the platform
     if(cudaGetDeviceCount(&deviceCount) != cudaSuccess){
         std::cout << "CT_CUDA::PrintCUDADeviceProperties: cudaGetDeviceCount failed!" << std::endl;
