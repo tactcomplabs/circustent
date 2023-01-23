@@ -1,0 +1,166 @@
+==============================================
+              1536 total
+==============================================
+------------------------------------------------
+Dimensions: 3 x 512
+------------------------------------------------
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00199604
+ Giga AMOs/sec (GAMS) : 0.751488
+================================================
+
+------------------------------------------------
+Dimensions: 6 x 256
+------------------------------------------------
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00219703
+ Giga AMOs/sec (GAMS) : 1.36548
+================================================
+
+------------------------------------------------
+Dimensions: 12 x 128
+------------------------------------------------
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00393105
+ Giga AMOs/sec (GAMS) : 1.52631
+================================================
+
+------------------------------------------------
+Dimensions: 24 x 64
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.0076139
+ Giga AMOs/sec (GAMS) : 1.57607
+================================================
+
+------------------------------------------------
+Dimensions: 32 x 48
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00992298
+ Giga AMOs/sec (GAMS) : 1.61242
+================================================
+
+------------------------------------------------
+Dimensions: 48 x 32
+------------------------------------------------
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.0149541
+ Giga AMOs/sec (GAMS) : 1.60491
+================================================
+
+------------------------------------------------
+Dimensions: 64 x 24
+------------------------------------------------
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.0197189
+ Giga AMOs/sec (GAMS) : 1.62281
+================================================
+
+------------------------------------------------
+Dimensions: 128 x 12
+------------------------------------------------
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.0388031
+ Giga AMOs/sec (GAMS) : 1.64935
+================================================
+
+------------------------------------------------
+Dimensions: 256 x 6
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.0780571
+ Giga AMOs/sec (GAMS) : 1.63983
+================================================
+
+------------------------------------------------
+Dimensions: 512 x 3
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device
+ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA
+

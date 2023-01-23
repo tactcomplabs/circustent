@@ -21,7 +21,8 @@
 #ifndef _CT_CUDA_CUH_
 #define _CT_CUDA_CUH_
 
-#include <cuda_runtime.h>
+// #include <cuda_runtime.h>
+#include "/usr/local/cuda-11.0/include/cuda_runtime.h"
 #include "CircusTent/CTBaseImpl.h"
 
 // Benchmark Kernel Prototypes
