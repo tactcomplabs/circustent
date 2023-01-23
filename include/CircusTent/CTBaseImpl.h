@@ -60,12 +60,20 @@ public:
   /// Virtual execution function
   virtual bool Execute(double &Timing,double &GAMS) = 0;
 
+#if defined(_ENABLE_CUDA_)
+  /// Virtual data allocation function
+  virtual bool AllocateData( uint64_t memSize,
+                             uint64_t threadBlocks,
+                             uint64_t threads,
+                             uint64_t iters,
+                             uint64_t stride ) = 0;
+#else
   /// Virtual data allocation function
   virtual bool AllocateData( uint64_t memSize,
                              uint64_t pes,
                              uint64_t iters,
                              uint64_t stride ) = 0;
-
+#endif
   /// Virtual data free function
   virtual bool FreeData() = 0;
 

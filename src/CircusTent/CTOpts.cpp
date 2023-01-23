@@ -132,6 +132,26 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       PrintBench();
       return true;
     }
+#if defined(_ENABLE_CUDA_)
+    else if( (s=="-o") || (s=="-blocks") || (s=="--blocks")){
+        if ( i+1 > (argc-1)) {
+            std::cout << "Error: --blocks requires an argument" << std::endl;
+            return false;
+        }
+        std::string P(argv[i+1]);
+        threadBlocks = atoi(P.c_str());
+        i++;
+    }
+    else if ((s=="-t") || (s=="-threads") || (s=="--threads")){
+        if ( i+1 > (argc-1)) {
+            std::cout << "Error: --threads requires an argument" << std::endl;
+            return false;
+        }
+        std::string P(argv[i+1]);
+        threadsPerBlock = atoi(P.c_str());
+        i++;
+    }
+#else
     else if( (s=="-p") || (s=="-pes") || (s=="--pes") ){
       if( i+1 > (argc-1) ){
         std::cout << "Error : --pes requires an argument" << std::endl;
@@ -141,6 +161,7 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       pes = atoll(P.c_str());
       i++;
     }
+#endif
     else{
       std::cout << "Unknown option: " << s << std::endl;
       return false;
@@ -177,19 +198,24 @@ void CTOpts::PrintBench(){
 void CTOpts::PrintHelp(){
   unsigned major = CT_VERSION_MAJOR;
   unsigned minor = CT_VERSION_MINOR;
-  std::cout << "=======================================================================" << std::endl;
+  std::cout << "=================================================================================" << std::endl;
   std::cout << " CircusTent Version " << major << "." << minor << std::endl;
   std::cout << " Usage: circustent [OPTIONS]" << std::endl;
-  std::cout << "=======================================================================" << std::endl;
+  std::cout << "=================================================================================" << std::endl;
   std::cout << " -b|-bench|--bench TEST                    : Sets the benchmark to run" << std::endl;
   std::cout << " -m|-memsize|--memsize BYTES               : Sets the size of the array" << std::endl;
   std::cout << " -i|-iters|--iters ITERATIONS              : Sets the number of iterations per PE" << std::endl;
   std::cout << " -s|-stride|--stride STRIDE (elems)        : Sets the stride in 'elems'" << std::endl;
+#if defined(_ENABLE_CUDA_)
+  std::cout << " -o|-blocks|--blocks THREAD_BLOCKS         : Sets the number of thread blocks" << std::endl;
+  std::cout << " -t|-threads|--threads THREADS_PER_BLOCK   : Sets the number of threads per block" << std::endl;
+#else
   std::cout << " -p|-pes|--pes PES                         : Sets the number of PEs" << std::endl;
-  std::cout << "=======================================================================" << std::endl;
+#endif
+  std::cout << "=================================================================================" << std::endl;
   std::cout << " -h|-help|--help                           : Prints this help menu" << std::endl;
   std::cout << " -l|-list|--list                           : List benchmarks" << std::endl;
-  std::cout << "=======================================================================" << std::endl;
+  std::cout << "=================================================================================" << std::endl;
 }
 
 // EOF

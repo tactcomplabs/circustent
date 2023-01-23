@@ -41,4 +41,8 @@ if (ENABLE_CPP_STD)
   add_subdirectory(CT_CPP_STD)
 endif()
 
+if (ENABLE_CUDA)
+  add_subdirectory(CT_CUDA)
+endif()
+
 # EOF
