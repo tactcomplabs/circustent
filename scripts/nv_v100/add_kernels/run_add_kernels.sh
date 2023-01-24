@@ -2,6 +2,6 @@
 
 NTIMES=5
 
-for i in {1..NTIMES}; do
+for i in {1..$NTIMES}; do
     source add_kernels.sh
 done
