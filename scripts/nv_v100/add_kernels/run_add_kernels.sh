@@ -1,7 +1,7 @@
-#!/bin/bash
+# #!/bin/bash
 
-NTIMES=5
+# NTIMES=5
 
-for i in {1..$NTIMES}; do
-    source add_kernels.sh
-done
+# for i in {1..$NTIMES}; do
+#     source add_kernels.sh
+# done
