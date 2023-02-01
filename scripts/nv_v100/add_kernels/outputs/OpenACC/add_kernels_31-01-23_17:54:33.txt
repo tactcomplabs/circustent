@@ -1,0 +1,7 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 17:54:33 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to gpu
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz

@@ -1,0 +1,67 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 18:18:55 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz
+RUNNING WITH NUM_GANGS = 1
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.01267
+ Giga AMOs/sec (GAMS) : 0.631411
+================================================
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 18:19:42 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz
+RUNNING WITH NUM_GANGS = 1
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000409126
+ Giga AMOs/sec (GAMS) : 19.5539
+================================================
+
+
+=============================================================
+  Running the PTRCHASE_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 18:20:29 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz
+RUNNING WITH NUM_GANGS = 1
+================================================
+ Benchmark Kernel     : PTRCHASE_ADD
+ Timing (secs)        : 0
+ Giga AMOs/sec (GAMS) : inf
+================================================
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 18:21:16 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz
+RUNNING WITH NUM_GANGS = 1
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0
+ Giga AMOs/sec (GAMS) : inf
+================================================
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 18:22:03 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz

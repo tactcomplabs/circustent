@@ -1,0 +1,22 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 18:46:02 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz
+RUNNING WITH NUM_GANGS = 1
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.0130632
+ Giga AMOs/sec (GAMS) : 0.612408
+================================================
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenACC impl...
+                  31-01-23 AT 18:46:49 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 1
+Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz

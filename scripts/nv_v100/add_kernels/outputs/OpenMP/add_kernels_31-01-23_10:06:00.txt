@@ -1,0 +1,56 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 10:06:00 
+=============================================================
+Unknown option: 500000
+Failed to parse command line options
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 10:06:01 
+=============================================================
+Unknown option: 500000
+Failed to parse command line options
+
+
+=============================================================
+  Running the PTRCHASE_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 10:06:01 
+=============================================================
+Unknown option: 500000
+Failed to parse command line options
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 10:06:01 
+=============================================================
+Unknown option: 500000
+Failed to parse command line options
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 10:06:01 
+=============================================================
+Unknown option: 500000
+Failed to parse command line options
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 10:06:01 
+=============================================================
+Unknown option: 500000
+Failed to parse command line options
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 10:06:02 
+=============================================================
+Unknown option: 500000
+Failed to parse command line options
+
+

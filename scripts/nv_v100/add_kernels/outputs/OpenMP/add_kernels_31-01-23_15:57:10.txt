@@ -1,0 +1,56 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 15:57:10 
+=============================================================
+CT_OMP_TARGET::SetDevice : No target devices detected!
+ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 15:57:10 
+=============================================================
+CT_OMP_TARGET::SetDevice : No target devices detected!
+ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET
+
+
+=============================================================
+  Running the PTRCHASE_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 15:57:10 
+=============================================================
+CT_OMP_TARGET::SetDevice : No target devices detected!
+ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 15:57:10 
+=============================================================
+CT_OMP_TARGET::SetDevice : No target devices detected!
+ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 15:57:10 
+=============================================================
+CT_OMP_TARGET::SetDevice : No target devices detected!
+ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 15:57:11 
+=============================================================
+CT_OMP_TARGET::SetDevice : No target devices detected!
+ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  31-01-23 AT 15:57:11 
+=============================================================
+CT_OMP_TARGET::SetDevice : No target devices detected!
+ERROR : UNABLE TO SET TARGET OPTIONS FOR CT_OMP_TARGET
+
+
