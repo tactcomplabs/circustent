@@ -1,3 +1,0 @@
-CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
-CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
-Running on Vendor: GenuineIntel Device: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz
