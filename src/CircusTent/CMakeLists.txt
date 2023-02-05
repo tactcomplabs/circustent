@@ -56,4 +56,10 @@ if (ENABLE_CUDA)
   set_property(TARGET circustent PROPERTY CUDA_ARCHITECTURES OFF)
 endif()
 
+if (ENABLE_YGM)
+  include_directories(${YGM_INCLUDE_PATH})
+  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_YGM_OBJS>)
+  target_link_libraries(circustent PUBLIC ygm::ygm)
+endif()
+
 install(TARGETS circustent DESTINATION bin)

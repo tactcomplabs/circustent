@@ -134,6 +134,20 @@ else()
   message(STATUS "DISABLING CUDA Implementation")
 endif()
 
+if (ENABLE_YGM)
+  find_package(ygm)
+  if(NOT YGM_INCLUDE_PATH)
+    message(FATAL_ERROR "YGM BUILDS MUST SET YGM_INCLUDE_PATH")
+  else()
+    message(STATUS "USING YGM FROM ${YGM_INCLUDE_PATH}")
+  endif()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_YGM_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -D_ENABLE_YGM_")
+  message(STATUS "ENABLING YGM Implementation")
+else()
+  message(STATUS "DISABLING YGM Implementation")
+endif()
+
 #------------------------------------------------------------------------
 # Add package paths
 #------------------------------------------------------------------------

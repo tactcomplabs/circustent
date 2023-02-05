@@ -50,6 +50,10 @@
 #include "Impl/CT_CUDA/CT_CUDA.cuh"
 #endif
 
+#ifdef _ENABLE_YGM_
+#include "Impl/CT_YGM/CT_YGM.h"
+#endif
+
 void PrintTiming(double Timing, double GAMS, CTBaseImpl::CTBenchType BType, CTBaseImpl::CTAtomType AType){
   std::string benchmark;
   if ( BType == CTBaseImpl::CT_RAND ) {
@@ -661,6 +665,58 @@ void RunBenchOMP( CTOpts *Opts ){
 }
 #endif
 
+#ifdef _ENABLE_YGM_
+void RunBenchYGM( CTOpts *Opts ){
+  // init the MPI object
+  CT_YGM *CT = new CT_YGM(Opts->GetBenchType(),
+                          Opts->GetAtomType());
+  if( !CT ){
+    std::cout << "ERROR : COULD NOT ALLOCATE CT_YGM OBJECTS" << std::endl;
+    return;
+  }
+
+  // Allocate the data
+  if( !CT->AllocateData( Opts->GetMemSize(),
+                         Opts->GetPEs(),
+                         Opts->GetIters(),
+                         Opts->GetStride() ) ){
+    std::cout << "ERROR : COULD NOT ALLOCATE MEMORY FOR CT_YGM" << std::endl;
+    delete CT;
+    return;
+  }
+
+  // Execute the benchmark
+  double Timing = 0.;
+  double GAMS = 0.;
+  if( !CT->Execute(Timing,GAMS) ){
+    std::cout << "ERROR : COULD NOT EXECUTE BENCHMARK FOR CT_YGM" << std::endl;
+    CT->FreeData();
+    MPI_Finalize();
+    delete CT;
+    return;
+  }
+
+  // Free the data
+  if( !CT->FreeData() ){
+    std::cout << "ERROR : COULD NOT FREE THE MEMORY FOR CT_YGM" << std::endl;
+    MPI_Finalize();
+    delete CT;
+    return;
+  }
+
+  // Print the timing
+#if 0
+  int rank = -1;
+  MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+  if( rank == 0 ){
+    PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
+  }
+#endif
+
+  delete CT;
+}
+#endif
+
 int main( int argc, char **argv ){
   CTOpts *Opts = new CTOpts();
 
@@ -701,6 +757,9 @@ int main( int argc, char **argv ){
 #endif
 #ifdef _ENABLE_CUDA_
     RunBenchCuda(Opts);
+#endif
+#ifdef _ENABLE_YGM
+    RunBenchYGM(Opts);
 #endif
   }
 
