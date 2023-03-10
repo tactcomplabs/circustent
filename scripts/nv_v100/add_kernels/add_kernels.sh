@@ -1,6 +1,4 @@
 #!/bin/bash
-#
-# Script to run all ADD kernels and save output
 
 HLINE="============================================================="
 
@@ -9,28 +7,9 @@ HLINE="============================================================="
 #######################################################################
 BACKENDS=("CUDA" "OpenMP" "OpenACC")
 
-# IMPL=$BACKENDS[3]
+# IMPL="CUDA"
+# IMPL="OpenMP"
 IMPL="OpenACC"
-
-#######################################################################
-#               Set implementation-specific env variables
-#######################################################################
-if [[ "$IMPL" == "OpenMP" ]]; then
-    BLOCKS=16
-    export OMP_DEFAULT_DEVICE=0
-    export OMP_NUM_THREADS=128
-elif [[ "$IMPL" == "OpenACC" ]]; then
-    export ACC_DEVICE_TYPE=nvidia
-    export ACC_DEVICE_NUM=0
-fi
-
-#######################################################################
-#                 Edit the run run configuration
-#######################################################################
-BLOCKS=16
-THREADS=128
-MEM_SIZE=32089730048
-ITERS=500000
 
 #######################################################################
 #     Set $COMPILE to true if you want to run the build script
@@ -40,6 +19,38 @@ if [[ $COMPILE == true ]]; then
     cd ../../
     source BUILD.sh
     cd nv_v100/add_kernels
+fi
+
+#######################################################################
+#                 Edit the run run configuration
+#######################################################################
+BLOCKS=16
+THREADS=128
+
+MEM_SIZE=31089730048
+ITERS=500000
+
+# MEM_SIZE=16044865024
+# ITERS=250000
+
+#######################################################################
+#               Set implementation-specific env variables
+#######################################################################
+if [[ "$IMPL" == "OpenMP" ]]; then
+    # export OMP_PLACES=
+    export OMP_TARGET_OFFLOAD=MANDATORY
+    export OMP_DEFAULT_DEVICE=0
+    export OMP_NUM_TEAMS=$BLOCKS
+    export OMP_NUM_THREADS=$THREADS
+elif [[ "$IMPL" == "OpenACC" ]]; then
+    export NVCOMPILER_ACC_NOTIFY=1
+    export NV_ACC_TIME=1
+
+    export ACC_DEVICE_TYPE=nvidia
+    export ACC_DEVICE_NUM=0
+    export ACC_NUM_GANGS=$BLOCKS
+    export ACC_NUM_WORKERS=$THREADS
+    # export ACC_NUM_CORES=$THREADS
 fi
 
 #######################################################################
@@ -69,24 +80,27 @@ cd $TEST_DIR
 #######################################################################
 BENCH="RAND_ADD STRIDE1_ADD PTRCHASE_ADD CENTRAL_ADD SG_ADD SCATTER_ADD GATHER_ADD" 
 for B in $BENCH; do
-    echo $HLINE | tee $OUTPUT_FILE
-    echo "  Running the $B kernel using the $IMPL impl..." | tee $OUTPUT_FILE
-    echo "                  $(date +"%d-%m-%y") AT $(date +"%T") " | tee $OUTPUT_FILE
-    echo $HLINE | tee $OUTPUT_FILE
+    echo $HLINE >> $OUTPUT_FILE
+    echo "  Running the $B kernel using the $IMPL impl..." >> $OUTPUT_FILE
+    echo "                  $(date +"%d-%m-%y") AT $(date +"%T") " >> $OUTPUT_FILE
+    echo $HLINE >> $OUTPUT_FILE
 
-    if [[ "$IMPL" == "CUDA" ]]; then    
-        $EXE --bench $B -m $MEM_SIZE -i $ITERS --blocks $BLOCKS --threads $THREADS | tee $OUTPUT_FILE
-        echo | tee $OUTPUT_FILE
-        echo | tee $OUTPUT_FILE
+    if [[ "$IMPL" == "CUDA" ]]; then
+        echo "Running with $BLOCKS blocks, $THREADS threads per block" >> $OUTPUT_FILE
+        $EXE --bench $B -m $MEM_SIZE -i $ITERS --blocks $BLOCKS --threads $THREADS >> $OUTPUT_FILE
+        echo >> $OUTPUT_FILE
+        echo >> $OUTPUT_FILE
     elif [[ "$IMPL" == "OpenMP" ]]; then
-        # FIXME: Is OpenMP teams == CUDA blocks? -p is the teams
-        $EXE --bench $B -m $MEM_SIZE -p $BLOCKS -i $ITERS | tee $OUTPUT_FILE        
-        echo | tee $OUTPUT_FILE
-        echo | tee $OUTPUT_FILE
+        # OpenMP teams == CUDA blocks?
+        echo "Running with $BLOCKS teams, $THREADS threads per team" >> $OUTPUT_FILE
+        $EXE --bench $B -m $MEM_SIZE -p $BLOCKS -i $ITERS >> $OUTPUT_FILE        
+        echo >> $OUTPUT_FILE
+        echo >> $OUTPUT_FILE
     elif [[ "$IMPL" == "OpenACC" ]]; then
-        # FIXME: Is OpenACC gangs == CUDA blocks? -p is the teams 
-        $EXE --bench $B -m $MEM_SIZE -p $BLOCKS -i $ITERS | tee $OUTPUT_FILE        
-        echo | tee $OUTPUT_FILE
-        echo | tee $OUTPUT_FILE 
+        # OpenACC gangs == CUDA blocks?
+        # echo "Running with $BLOCKS gangs, $THREADS workers per gang" >> $OUTPUT_FILE
+        $EXE --bench $B -m $MEM_SIZE -p $BLOCKS -i $ITERS >> $OUTPUT_FILE        
+        echo >> $OUTPUT_FILE
+        echo >> $OUTPUT_FILE 
     fi
 done

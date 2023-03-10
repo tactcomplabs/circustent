@@ -1,6 +1,6 @@
 =============================================================
-  Running the RAND_ADD kernel using the CUDA imp...l
-     24-01-23 AT 11:21:23 
+  Running the RAND_ADD kernel using the CUDA impl...
+                  03-02-23 AT 09:41:19 
 =============================================================
 ------------------------------------------------
             CUDA Device Properties
@@ -12,14 +12,14 @@ Global Memory (bytes): 34089730048
 Compute Capability: 7.0
 ================================================
  Benchmark Kernel     : RAND_ADD
- Timing (secs)        : 0.0052011
- Giga AMOs/sec (GAMS) : 1.53814
+ Timing (secs)        : 0.00523186
+ Giga AMOs/sec (GAMS) : 1.52909
 ================================================
 
 
 =============================================================
-  Running the STRIDE1_ADD kernel using the CUDA imp...l
-     24-01-23 AT 11:22:39 
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  03-02-23 AT 09:42:35 
 =============================================================
 ------------------------------------------------
             CUDA Device Properties
@@ -31,14 +31,14 @@ Global Memory (bytes): 34089730048
 Compute Capability: 7.0
 ================================================
  Benchmark Kernel     : STRIDE1_ADD
- Timing (secs)        : 0.000659943
- Giga AMOs/sec (GAMS) : 12.1223
+ Timing (secs)        : 0.000662088
+ Giga AMOs/sec (GAMS) : 12.083
 ================================================
 
 
 =============================================================
-  Running the PTRCHASE_ADD kernel using the CUDA imp...l
-     24-01-23 AT 11:23:55 
+  Running the PTRCHASE_ADD kernel using the CUDA impl...
+                  03-02-23 AT 09:43:52 
 =============================================================
 ------------------------------------------------
             CUDA Device Properties
@@ -50,14 +50,14 @@ Global Memory (bytes): 34089730048
 Compute Capability: 7.0
 ================================================
  Benchmark Kernel     : PTRCHASE_ADD
- Timing (secs)        : 0.0909381
- Giga AMOs/sec (GAMS) : 0.0879719
+ Timing (secs)        : 0.091058
+ Giga AMOs/sec (GAMS) : 0.0878561
 ================================================
 
 
 =============================================================
-  Running the CENTRAL_ADD kernel using the CUDA imp...l
-     24-01-23 AT 11:25:11 
+  Running the CENTRAL_ADD kernel using the CUDA impl...
+                  03-02-23 AT 09:45:08 
 =============================================================
 ------------------------------------------------
             CUDA Device Properties
@@ -69,14 +69,14 @@ Global Memory (bytes): 34089730048
 Compute Capability: 7.0
 ================================================
  Benchmark Kernel     : CENTRAL_ADD
- Timing (secs)        : 0.00612593
- Giga AMOs/sec (GAMS) : 1.30592
+ Timing (secs)        : 0.00612783
+ Giga AMOs/sec (GAMS) : 1.30552
 ================================================
 
 
 =============================================================
-  Running the SG_ADD kernel using the CUDA imp...l
-     24-01-23 AT 11:26:26 
+  Running the SG_ADD kernel using the CUDA impl...
+                  03-02-23 AT 09:46:25 
 =============================================================
 ------------------------------------------------
             CUDA Device Properties
@@ -88,14 +88,14 @@ Global Memory (bytes): 34089730048
 Compute Capability: 7.0
 ================================================
  Benchmark Kernel     : SG_ADD
- Timing (secs)        : 0.00858808
- Giga AMOs/sec (GAMS) : 3.7261
+ Timing (secs)        : 0.00863719
+ Giga AMOs/sec (GAMS) : 3.70491
 ================================================
 
 
 =============================================================
-  Running the SCATTER_ADD kernel using the CUDA imp...l
-     24-01-23 AT 11:27:42 
+  Running the SCATTER_ADD kernel using the CUDA impl...
+                  03-02-23 AT 09:47:40 
 =============================================================
 ------------------------------------------------
             CUDA Device Properties
@@ -107,14 +107,14 @@ Global Memory (bytes): 34089730048
 Compute Capability: 7.0
 ================================================
  Benchmark Kernel     : SCATTER_ADD
- Timing (secs)        : 0.00617695
- Giga AMOs/sec (GAMS) : 3.88541
+ Timing (secs)        : 0.00618601
+ Giga AMOs/sec (GAMS) : 3.87972
 ================================================
 
 
 =============================================================
-  Running the GATHER_ADD kernel using the CUDA imp...l
-     24-01-23 AT 11:28:58 
+  Running the GATHER_ADD kernel using the CUDA impl...
+                  03-02-23 AT 09:48:56 
 =============================================================
 ------------------------------------------------
             CUDA Device Properties
@@ -126,8 +126,8 @@ Global Memory (bytes): 34089730048
 Compute Capability: 7.0
 ================================================
  Benchmark Kernel     : GATHER_ADD
- Timing (secs)        : 0.00814915
- Giga AMOs/sec (GAMS) : 2.94509
+ Timing (secs)        : 0.00815797
+ Giga AMOs/sec (GAMS) : 2.94191
 ================================================
 
 

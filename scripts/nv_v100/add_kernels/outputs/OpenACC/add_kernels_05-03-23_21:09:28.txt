@@ -1,0 +1,37 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenACC impl...
+                  05-03-23 AT 21:09:28 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.000113964
+ Giga AMOs/sec (GAMS) : 70.1976
+================================================
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenACC impl...
+                  05-03-23 AT 21:10:36 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000118017
+ Giga AMOs/sec (GAMS) : 67.7867
+================================================
+
+
+=============================================================
+  Running the PTRCHASE_ADD kernel using the OpenACC impl...
+                  05-03-23 AT 21:11:44 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB

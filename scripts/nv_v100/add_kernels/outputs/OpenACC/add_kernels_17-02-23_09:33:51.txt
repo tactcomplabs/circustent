@@ -1,0 +1,105 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenACC impl...
+                  17-02-23 AT 09:33:51 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.000129938
+ Giga AMOs/sec (GAMS) : 61.5678
+================================================
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenACC impl...
+                  17-02-23 AT 09:34:30 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000114918
+ Giga AMOs/sec (GAMS) : 69.615
+================================================
+
+
+=============================================================
+  Running the PTRCHASE_ADD kernel using the OpenACC impl...
+                  17-02-23 AT 09:35:06 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : PTRCHASE_ADD
+ Timing (secs)        : 0.181944
+ Giga AMOs/sec (GAMS) : 0.0439696
+================================================
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenACC impl...
+                  17-02-23 AT 09:35:41 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 9.5129e-05
+ Giga AMOs/sec (GAMS) : 84.0963
+================================================
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenACC impl...
+                  17-02-23 AT 09:36:17 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.115182
+ Giga AMOs/sec (GAMS) : 0.277821
+================================================
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenACC impl...
+                  17-02-23 AT 09:36:53 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.000133038
+ Giga AMOs/sec (GAMS) : 180.4
+================================================
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenACC impl...
+                  17-02-23 AT 09:37:29 
+=============================================================
+CT_OPENACC::SetDevice : ACC_DEVICE_TYPE set to nvidia
+CT_OPENACC::SetDevice : ACC_DEVICE_NUM set to 0
+Running on Vendor: NVIDIA Device: Tesla V100-PCIE-32GB
+RUNNING WITH NUM_GANGS = 16
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.124185
+ Giga AMOs/sec (GAMS) : 0.19326
+================================================
+
+
