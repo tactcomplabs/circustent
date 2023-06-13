@@ -667,7 +667,7 @@ void RunBenchOMP( CTOpts *Opts ){
 
 #ifdef _ENABLE_YGM_
 void RunBenchYGM( CTOpts *Opts ){
-  // init the MPI object
+  // init the YGM object
   CT_YGM *CT = new CT_YGM(Opts->GetBenchType(),
                           Opts->GetAtomType());
   if( !CT ){
@@ -705,13 +705,11 @@ void RunBenchYGM( CTOpts *Opts ){
   }
 
   // Print the timing
-#if 0
   int rank = -1;
   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
   if( rank == 0 ){
     PrintTiming( Timing, GAMS, Opts->GetBenchType(), Opts->GetAtomType() );
   }
-#endif
 
   delete CT;
 }
@@ -758,7 +756,7 @@ int main( int argc, char **argv ){
 #ifdef _ENABLE_CUDA_
     RunBenchCuda(Opts);
 #endif
-#ifdef _ENABLE_YGM
+#ifdef _ENABLE_YGM_
     RunBenchYGM(Opts);
 #endif
   }
