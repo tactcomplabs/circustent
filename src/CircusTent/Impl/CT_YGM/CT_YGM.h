@@ -54,8 +54,14 @@ private:
   /// STRIDE1 AMO ADD Benchmark
   void STRIDE1_ADD();
 
+  /// STRIDE1 AMO CAS Benchmark
+  void STRIDE1_CAS();
+
   /// STRIDEN AMO ADD Benchmark
   void STRIDEN_ADD();
+
+  /// STRIDEN AMO CAS Benchmark
+  void STRIDEN_CAS();
 
 public:
   /// CircusTent YGM Constructor

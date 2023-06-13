@@ -224,7 +224,7 @@ bool CT_YGM::AllocateData( uint64_t m,
   }
 
   for( uint64_t i=0; i<elems; i++ ){
-    Array[i] = 0 (uint64_t)(rand());
+    Array[i] = (uint64_t)(rand());
   }
 
   world.barrier();

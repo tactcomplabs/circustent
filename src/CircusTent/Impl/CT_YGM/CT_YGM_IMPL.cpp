@@ -55,6 +55,10 @@ void CT_YGM::STRIDE1_ADD(){
 #endif
 }
 
+void CT_YGM::STRIDE1_CAS(){
+    return;
+}
+
 void CT_YGM::STRIDEN_ADD(){
     
     uint64_t start = 0xF;
@@ -99,6 +103,10 @@ void CT_YGM::STRIDEN_ADD(){
     world.async(Target[0], add_value, yp_Array, iters, stride, start);
 
 #endif
+}
+
+void CT_YGM::STRIDEN_CAS(){
+    return;
 }
 
 // EOF
