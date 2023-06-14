@@ -86,6 +86,29 @@ bool CT_YGM::Execute(double &Timing, double &GAMS){
       return false;
     }
   }
+  else if( BType == CT_CENTRAL ){
+    switch( AType ){
+    case CT_ADD:
+      world.barrier();
+      StartTime = this->MySecond();
+      CENTRAL_ADD();
+      world.barrier();
+      EndTime   = this->MySecond();
+      OPS = this->GAM(1,iters,pes);
+      break;
+    case CT_CAS:
+      world.barrier();
+      StartTime = this->MySecond();
+      CENTRAL_CAS();
+      world.barrier();
+      EndTime   = this->MySecond();
+      OPS = this->GAM(1,iters,pes);
+      break;
+    default:
+      this->ReportBenchError();
+      return false;
+    }
+  }
   else{
     this->ReportBenchError();
     return false;

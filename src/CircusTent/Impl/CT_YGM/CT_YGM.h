@@ -49,7 +49,10 @@ private:
 
   // -- private member implementations for YGM
   // RAND AMO ADD Benchmark
-  void RAND_ADD( uint64_t iters, uint64_t pes );
+  void RAND_ADD();
+
+  /// RAND AMO CAS Benchmark
+  void RAND_CAS();
 
   /// STRIDE1 AMO ADD Benchmark
   void STRIDE1_ADD();
@@ -62,6 +65,12 @@ private:
 
   /// STRIDEN AMO CAS Benchmark
   void STRIDEN_CAS();
+
+  /// CENTRAL AMO ADD Benchmark
+  void CENTRAL_ADD();
+
+  /// CENTRAL AMO CAS Benchmark
+  void CENTRAL_CAS();
 
 public:
   /// CircusTent YGM Constructor

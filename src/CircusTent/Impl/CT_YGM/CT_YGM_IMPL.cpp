@@ -10,14 +10,19 @@
 
 #include "CT_YGM.h"
 
-void CT_YGM::RAND_ADD( uint64_t iters, uint64_t pes ){
+void CT_YGM::RAND_ADD(){
+    return;
+}
+
+void CT_YGM::RAND_CAS(){
+    return;
 }
 
 void CT_YGM::STRIDE1_ADD(){
 
     uint64_t start = 0xF;
 
-#ifdef _NAIVE_STRIDE_YGM_
+#ifdef _NAIVE_RPC_YGM_
 
     /*
     This format may be a closer comparison to other STRIDE1 implementations.
@@ -58,7 +63,7 @@ void CT_YGM::STRIDE1_CAS(){
     
     uint64_t start = 0xF;
 
-#ifdef _NAIVE_STRIDE_YGM_
+#ifdef _NAIVE_RPC_YGM_
 
     for (uint64_t i = 0; i<iters; i++) {
 
@@ -95,7 +100,7 @@ void CT_YGM::STRIDEN_ADD(){
     
     uint64_t start = 0xF;
 
-#ifdef _NAIVE_STRIDE_YGM_
+#ifdef _NAIVE_RPC_YGM_
 
     /*
     This format may be a closer comparison to other STRIDEN implementations.
@@ -140,7 +145,7 @@ void CT_YGM::STRIDEN_CAS(){
     
     uint64_t start = 0xF;
 
-#ifdef _NAIVE_STRIDE_YGM_
+#ifdef _NAIVE_RPC_YGM_
 
     uint64_t idx = 0;
 
@@ -176,4 +181,83 @@ void CT_YGM::STRIDEN_CAS(){
 #endif
 }
 
+void CT_YGM::CENTRAL_ADD(){
+
+    uint64_t start = 0x1;
+
+#ifdef _NAIVE_RPC_YGM_
+
+    for (uint64_t i = 0; i<iters; i++) {
+
+        auto add_value = [](auto parray, uint64_t value)
+        {
+            (*parray)[0] += value;
+        };
+
+        world.async(0, add_value, yp_Array, start);
+    }
+
+#else
+
+    auto add_value = [](auto parray, uint64_t iter_count, uint64_t value)
+    {
+        for (uint64_t i = 0; i<iter_count; i++) {
+            (*parray)[0] += value;
+        }
+    };
+
+    world.async(0, add_value, yp_Array, iters, start);
+
+#endif
+}
+
+void CT_YGM::CENTRAL_CAS(){
+
+#ifdef _NAIVE_RPC_YGM_
+
+    for (uint64_t i = 0; i < iters; i++) {
+        auto central_cas = [](auto parray)
+        {
+            // This method of presetting expected and desired
+            // is similar to CPP STD implementation
+            // MPI implementation uses result_buff from previous op and 1.
+            uint64_t expected = (*parray)[0];
+
+            uint64_t desired = (*parray)[0];
+
+            if ((*parray)[0] == expected)
+            {
+                (*parray)[0] = desired;
+            }
+        };
+
+        world.async(0, central_cas, yp_Array);
+    }
+
+#else
+
+    auto central_cas = [](auto parray, uint64_t iter_count)
+    {
+        for (uint64_t i = 0; i<iter_count; i++) {
+
+            // This method of presetting expected and desired
+            // is similar to CPP STD implementation
+            // MPI implementation uses result_buff from previous op and 1.
+            uint64_t expected = (*parray)[0];
+
+            uint64_t desired = (*parray)[0];
+
+            if ((*parray)[0] == expected)
+            {
+                (*parray)[0] = desired;
+            }
+
+        }
+    };
+
+    world.async(0, central_cas, yp_Array, iters);
+
+#endif
+
+}
 // EOF
