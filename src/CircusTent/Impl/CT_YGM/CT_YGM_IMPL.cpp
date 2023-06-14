@@ -11,11 +11,40 @@
 #include "CT_YGM.h"
 
 void CT_YGM::RAND_ADD(){
-    return;
+
+    uint64_t start = 0x1;
+
+    for ( uint64_t i = 0; i < iters; i++ ){
+        
+        auto add_rand = [](auto parray, uint64_t index, uint64_t value)
+        {
+            (*parray)[index] += value; 
+        };
+
+        world.async(Idx[i]/elems, add_rand, yp_Array, Idx[i] % elems, start);
+    }
 }
 
 void CT_YGM::RAND_CAS(){
-    return;
+    
+    uint64_t start = 0x1;
+
+    for ( uint64_t i = 0; i < iters; i++ ){
+        
+        auto cas = [](auto parray, uint64_t index)
+        {
+            uint64_t expected = (*parray)[index];
+
+            uint64_t desired = (*parray)[index];
+
+            if ((*parray)[index] == expected)
+            {
+                (*parray)[index] = desired;
+            }
+        };
+
+        world.async(Idx[i]/elems, cas, yp_Array, Idx[i] % elems);
+    }
 }
 
 void CT_YGM::STRIDE1_ADD(){
@@ -34,7 +63,7 @@ void CT_YGM::STRIDE1_ADD(){
     // targeted rank
     for (uint64_t i = 0; i<iters; i++) {
 
-        auto add_value = [](auto parray, size_t index, uint64_t value) 
+        auto add_value = [](auto parray, uint64_t index, uint64_t value) 
         {
             (*parray)[index] += value;
         };
@@ -67,7 +96,7 @@ void CT_YGM::STRIDE1_CAS(){
 
     for (uint64_t i = 0; i<iters; i++) {
 
-        auto cas = [](auto parray, size_t index, uint64_t expected, uint64_t desired)
+        auto cas = [](auto parray, uint64_t index, uint64_t expected, uint64_t desired)
         {
             if ((*parray)[index] == expected)
             {
@@ -114,7 +143,7 @@ void CT_YGM::STRIDEN_ADD(){
     // targeted rank
     for (uint64_t i = 0; i<iters; i++) {
 
-        auto add_value = [](auto parray, size_t index, uint64_t value)
+        auto add_value = [](auto parray, uint64_t index, uint64_t value)
         { 
             (*parray)[index] += value;
         };
@@ -150,7 +179,7 @@ void CT_YGM::STRIDEN_CAS(){
     uint64_t idx = 0;
 
     for (uint64_t i = 0; i<iters; i++) {
-        auto cas = [](auto parray, size_t index, uint64_t expected, uint64_t desired)
+        auto cas = [](auto parray, uint64_t index, uint64_t expected, uint64_t desired)
         {
             if ((*parray)[index] == expected)
             {

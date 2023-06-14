@@ -109,6 +109,29 @@ bool CT_YGM::Execute(double &Timing, double &GAMS){
       return false;
     }
   }
+  else if( BType == CT_RAND ){
+    switch( AType ){
+    case CT_ADD:
+      world.barrier();
+      StartTime = this->MySecond();
+      RAND_ADD();
+      world.barrier();
+      EndTime   = this->MySecond();
+      OPS = this->GAM(1,iters,pes);
+      break;
+    case CT_CAS:
+      world.barrier();
+      StartTime = this->MySecond();
+      RAND_CAS();
+      world.barrier();
+      EndTime   = this->MySecond();
+      OPS = this->GAM(1,iters,pes);
+      break;
+    default:
+      this->ReportBenchError();
+      return false;
+    }
+  }
   else{
     this->ReportBenchError();
     return false;
@@ -241,7 +264,10 @@ bool CT_YGM::AllocateData( uint64_t m,
   for( unsigned i=0; i<(iters+1); i++ ){
     if( this->GetBenchType() == CT_PTRCHASE ){
       Idx[i] = (uint64_t)(rand()%(iters-1));
-    }else{
+    }else if( this->GetBenchType() == CT_RAND ){
+      Idx[i] = (uint64_t)(rand()%(pes * elems));
+    }
+    else{
       Idx[i] = (uint64_t)(rand()%(elems));
     }
   }
