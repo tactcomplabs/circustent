@@ -25,10 +25,9 @@ void CT_YGM::STRIDE1_ADD(){
     YGM RPC paradigm.
     */
 
-    uint64_t i = 0;
     // Akin to the MPI implementation, each edit is function call to the 
     // targeted rank
-    for (i = 0; i<iters; i++) {
+    for (uint64_t i = 0; i<iters; i++) {
 
         auto add_value = [](auto parray, size_t index, uint64_t value) 
         {
@@ -56,7 +55,40 @@ void CT_YGM::STRIDE1_ADD(){
 }
 
 void CT_YGM::STRIDE1_CAS(){
-    return;
+    
+    uint64_t start = 0xF;
+
+#ifdef _NAIVE_STRIDE_YGM_
+
+    for (uint64_t i = 0; i<iters; i++) {
+
+        auto cas = [](auto parray, size_t index, uint64_t expected, uint64_t desired)
+        {
+            if ((*parray)[index] == expected)
+            {
+                (*parray)[index] = desired;
+            }
+        };
+
+        world.async(Target[i], cas, yp_Array, i, start, start);
+    }
+
+#else
+
+    auto cas = [](auto parray, uint64_t iter_count, uint64_t expected, uint64_t desired) 
+    {
+        for (uint64_t i = 0; i<iter_count; i++) 
+        {
+            if ((*parray)[i] == expected)
+            {
+                (*parray)[i] = desired;
+            }
+        }
+    };
+
+    world.async(Target[0], cas, yp_Array, iters, start, start);
+
+#endif
 }
 
 void CT_YGM::STRIDEN_ADD(){
@@ -71,12 +103,11 @@ void CT_YGM::STRIDEN_ADD(){
     YGM RPC paradigm.
     */
 
-   uint64_t i = 0;
    uint64_t idx = 0;
 
     // Akin to the MPI implementation, each edit is function call to the 
     // targeted rank
-    for (i = 0; i<iters; i++) {
+    for (uint64_t i = 0; i<iters; i++) {
 
         auto add_value = [](auto parray, size_t index, uint64_t value)
         { 
@@ -106,7 +137,43 @@ void CT_YGM::STRIDEN_ADD(){
 }
 
 void CT_YGM::STRIDEN_CAS(){
-    return;
+    
+    uint64_t start = 0xF;
+
+#ifdef _NAIVE_STRIDE_YGM_
+
+    uint64_t idx = 0;
+
+    for (uint64_t i = 0; i<iters; i++) {
+        auto cas = [](auto parray, size_t index, uint64_t expected, uint64_t desired)
+        {
+            if ((*parray)[index] == expected)
+            {
+                (*parray)[index] = desired;
+            }
+        };
+
+        world.async(Target[i], cas, yp_Array, idx, start, start);
+
+        idx += stride;
+    }
+
+#else
+
+    auto cas = [](auto parray, uint64_t iter_count, uint64_t stride_len, uint64_t expected, uint64_t desired) 
+    {
+        for (uint64_t i = 0; i<iter_count; i++) 
+        {
+            if ((*parray)[i*stride_len] == expected)
+            {
+                (*parray)[i*stride_len] = desired;
+            }
+        }
+    };
+
+    world.async(Target[0], cas, yp_Array, iters, stride, start, start);
+    
+#endif
 }
 
 // EOF
