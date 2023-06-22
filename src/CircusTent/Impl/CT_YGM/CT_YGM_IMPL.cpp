@@ -12,6 +12,10 @@
 
 void CT_YGM::RAND_ADD(){
 
+    // for i ← 0 to iters by 1 do
+    //     AMO(VAL[IDX[i]])
+    // end
+
     uint64_t start = 0x1;
 
     for ( uint64_t i = 0; i < iters; i++ ){
@@ -32,6 +36,10 @@ void CT_YGM::RAND_ADD(){
 }
 
 void CT_YGM::RAND_CAS(){
+
+    // for i ← 0 to iters by 1 do
+    //     AMO(VAL[IDX[i]])
+    // end
     
     uint64_t start = 0x1;
 
@@ -58,6 +66,10 @@ void CT_YGM::RAND_CAS(){
 }
 
 void CT_YGM::STRIDE1_ADD(){
+
+    // for i ← 0 to iters by 1 do
+    //     AMO(VAL[i])
+    // end
 
     uint64_t start = 0xF;
 
@@ -108,6 +120,10 @@ void CT_YGM::STRIDE1_ADD(){
 
 void CT_YGM::STRIDE1_CAS(){
     
+    // for i ← 0 to iters by 1 do
+    //     AMO(VAL[i])
+    // end
+
     uint64_t start = 0xF;
 
     // @SEE CT_YGM::STRIDE1_ADD() for comparison of different benchmark implementations
@@ -153,6 +169,10 @@ void CT_YGM::STRIDE1_CAS(){
 
 void CT_YGM::STRIDEN_ADD(){
     
+    // for i ← 0 to iters by stride do
+    //         AMO(VAL[i])
+    // end
+
     uint64_t start = 0xF;
 
 #ifdef _NAIVE_RPC_YGM_
@@ -203,6 +223,10 @@ void CT_YGM::STRIDEN_ADD(){
 
 void CT_YGM::STRIDEN_CAS(){
 
+    // for i ← 0 to iters by stride do
+    //         AMO(VAL[i])
+    // end
+
     // @SEE CT_YGM::STRIDEN_ADD() for comparison of different benchmark implementations
     
     uint64_t start = 0xF;
@@ -250,6 +274,10 @@ void CT_YGM::STRIDEN_CAS(){
 
 void CT_YGM::CENTRAL_ADD(){
 
+    // for i ← 0 to iters by 1 do 
+    //    AMO(VAL[0])
+    // end
+
     uint64_t start = 0x1;
 
     // The two different implementations seen here are 
@@ -288,6 +316,10 @@ void CT_YGM::CENTRAL_ADD(){
 }
 
 void CT_YGM::CENTRAL_CAS(){
+
+    // for i ← 0 to iters by 1 do 
+    //    AMO(VAL[0])
+    // end
 
 #ifdef _NAIVE_RPC_YGM_
 
@@ -370,22 +402,11 @@ void CT_YGM::PTRCHASE_CAS(){
 
 void CT_YGM::SCATTER_ADD(){
 
-    // First implementation of Scatter Kernel, uses a remote Idx.
-    // Similar to the MPI that always targets a remote rank with the AMO operations, but
-    // following that route appears less true to what is described in the paper when
-    // compared to CT::YGM_SCATTER_ADD_ALTERNATE when considering the 
-    // intent of the kernel
-
-    for( uint64_t i = 0; i < iters; i++ )
-    {
-        world.async(target, CT_YGM::scatter_functor_add(), yp_Array, yp_Idx, i, elems);
-    }
-}
-
-void CT_YGM::SCATTER_ADD_ALTERNATE(){
-
-    // this seems much closer to the original intent of the kernel but
-    // less of a comparison to the mpi kernel 
+    // for i ← 0 to iters by 1 do
+    //     dest = AMO(IDX[i+1])
+    //     val = AMO(VAL[i])
+    //     AMO(VAL[dest], val) // VAL[dest] = val
+    // end
 
     uint64_t dest = 0;
     uint64_t val = 0;
@@ -409,17 +430,11 @@ void CT_YGM::SCATTER_ADD_ALTERNATE(){
 
 void CT_YGM::SCATTER_CAS(){
 
-    // First implementation of Scatter Kernel, uses a remote Idx.
-    // Similar to the MPI that always targets a remote rank with the AMO operations, but
-    // following that route appears less true to what is described in the paper when
-    // compared to CT::YGM_SCATTER_CAS_ALTERNATE when considering the 
-    // intent of the kernel
-    for( uint64_t i = 0; i < iters; i++ ){
-        world.async(target, CT_YGM::scatter_functor_cas(), yp_Array, yp_Idx, i, elems);
-    }  
-}
-
-void CT_YGM::SCATTER_CAS_ALTERNATE(){
+    // for i ← 0 to iters by 1 do
+    //     dest = AMO(IDX[i+1])
+    //     val = AMO(VAL[i])
+    //     AMO(VAL[dest], val) // VAL[dest] = val
+    // end
 
     uint64_t dest = 0;
     uint64_t val  = 1;

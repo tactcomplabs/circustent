@@ -110,6 +110,11 @@ private:
   // PTRCHASE AMO ADD Functor
   struct chase_functor_add {
   public:
+
+    // for i ← 0 to iters by 1 do
+    //     start = AMO(IDX[start])
+    // end
+
     template <typename Comm>
     void operator()(Comm* pcomm, ygm::ygm_ptr<uint64_t*> parray, uint64_t index, uint64_t value, uint64_t ops_left, uint64_t block_size) {
 
@@ -131,6 +136,11 @@ private:
   // PTRCHASE AMO CAS Functor
   struct chase_functor_cas {
     public:
+
+      // for i ← 0 to iters by 1 do
+      //     start = AMO(IDX[start])
+      // end
+
       template <typename Comm>
       void operator()(Comm* pcomm, ygm::ygm_ptr<uint64_t*> parray, uint64_t index, uint64_t desired, uint64_t ops_left, uint64_t block_size) {
 
@@ -152,61 +162,6 @@ private:
         if (ops_left > 0) {
           pcomm->async(index/block_size, chase_functor_cas(), parray, index % block_size, desired, ops_left, block_size);
         }
-      }
-  };
-
-  // SCATTER AMO ADD Functor
-  struct scatter_functor_add {
-    public:
-      template <typename Comm>
-      void operator()(Comm* pcomm, ygm::ygm_ptr<uint64_t*> parray, ygm::ygm_ptr<uint64_t*> pidx, uint64_t i, uint64_t block_size) 
-      {
-        auto operation_amo = [](auto parray, uint64_t index, uint64_t value)
-        {
-          (*parray)[index] += value;
-        };
-
-        uint64_t dest = (*pidx)[i + 1];
-        uint64_t val  = (*parray)[i] + (uint64_t)(0x01ull);
-
-        pcomm->async(dest / block_size, operation_amo, parray, dest % block_size, val);
-      }
-  };
-
-  // SCATTER AMO ADD Functor
-  struct scatter_functor_cas {
-    public:
-      template <typename Comm>
-      void operator()(Comm* pcomm, ygm::ygm_ptr<uint64_t*> parray, ygm::ygm_ptr<uint64_t*> pidx, uint64_t i, uint64_t block_size) 
-      {
-        uint64_t dest = 0x0;
-        uint64_t val  = 0x1;
-
-        // CAS operations somewhat similar to mpi implementation
-
-        // CAS for dest 
-        if( (*pidx)[i + 1] == 0 ){
-          (*pidx)[i + 1] = 0;
-        }
-        dest = (*pidx)[i + 1];
-
-        // CAS for val
-        if( (*parray)[i] == 1 ){
-          (*parray)[i] = 0;
-        }
-        val = (*parray)[i];
-
-        // perform CAS at destination with val
-        auto operation_amo = [](auto parray, uint64_t index, uint64_t value)
-        {
-          // perform CAS at destination with val
-          if ((*parray)[index] == value)
-          {
-            (*parray)[index] = 0;
-          }
-        };
-
-        pcomm->async(dest / block_size, operation_amo, parray, dest % block_size, val);
       }
   };
 
