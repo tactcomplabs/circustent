@@ -12,17 +12,23 @@
 
 #ifdef _CT_YGM_H_
 
+// init static parameters. Must be done here so they are accessible 
+// by lambdas/functors. Because there is one CT_YGM object per PE for 
+// CircusTent, there will not be any conflicts.
+
+uint64_t* CT_YGM::val = nullptr;
+uint64_t* CT_YGM::idx = nullptr;
+uint64_t CT_YGM::iters = 0;
+
 CT_YGM::CT_YGM(CTBaseImpl::CTBenchType B,
                CTBaseImpl::CTAtomType A) : CTBaseImpl("YGM",B,A),
-                                           Array(nullptr),
-                                           Idx(nullptr),
                                            target(0),
                                            memSize(0),
                                            pes(0),
-                                           iters(0),
                                            elems(0),
                                            stride(0),
                                            rank(-1),
+                                           chasers_per_rank(1),
                                            world(NULL, NULL) {
 }
 
@@ -273,49 +279,37 @@ bool CT_YGM::AllocateData( uint64_t m,
   uint64_t end = (iters * stride)-stride;
 
   if( end >= elems ){
-    std::cout << "CT_YGM::AllocateData : 'Array' is not large enough for pes="
+    std::cout << "CT_YGM::AllocateData : 'val' is not large enough for pes="
               << pes << "; iters=" << iters << "; stride =" << stride
               << std::endl;
     return false;
   }
 
-  // 'Array' resides in local heap space
-  Array = new std::uint64_t[elems];
-  if ( Array == nullptr ){
-    world.cout("CT_YGM::AllocateData : 'Array' could not be allocated");
+  // 'val' resides in local heap space
+  val = new std::uint64_t[elems];
+  if ( val == nullptr ){
+    world.cout("CT_YGM::AllocateData : 'val' could not be allocated");
     return false;
   }
 
-  // Create ygm ptr to local Array
-  // make_ygm_ptr will check ready to use so no check necessary after creation
-  // this allows us to call procedures on another 
-  // rank that will use the remote rank's array for operations
-  yp_Array = world.make_ygm_ptr(Array);
+  // 'idx' resides in local heap space
+  idx = new std::uint64_t[iters + 1];
 
-  // 'Idx' resides in local heap space
-  Idx = new std::uint64_t[iters + 1];
-
-  if ( Idx == nullptr ){
-    world.cout("CT_YGM::AllocateData : 'Idx' could not be allocated");
-    delete[] Array;
+  if ( idx == nullptr ){
+    world.cout("CT_YGM::AllocateData : 'idx' could not be allocated");
+    delete[] val;
     return false;
   }
-
-  // Create ygm ptr to local Idx
-  // make_ygm_ptr will check ready to use
-  yp_Idx = world.make_ygm_ptr(Idx);
 
   if (rank == 0)
   {
     world.cout0("Initializing YGM data members");
   }
 
-  world.barrier();
-
   // initiate the random array
   srand(time(NULL) + rank);
 
-  // Initialize the target array
+  // Initialize the target
   if( size == 1 ){
     target = 0;
   }else{
@@ -323,32 +317,33 @@ bool CT_YGM::AllocateData( uint64_t m,
     target = (rank + 1) % size;
   }
 
-  // setup the Idx values
+  // setup the idx values
   for( unsigned i=0; i<(iters+1); i++ ){
     if( this->GetBenchType() == CT_PTRCHASE ){
-      Idx[i] = (uint64_t)(rand()%(pes * (iters + 1)));
+      idx[i] = (uint64_t)(rand()%(pes * (iters + 1)));
     }else if( this->GetBenchType() == CT_RAND ){
-      Idx[i] = (uint64_t)(rand()%(pes * elems));
+      idx[i] = (uint64_t)(rand()%(pes * elems));
     }
     else if( this->GetBenchType() == CT_SCATTER ){
-      Idx[i] = (uint64_t)(rand()%(pes * elems));
+      idx[i] = (uint64_t)(rand()%(pes * elems));
     }
     else if( this->GetBenchType() == CT_GATHER ){
-      Idx[i] = (uint64_t)(rand()%(pes * elems));
+      idx[i] = (uint64_t)(rand()%(pes * elems));
     }
     else if( this->GetBenchType() == CT_SG ){
-      Idx[i] = (uint64_t)(rand()%(pes * elems));
+      idx[i] = (uint64_t)(rand()%(pes * elems));
     }
     else{
-      Idx[i] = (uint64_t)(rand()%(elems));
+      idx[i] = (uint64_t)(rand()%(elems));
     }
   }
 
   for( uint64_t i=0; i<elems; i++ ){
-    Array[i] = (uint64_t)(rand());
+    val[i] = (uint64_t)(rand());
   }
 
-  world.barrier();
+  // No need for full ygm::comm barrier, we haven't made any calls yet
+  world.cf_barrier(); 
 
   if( rank == 0 ){
     std::cout << "Done initializing YGM data members" << std::endl;
@@ -359,30 +354,27 @@ bool CT_YGM::AllocateData( uint64_t m,
 
 bool CT_YGM::FreeData(){
   
-  if( Array ){
-    delete[] Array;
+  if( val ){
+    delete[] val;
   }
-  if( Idx ){
-    delete[] Idx;
+  if( idx ){
+    delete[] idx;
   }
-  
-  yp_Array = nullptr;
-  yp_Idx = nullptr;
 
   return true;
 }
 
-void CT_YGM::PrintArray(){
+void CT_YGM::PrintVal(){
   std::stringstream ss;
 
   ss << "{";
 
   for (std::size_t j = 0; j < elems - 1; j++)
   {
-      ss << Array[j] << ", ";
+      ss << val[j] << ", ";
   }
 
-  ss << Array[elems - 1] << "}";
+  ss << val[elems - 1] << "}";
 
   world.cout(ss.str());
 }
@@ -395,10 +387,10 @@ void CT_YGM::PrintIdx(){
 
   for (std::size_t j = 0; j < iters; j++)
   {
-      ss << Idx[j] << ", ";
+      ss << idx[j] << ", ";
   }
 
-  ss << Idx[iters] << "}";
+  ss << idx[iters] << "}";
 
   world.cout(ss.str());
 }
