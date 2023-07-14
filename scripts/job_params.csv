@@ -1,0 +1,2 @@
+machine, partition, Nodes, ntasks, timelimit, bin, benchmark, memSize, iters, stride
+<system_to_benchmark>, pbatch, 1, 56, 00:05:00, <path_to_executable>, STRIDEN_ADD, 2000000000, 20000000, 9

@@ -49,7 +49,7 @@ void CT_YGM::RAND_CAS(){
             // This looks a bit strange but is similar to the CPP STD implementation
             uint64_t expected = val[index];
 
-            uint64_t desired = val[index];
+            uint64_t desired = val[index] + 1; // This prevents the entire lambda from being optimized to nothing
 
             if (val[index] == expected)
             {

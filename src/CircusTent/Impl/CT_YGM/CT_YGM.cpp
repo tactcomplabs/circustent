@@ -306,9 +306,6 @@ bool CT_YGM::AllocateData( uint64_t m,
     world.cout0("Initializing YGM data members");
   }
 
-  // initiate the random array
-  srand(time(NULL) + rank);
-
   // Initialize the target
   if( size == 1 ){
     target = 0;
@@ -317,29 +314,40 @@ bool CT_YGM::AllocateData( uint64_t m,
     target = (rank + 1) % size;
   }
 
+  // Last index on last rank for the distributed array VAL. 
+  // informs our distribution for random IDX values
+  uint64_t max_val_index = elems;
+
+  if( this->GetBenchType() == CT_PTRCHASE ){
+    max_val_index = (pes * (iters + 1)) - 1;
+  }else if( this->GetBenchType() == CT_RAND ){
+    max_val_index = (pes * elems) - 1;
+  }
+  else if( this->GetBenchType() == CT_SCATTER ){
+    max_val_index = (pes * elems) - 1;
+  }
+  else if( this->GetBenchType() == CT_GATHER ){
+    max_val_index = (pes * elems) - 1;
+  }
+  else if( this->GetBenchType() == CT_SG ){
+    max_val_index = (pes * elems) - 1;
+  }
+
+  // mersenne_twister_engine seeded uniquely for each rank
+  std::mt19937_64 gen(pes + rank);
+  std::uniform_int_distribution<uint64_t> ind_dist(0, max_val_index);
+
   // setup the idx values
-  for( unsigned i=0; i<(iters+1); i++ ){
-    if( this->GetBenchType() == CT_PTRCHASE ){
-      idx[i] = (uint64_t)(rand()%(pes * (iters + 1)));
-    }else if( this->GetBenchType() == CT_RAND ){
-      idx[i] = (uint64_t)(rand()%(pes * elems));
-    }
-    else if( this->GetBenchType() == CT_SCATTER ){
-      idx[i] = (uint64_t)(rand()%(pes * elems));
-    }
-    else if( this->GetBenchType() == CT_GATHER ){
-      idx[i] = (uint64_t)(rand()%(pes * elems));
-    }
-    else if( this->GetBenchType() == CT_SG ){
-      idx[i] = (uint64_t)(rand()%(pes * elems));
-    }
-    else{
-      idx[i] = (uint64_t)(rand()%(elems));
+  // if benchmark does not depend on idx do not instantiate
+  if(! ((this->GetBenchType() == CT_STRIDE1) || (this->GetBenchType() == CT_STRIDEN) || (this->GetBenchType() == CT_CENTRAL)))
+  {
+    for( unsigned i=0; i<(iters+1); i++ ){
+      idx[i] = ind_dist(gen);
     }
   }
 
   for( uint64_t i=0; i<elems; i++ ){
-    val[i] = (uint64_t)(rand());
+    val[i] = gen();
   }
 
   // No need for full ygm::comm barrier, we haven't made any calls yet

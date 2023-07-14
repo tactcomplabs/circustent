@@ -23,6 +23,7 @@
 #define _CT_YGM_H_
 
 #include <cstdlib>
+#include <random>
 #include <ctime>
 #include <ygm/comm.hpp>
 #include <ygm/detail/ygm_ptr.hpp>
