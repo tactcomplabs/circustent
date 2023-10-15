@@ -320,16 +320,10 @@ bool CT_YGM::AllocateData( uint64_t m,
 
   if( this->GetBenchType() == CT_PTRCHASE ){
     max_val_index = (pes * (iters + 1)) - 1;
-  }else if( this->GetBenchType() == CT_RAND ){
-    max_val_index = (pes * elems) - 1;
-  }
-  else if( this->GetBenchType() == CT_SCATTER ){
-    max_val_index = (pes * elems) - 1;
-  }
-  else if( this->GetBenchType() == CT_GATHER ){
-    max_val_index = (pes * elems) - 1;
-  }
-  else if( this->GetBenchType() == CT_SG ){
+  }else if( (this->GetBenchType() == CT_RAND) ||
+            (this->GetBenchType() == CT_SCATTER) ||
+            (this->GetBenchType() == CT_GATHER) ||
+            (this->GetBenchType() == CT_SG) ){
     max_val_index = (pes * elems) - 1;
   }
 
@@ -339,9 +333,11 @@ bool CT_YGM::AllocateData( uint64_t m,
 
   // setup the idx values
   // if benchmark does not depend on idx do not instantiate
-  if(! ((this->GetBenchType() == CT_STRIDE1) || (this->GetBenchType() == CT_STRIDEN) || (this->GetBenchType() == CT_CENTRAL)))
+  if( !((this->GetBenchType() == CT_STRIDE1) || 
+        (this->GetBenchType() == CT_STRIDEN) || 
+        (this->GetBenchType() == CT_CENTRAL)))
   {
-    for( unsigned i=0; i<(iters+1); i++ ){
+    for( uint64_t i=0; i<(iters+1); i++ ){
       idx[i] = ind_dist(gen);
     }
   }
