@@ -57,9 +57,8 @@ if (ENABLE_CUDA)
 endif()
 
 if (ENABLE_YGM)
-  include_directories(${YGM_INCLUDE_PATH})
-  add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_YGM_OBJS>)
-  target_link_libraries(circustent PUBLIC ygm::ygm)
+  add_executable(circustent ${CTSrcs})
+  target_link_libraries(circustent PUBLIC CT_YGM_OBJS)
 endif()
 
 install(TARGETS circustent DESTINATION bin)
