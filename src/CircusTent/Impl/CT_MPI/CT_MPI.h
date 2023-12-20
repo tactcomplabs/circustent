@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <mpi.h>
 #include <ctime>
+#include <random>
 
 #include "CircusTent/CTBaseImpl.h"
 
