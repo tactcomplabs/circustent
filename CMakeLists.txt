@@ -158,7 +158,7 @@ if (ENABLE_YGM)
     if(DEFINED ENV{YGM_BENCH_YGM_TAG})
       set(YGM_TAG $ENV{YGM_BENCH_YGM_TAG})
     else()
-      set(YGM_TAG "develop")
+      set(YGM_TAG "v0.6")
     endif()
 
     FetchContent_Declare(

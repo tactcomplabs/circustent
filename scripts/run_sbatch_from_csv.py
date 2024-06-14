@@ -13,9 +13,9 @@ job_params = []
 
 fields = []
 
-host_dir = '~/TCL/circustent/scripts/'
+host_dir = '<host_dir>'
 
-with open(host_dir + 'job_params.csv', 'r') as job_data:
+with open(host_dir + 'jp_hold.csv', 'r') as job_data:
     
 	job_table = csv.reader(job_data, delimiter=',', skipinitialspace=True)
 
@@ -35,7 +35,7 @@ for job in job_params:
 		job[4] = "00:30:00"
 
 	if job[1] == '':
-		job[1] = "pbatch"
+		job[1] = "<partition>"
 
 
 	machine = job[0]
@@ -83,7 +83,7 @@ for job in job_params:
 
 	if __name__ == "__main__":
     
-		proc = subprocess.Popen(['rm', output_path], stdout=subprocess.PIPE).wait()
+		# proc = subprocess.Popen(['rm', output_path], stdout=subprocess.PIPE).wait()
 
 		with open(output_path, "a") as results_file:
 			results_file.write('N: ' + num_nodes + ', ntasks: ' + num_tasks + ', binary: ' +  bin_path + ", memSize: " + memSize + ", iters: " + iters + ", stride: " + stride +'\n')
