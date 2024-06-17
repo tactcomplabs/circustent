@@ -1,6 +1,6 @@
 # CircusTent: Atomic Memory Operation System Benchmarks
 
-[![GitHub license](https://img.shields.io/badge/license-APACHE2-blue.svg)](https://raw.githubusercontent.com/tactcomplabs/circustent/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-APACHE2-blue.svg)](https://raw.githubusercontent.com/tactcomplabs/circustent/main/LICENSE)
 
 ![CircusTent](docs/imgs/circus_tent.png)
 
