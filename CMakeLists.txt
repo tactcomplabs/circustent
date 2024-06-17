@@ -9,27 +9,28 @@
 
 cmake_minimum_required(VERSION 3.4.3)
 project(CircusTent)
+
 set(VERSION "0.2.0")
 
 #------------------------------------------------------------------------
 #-- EXTERNAL CMAKE SCRIPTS
 #------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH
-  "${CMAKE_SOURCE_DIR}/cmake"
-  ${CMAKE_MODULE_PATH}
+    "${CMAKE_SOURCE_DIR}/cmake"
+    ${CMAKE_MODULE_PATH}
 )
+
 include(UseLATEX OPTIONAL)
 
 #------------------------------------------------------------------------
 #-- DERIVE THE RELEASE CODENAME
 #------------------------------------------------------------------------
 execute_process(COMMAND lsb_release -cs
-    OUTPUT_VARIABLE CT_RELEASE_CODENAME
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+                OUTPUT_VARIABLE CT_RELEASE_CODENAME
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 #------------------------------------------------------------------------
-#-- COMPILER OPTIONS
+#-- COMPILER OPTIONS  
 #------------------------------------------------------------------------
 if( CT_CFLAGS )
   message(STATUS "USING MACHINE-SPECIFIC C_FLAGS: ${CT_CFLAGS}")
@@ -107,9 +108,9 @@ else()
 endif()
 
 if (ENABLE_OPENCL)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_OPENCL_")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_OPENCL_")
-    message(STATUS "ENABLING OpenCL Implementation")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_OPENCL_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_OPENCL_")
+  message(STATUS "ENABLING OpenCL Implementation")
 else()
   message(STATUS "DISABLING OpenCL Implementation")
 endif()
@@ -123,13 +124,16 @@ else()
 endif()
 
 if (ENABLE_CUDA)
-    project(CircusTent LANGUAGES CUDA CXX C)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lcudart -lcudadevrt -D_ENABLE_CUDA_")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lcudart -lcudadevrt -D_ENABLE_CUDA_")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lcudart -lcudadevrt -D_ENABLE_CUDA_")   
-    set(CMAKE_CUDA_COMPILER "nvcc")
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_ENABLE_CUDA_")
-    message(STATUS "ENABLING CUDA Implementation")
+  cmake_minimum_required(VERSION 3.17)
+  enable_language(CUDA)
+  find_package(CUDAToolkit REQUIRED)
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_CUDA_")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_ENABLE_CUDA_")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -D_ENABLE_CUDA_")
+  set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_ENABLE_CUDA_")
+
+  message(STATUS "ENABLING CUDA Implementation")
 else()
   message(STATUS "DISABLING CUDA Implementation")
 endif()
@@ -141,6 +145,7 @@ if(NOT CT_INCLUDE_PATH)
   set(CT_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
   message(STATUS "CT_INCLUDE_PATH set to ${CT_INCLUDE_PATH}")
 endif()
+
 if(NOT CT_SRC_PATH)
   set(CT_SRC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/CircusTent")
   message(STATUS "CT_SRC_PATH set to ${CT_SRC_PATH}")
@@ -177,7 +182,6 @@ if(CIRCUSTENT_BUILD_DEB)
   set(CPACK_PACKAGE_RELEASE 1)
   set(CPACK_PACKAGE_CONTACT "John Leidel")
   set(CPACK_PACKAGE_VENDOR "Tactical Computing Laboratories, LLC")
-
   #-- setup package deps
   if( "${CT_RELEASE_CODENAME}" STREQUAL "bionic" )
     message(STATUS "Setting package dependencies for Ubuntu 18.04 (bionic)")
@@ -189,7 +193,6 @@ if(CIRCUSTENT_BUILD_DEB)
     message(STATUS "Unknown debian version: ${CT_RELEASE_CODENAME}")
     message(STATUS "No debian package dependencies are set!!!")
   endif()
-
   set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
   set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
   include(CPack)
