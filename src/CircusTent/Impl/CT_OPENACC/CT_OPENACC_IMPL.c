@@ -6,7 +6,7 @@
  * contact@tactcomplabs.com
  *
  * See LICENSE in the top level directory for licensing details
- */
+*/
 
 #include <openacc.h>
 #include <stdint.h>
@@ -19,7 +19,7 @@
  *                          unsigned long long iters,
  *                          unsigned long long pes )
  *
- */
+*/
 
 void RAND_ADD( uint64_t *restrict ARRAY,
                uint64_t *restrict IDX,

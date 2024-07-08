@@ -1,0 +1,197 @@
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the RAND_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:26 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the RAND_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:26 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:26 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDE1_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:27 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:27 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDEN_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:27 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the CENTRAL_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:27 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the CENTRAL_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:27 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SG_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:27 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SG_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:27 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SCATTER_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:28 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SCATTER_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:28 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the GATHER_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:28 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the GATHER_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:28 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+=============================================================
+        ITERATION 2
+=============================================================
+------------------------------------------------------
+  Running the RAND_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:28 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the RAND_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:28 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:29 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDE1_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:29 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:29 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the STRIDEN_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:29 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the CENTRAL_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:29 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the CENTRAL_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:29 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SG_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:29 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SG_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:30 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SCATTER_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:30 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the SCATTER_CAS kernel using the CUDA impl...
+                  02-06-24 AT 18:02:30 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the GATHER_ADD kernel using the CUDA impl...
+                  02-06-24 AT 18:02:30 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+
+
+------------------------------------------------------
+  Running the GATHER_CAS kernel using the CUDA impl...

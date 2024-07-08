@@ -1,0 +1,60 @@
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  14-04-23 AT 10:41:51 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+Unknown option: --blocks
+Failed to parse command line options
+
+
+=============================================================
+        ITERATION 2
+=============================================================
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  14-04-23 AT 10:41:51 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+Unknown option: --blocks
+Failed to parse command line options
+
+
+=============================================================
+        ITERATION 3
+=============================================================
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  14-04-23 AT 10:41:51 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+Unknown option: --blocks
+Failed to parse command line options
+
+
+=============================================================
+        ITERATION 4
+=============================================================
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  14-04-23 AT 10:41:51 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+Unknown option: --blocks
+Failed to parse command line options
+
+
+=============================================================
+        ITERATION 5
+=============================================================
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  14-04-23 AT 10:41:51 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+Unknown option: --blocks
+Failed to parse command line options
+
+

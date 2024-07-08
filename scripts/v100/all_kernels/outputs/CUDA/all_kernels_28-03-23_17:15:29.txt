@@ -1,0 +1,115 @@
+=============================================================
+  Running the RAND_ADD kernel using the CUDA impl...
+                  28-03-23 AT 17:15:29 
+=============================================================
+Running with 977 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device
+ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA
+
+
+=============================================================
+  Running the RAND_CAS kernel using the CUDA impl...
+                  28-03-23 AT 17:15:30 
+=============================================================
+Running with 977 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device
+ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  28-03-23 AT 17:15:31 
+=============================================================
+Running with 977 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device
+ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA
+
+
+=============================================================
+  Running the STRIDE1_CAS kernel using the CUDA impl...
+                  28-03-23 AT 17:15:32 
+=============================================================
+Running with 977 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device
+ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA
+
+
+=============================================================
+  Running the STRIDEN_ADD kernel using the CUDA impl...
+                  28-03-23 AT 17:15:33 
+=============================================================
+Running with 977 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device
+ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA
+
+
+=============================================================
+  Running the STRIDEN_CAS kernel using the CUDA impl...
+                  28-03-23 AT 17:15:34 
+=============================================================
+Running with 977 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+CT_CUDA::AllocateData : 'd_Idx' could not be alloced on device
+ERROR : COULD NOT ALLOCATE MEMORY FOR CT_CUDA
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the CUDA impl...
+                  28-03-23 AT 17:15:35 
+=============================================================
+Running with 977 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0

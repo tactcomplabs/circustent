@@ -1,0 +1,90 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  20-03-23 AT 10:27:03 
+=============================================================
+Running with 16 teams, 1024 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00568295
+ Giga AMOs/sec (GAMS) : 1.40772
+================================================
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  20-03-23 AT 10:28:19 
+=============================================================
+Running with 16 teams, 1024 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000906944
+ Giga AMOs/sec (GAMS) : 8.82083
+================================================
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  20-03-23 AT 10:29:36 
+=============================================================
+Running with 16 teams, 1024 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0.00639677
+ Giga AMOs/sec (GAMS) : 1.25063
+================================================
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  20-03-23 AT 10:30:52 
+=============================================================
+Running with 16 teams, 1024 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.00917602
+ Giga AMOs/sec (GAMS) : 3.48735
+================================================
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  20-03-23 AT 10:32:09 
+=============================================================
+Running with 16 teams, 1024 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.00641012
+ Giga AMOs/sec (GAMS) : 3.74408
+================================================
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  20-03-23 AT 10:33:25 
+=============================================================
+Running with 16 teams, 1024 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.00636315
+ Giga AMOs/sec (GAMS) : 3.77171
+================================================
+
+

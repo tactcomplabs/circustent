@@ -1,0 +1,52 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  30-03-23 AT 15:21:57 
+=============================================================
+Running with 16 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.0056529
+ Giga AMOs/sec (GAMS) : 1.4152
+================================================
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  30-03-23 AT 15:23:14 
+=============================================================
+Running with 16 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000908852
+ Giga AMOs/sec (GAMS) : 8.80232
+================================================
+
+
+=============================================================
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  30-03-23 AT 15:24:31 
+=============================================================
+Running with 16 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.001019
+ Giga AMOs/sec (GAMS) : 7.85083
+================================================
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  30-03-23 AT 15:25:47 
+=============================================================
+Running with 16 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0

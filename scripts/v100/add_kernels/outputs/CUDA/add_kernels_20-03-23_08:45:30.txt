@@ -1,0 +1,140 @@
+=============================================================
+  Running the RAND_ADD kernel using the CUDA impl...
+                  20-03-23 AT 08:45:30 
+=============================================================
+Running with 16 blocks, 1024 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00510788
+ Giga AMOs/sec (GAMS) : 1.56621
+================================================
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the CUDA impl...
+                  20-03-23 AT 08:46:46 
+=============================================================
+Running with 16 blocks, 1024 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000667095
+ Giga AMOs/sec (GAMS) : 11.9923
+================================================
+
+
+=============================================================
+  Running the PTRCHASE_ADD kernel using the CUDA impl...
+                  20-03-23 AT 08:48:05 
+=============================================================
+Running with 16 blocks, 1024 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : PTRCHASE_ADD
+ Timing (secs)        : 0.091176
+ Giga AMOs/sec (GAMS) : 0.0877424
+================================================
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the CUDA impl...
+                  20-03-23 AT 08:49:21 
+=============================================================
+Running with 16 blocks, 1024 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0.00612712
+ Giga AMOs/sec (GAMS) : 1.30567
+================================================
+
+
+=============================================================
+  Running the SG_ADD kernel using the CUDA impl...
+                  20-03-23 AT 08:50:37 
+=============================================================
+Running with 16 blocks, 1024 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.0102501
+ Giga AMOs/sec (GAMS) : 3.12192
+================================================
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the CUDA impl...
+                  20-03-23 AT 08:51:53 
+=============================================================
+Running with 16 blocks, 1024 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.0109501
+ Giga AMOs/sec (GAMS) : 2.19176
+================================================
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the CUDA impl...
+                  20-03-23 AT 08:53:09 
+=============================================================
+Running with 16 blocks, 1024 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.0116949
+ Giga AMOs/sec (GAMS) : 2.05218
+================================================
+
+

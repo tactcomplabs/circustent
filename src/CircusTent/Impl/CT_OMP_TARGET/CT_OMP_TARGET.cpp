@@ -72,19 +72,21 @@ bool CT_OMP_TARGET::Execute(double &Timing, double &GAMS){
       this->ReportBenchError();
       return false;
     }
-  }else if( BType == CT_PTRCHASE ){
-    switch( AType ){
-    case CT_ADD:
-      StartTime = this->MySecond();
-      PTRCHASE_ADD( Array, Idx, iters, pes );
-      EndTime   = this->MySecond();
-      OPS = this->GAM(1,iters,pes);
-      break;
-    default:
-      this->ReportBenchError();
-      return false;
-    }
-  }else if( BType == CT_SG ){
+  }
+  // else if( BType == CT_PTRCHASE ){
+  //   switch( AType ){
+  //   case CT_ADD:
+  //     StartTime = this->MySecond();
+  //     PTRCHASE_ADD( Array, Idx, iters, pes );
+  //     EndTime   = this->MySecond();
+  //     OPS = this->GAM(1,iters,pes);
+  //     break;
+  //   default:
+  //     this->ReportBenchError();
+  //     return false;
+  //   }
+  // }
+  else if( BType == CT_SG ){
     switch( AType ){
     case CT_ADD:
       StartTime = this->MySecond();
@@ -168,44 +170,50 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
   }
 
   // calculate the number of elements
-  elems = (memSize/8);
+  elems = (memSize / 8);
 
   // test to see whether we'll stride out of bounds
   uint64_t end = (pes * iters * stride) - stride;
-  if( end >= elems ){
+  if (end >= elems) {
     std::cout << "CT_OMP_TARGET::AllocateData : 'Array' is not large enough for pes="
-              << pes << "; iters=" << iters << "; stride =" << stride
+              << pes << "; iters=" << iters << "; stride=" << stride
               << std::endl;
     return false;
   }
 
   // allocate the data on the target device
+  std::cout << "Allocating Array on target device..." << std::endl;
   Array = (uint64_t *) omp_target_alloc(memSize, deviceID);
+  std::cout << "Array allocation done. Address: " << Array << std::endl;
+
   // temporary data array for initialization on the host
   uint64_t *HostArray = (uint64_t *) malloc(memSize);
 
-  if( ( Array == nullptr ) || ( HostArray == nullptr ) ){
+  if ((Array == nullptr) || (HostArray == nullptr)) {
     std::cout << "CT_OMP_TARGET::AllocateData : 'Array' could not be allocated" << std::endl;
     std::cout << "Array = " << Array << " HostArray = " << HostArray << std::endl;
     omp_target_free(Array, deviceID);
-    if(HostArray != nullptr){
+    if (HostArray != nullptr) {
       free(HostArray);
     }
     return false;
   }
 
   // target and host Idx arrays
-  Idx = (uint64_t *) omp_target_alloc(sizeof(uint64_t)*(pes+1)*iters, deviceID);
-  uint64_t *HostIdx = (uint64_t *) malloc(sizeof(uint64_t)*(pes+1)*iters);
+  std::cout << "Allocating Idx on target device..." << std::endl;
+  Idx = (uint64_t *) omp_target_alloc(sizeof(uint64_t) * (pes + 1) * iters, deviceID);
+  std::cout << "Idx allocation done. Address: " << Idx << std::endl;
 
-  if( ( Idx == nullptr ) || ( HostIdx == nullptr ) ){
+  uint64_t *HostIdx = (uint64_t *) malloc(sizeof(uint64_t) * (pes + 1) * iters);
+
+  if ((Idx == nullptr) || (HostIdx == nullptr)) {
     std::cout << "CT_OMP_TARGET::AllocateData : 'Idx' could not be allocated" << std::endl;
     omp_target_free(Array, deviceID);
     omp_target_free(Idx, deviceID);
-    if(HostArray != nullptr){
+    if (HostArray != nullptr) {
       free(HostArray);
     }
-    if(HostIdx != nullptr){
+    if (HostIdx != nullptr) {
       free(HostIdx);
     }
     return false;
@@ -213,22 +221,34 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
 
   // Randomize arrays on the host
   srand(time(NULL));
-  if( this->GetBenchType() == CT_PTRCHASE ){
-    for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      HostIdx[i] = (uint64_t)(rand()%((pes+1)*iters));
+  if (this->GetBenchType() == CT_PTRCHASE) {
+    for (unsigned i = 0; i < ((pes + 1) * iters); i++) {
+      HostIdx[i] = (uint64_t)(rand() % ((pes + 1) * iters));
     }
-  }else{
-    for( unsigned i=0; i<((pes+1)*iters); i++ ){
-      HostIdx[i] = (uint64_t)(rand()%(elems-1));
+  } else {
+    for (unsigned i = 0; i < ((pes + 1) * iters); i++) {
+      HostIdx[i] = (uint64_t)(rand() % (elems - 1));
     }
   }
-  for( unsigned i=0; i<elems; i++ ){
+  for (unsigned i = 0; i < elems; i++) {
     HostArray[i] = (uint64_t)(rand());
   }
 
-  // Copy initalized arrays to target
-  omp_target_memcpy(Array, HostArray, memSize, 0, 0, deviceID, omp_get_initial_device());
-  omp_target_memcpy(Idx, HostIdx, sizeof(uint64_t)*(pes+1)*iters, 0, 0, deviceID, omp_get_initial_device());
+  // Copy initialized arrays to target
+  std::cout << "Copying data to target device..." << std::endl;
+  int ret1 = omp_target_memcpy(Array, HostArray, memSize, 0, 0, deviceID, omp_get_initial_device());
+  int ret2 = omp_target_memcpy(Idx, HostIdx, sizeof(uint64_t) * (pes + 1) * iters, 0, 0, deviceID, omp_get_initial_device());
+  
+  if (ret1 != 0 || ret2 != 0) {
+    std::cout << "CT_OMP_TARGET::AllocateData : Data copy to target device failed with errors ret1="
+              << ret1 << " ret2=" << ret2 << std::endl;
+    omp_target_free(Array, deviceID);
+    omp_target_free(Idx, deviceID);
+    free(HostArray);
+    free(HostIdx);
+    return false;
+  }
+  std::cout << "Data copy to target device done." << std::endl;
 
   // Free temp arrays on host
   free(HostArray);
@@ -241,13 +261,119 @@ bool CT_OMP_TARGET::AllocateData( uint64_t m,
   // Sanity check on target
   #pragma omp target teams num_teams(pes)
   {
-    if(omp_get_team_num() == 0){
+    if (omp_get_team_num() == 0) {
       printf("RUNNING WITH NUM_TEAMS = %d\n", omp_get_num_teams());
     }
   }
 
   return true;
 }
+
+//bool CT_OMP_TARGET::AllocateData( uint64_t m,
+//                                  uint64_t p,
+//                                  uint64_t i,
+//                                  uint64_t s){
+//  // save the data
+//  memSize = m;
+//  pes = p;
+//  iters = i;
+//  stride = s;
+//
+//  // check args
+//  if( pes == 0 ){
+//    std::cout << "CT_OMP_TARGET::AllocateData : 'pes' cannot be 0" << std::endl;
+//    return false;
+//  }
+//  if( iters == 0 ){
+//    std::cout << "CT_OMP_TARGET::AllocateData : 'iters' cannot be 0" << std::endl;
+//    return false;
+//  }
+//  if( stride == 0 ){
+//    std::cout << "CT_OMP_TARGET::AllocateData : 'stride' cannot be 0" << std::endl;
+//    return false;
+//  }
+//
+//  // calculate the number of elements
+//  elems = (memSize/8);
+//
+//  // test to see whether we'll stride out of bounds
+//  uint64_t end = (pes * iters * stride) - stride;
+//  if( end >= elems ){
+//    std::cout << "CT_OMP_TARGET::AllocateData : 'Array' is not large enough for pes="
+//              << pes << "; iters=" << iters << "; stride =" << stride
+//              << std::endl;
+//    return false;
+//  }
+//
+//  // allocate the data on the target device
+//  Array = (uint64_t *) omp_target_alloc(memSize, deviceID);
+//  // temporary data array for initialization on the host
+//  uint64_t *HostArray = (uint64_t *) malloc(memSize);
+//
+//  if( ( Array == nullptr ) || ( HostArray == nullptr ) ){
+//    std::cout << "CT_OMP_TARGET::AllocateData : 'Array' could not be allocated" << std::endl;
+//    std::cout << "Array = " << Array << " HostArray = " << HostArray << std::endl;
+//    omp_target_free(Array, deviceID);
+//    if(HostArray != nullptr){
+//      free(HostArray);
+//    }
+//    return false;
+//  }
+//
+//  // target and host Idx arrays
+//  Idx = (uint64_t *) omp_target_alloc(sizeof(uint64_t)*(pes+1)*iters, deviceID);
+//  uint64_t *HostIdx = (uint64_t *) malloc(sizeof(uint64_t)*(pes+1)*iters);
+//
+//  if( ( Idx == nullptr ) || ( HostIdx == nullptr ) ){
+//    std::cout << "CT_OMP_TARGET::AllocateData : 'Idx' could not be allocated" << std::endl;
+//    omp_target_free(Array, deviceID);
+//    omp_target_free(Idx, deviceID);
+//    if(HostArray != nullptr){
+//      free(HostArray);
+//    }
+//    if(HostIdx != nullptr){
+//      free(HostIdx);
+//    }
+//    return false;
+//  }
+//
+//  // Randomize arrays on the host
+//  srand(time(NULL));
+//  if( this->GetBenchType() == CT_PTRCHASE ){
+//    for( unsigned i=0; i<((pes+1)*iters); i++ ){
+//      HostIdx[i] = (uint64_t)(rand()%((pes+1)*iters));
+//    }
+//  }else{
+//    for( unsigned i=0; i<((pes+1)*iters); i++ ){
+//      HostIdx[i] = (uint64_t)(rand()%(elems-1));
+//    }
+//  }
+//  for( unsigned i=0; i<elems; i++ ){
+//    HostArray[i] = (uint64_t)(rand());
+//  }
+//
+//  // Copy initalized arrays to target
+//  omp_target_memcpy(Array, HostArray, memSize, 0, 0, deviceID, omp_get_initial_device());
+//  omp_target_memcpy(Idx, HostIdx, sizeof(uint64_t)*(pes+1)*iters, 0, 0, deviceID, omp_get_initial_device());
+//
+//  // Free temp arrays on host
+//  free(HostArray);
+//  free(HostIdx);
+//
+//  // Set the number of teams on the device
+//  // Need OpenMP 5.1 support for omp_set_num_teams(), for now using num_teams clause at kernel directives
+//  //omp_set_num_teams(teams);
+//
+//  // Sanity check on target
+//  #pragma omp target teams num_teams(pes)
+//  {
+//    if(omp_get_team_num() == 0){
+//      printf("RUNNING WITH NUM_TEAMS = %d\n", omp_get_num_teams());
+//    }
+//  }
+//
+//  return true;
+//}
 
 bool CT_OMP_TARGET::SetDevice(){
 

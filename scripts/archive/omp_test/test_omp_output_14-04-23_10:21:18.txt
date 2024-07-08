@@ -1,0 +1,168 @@
+------------------------------------------------------
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  14-04-23 AT 10:21:18 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 2.79072
+ Giga AMOs/sec (GAMS) : 0.229332
+================================================
+
+
+------------------------------------------------------
+  Running the RAND_CAS kernel using the OpenMP impl...
+                  14-04-23 AT 10:21:45 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : RAND_CAS
+ Timing (secs)        : 2.88066
+ Giga AMOs/sec (GAMS) : 0.222171
+================================================
+
+
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  14-04-23 AT 10:22:16 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.160577
+ Giga AMOs/sec (GAMS) : 3.98563
+================================================
+
+
+------------------------------------------------------
+  Running the STRIDE1_CAS kernel using the OpenMP impl...
+                  14-04-23 AT 10:22:39 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : STRIDE1_CAS
+ Timing (secs)        : 0.192117
+ Giga AMOs/sec (GAMS) : 3.3313
+================================================
+
+
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  14-04-23 AT 10:23:02 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.143489
+ Giga AMOs/sec (GAMS) : 4.46027
+================================================
+
+
+------------------------------------------------------
+  Running the STRIDEN_CAS kernel using the OpenMP impl...
+                  14-04-23 AT 10:23:25 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : STRIDEN_CAS
+ Timing (secs)        : 0.21322
+ Giga AMOs/sec (GAMS) : 3.0016
+================================================
+
+
+------------------------------------------------------
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  14-04-23 AT 10:23:48 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 7.59386
+ Giga AMOs/sec (GAMS) : 0.0842786
+================================================
+
+
+------------------------------------------------------
+  Running the CENTRAL_CAS kernel using the OpenMP impl...
+                  14-04-23 AT 10:24:19 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : CENTRAL_CAS
+ Timing (secs)        : 9.25511
+ Giga AMOs/sec (GAMS) : 0.069151
+================================================
+
+
+------------------------------------------------------
+  Running the SG_ADD kernel using the OpenMP impl...
+                  14-04-23 AT 10:24:51 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 2.88119
+ Giga AMOs/sec (GAMS) : 0.888521
+================================================
+
+
+------------------------------------------------------
+  Running the SG_CAS kernel using the OpenMP impl...
+                  14-04-23 AT 10:25:18 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : SG_CAS
+ Timing (secs)        : 3.10374
+ Giga AMOs/sec (GAMS) : 0.824811
+================================================
+
+
+------------------------------------------------------
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  14-04-23 AT 10:25:45 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 3.28579
+ Giga AMOs/sec (GAMS) : 0.584334
+================================================
+
+
+------------------------------------------------------
+  Running the SCATTER_CAS kernel using the OpenMP impl...
+                  14-04-23 AT 10:26:12 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : SCATTER_CAS
+ Timing (secs)        : 1.15241
+ Giga AMOs/sec (GAMS) : 1.66607
+================================================
+
+
+------------------------------------------------------
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  14-04-23 AT 10:26:37 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 2.70021
+ Giga AMOs/sec (GAMS) : 0.711055
+================================================
+
+
+------------------------------------------------------
+  Running the GATHER_CAS kernel using the OpenMP impl...
+                  14-04-23 AT 10:27:04 
+------------------------------------------------------
+RUNNING WITH NUM_THREADS = 32
+================================================
+ Benchmark Kernel     : GATHER_CAS
+ Timing (secs)        : 2.75528
+ Giga AMOs/sec (GAMS) : 0.696843
+================================================
+
+

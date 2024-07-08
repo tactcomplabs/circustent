@@ -1,0 +1,805 @@
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:24:38 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00598502
+ Giga AMOs/sec (GAMS) : 1.33667
+================================================
+
+
+=============================================================
+  Running the RAND_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:25:54 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:25:54 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000916958
+ Giga AMOs/sec (GAMS) : 8.7245
+================================================
+
+
+=============================================================
+  Running the STRIDE1_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:27:11 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:27:11 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.00103617
+ Giga AMOs/sec (GAMS) : 7.72076
+================================================
+
+
+=============================================================
+  Running the STRIDEN_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:28:27 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:28:27 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0.00708985
+ Giga AMOs/sec (GAMS) : 1.12837
+================================================
+
+
+=============================================================
+  Running the CENTRAL_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:29:43 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:29:44 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.0101912
+ Giga AMOs/sec (GAMS) : 3.13996
+================================================
+
+
+=============================================================
+  Running the SG_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:31:00 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:31:00 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.00671911
+ Giga AMOs/sec (GAMS) : 3.5719
+================================================
+
+
+=============================================================
+  Running the SCATTER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:32:16 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:32:16 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.00662994
+ Giga AMOs/sec (GAMS) : 3.61994
+================================================
+
+
+=============================================================
+  Running the GATHER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:33:33 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:33:33 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00606298
+ Giga AMOs/sec (GAMS) : 1.31948
+================================================
+
+
+=============================================================
+  Running the RAND_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:34:51 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:34:51 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.00100803
+ Giga AMOs/sec (GAMS) : 7.93624
+================================================
+
+
+=============================================================
+  Running the STRIDE1_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:36:07 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:36:08 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.00100589
+ Giga AMOs/sec (GAMS) : 7.95317
+================================================
+
+
+=============================================================
+  Running the STRIDEN_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:37:24 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:37:24 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0.00709605
+ Giga AMOs/sec (GAMS) : 1.12739
+================================================
+
+
+=============================================================
+  Running the CENTRAL_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:38:40 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:38:40 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.0101688
+ Giga AMOs/sec (GAMS) : 3.14688
+================================================
+
+
+=============================================================
+  Running the SG_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:39:57 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:39:57 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.00667882
+ Giga AMOs/sec (GAMS) : 3.59345
+================================================
+
+
+=============================================================
+  Running the SCATTER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:41:13 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:41:13 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.0065949
+ Giga AMOs/sec (GAMS) : 3.63918
+================================================
+
+
+=============================================================
+  Running the GATHER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:42:29 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:42:29 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00607109
+ Giga AMOs/sec (GAMS) : 1.31772
+================================================
+
+
+=============================================================
+  Running the RAND_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:43:46 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:43:46 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.00100493
+ Giga AMOs/sec (GAMS) : 7.96072
+================================================
+
+
+=============================================================
+  Running the STRIDE1_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:45:02 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:45:02 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.00101709
+ Giga AMOs/sec (GAMS) : 7.86555
+================================================
+
+
+=============================================================
+  Running the STRIDEN_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:46:18 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:46:18 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0.00709391
+ Giga AMOs/sec (GAMS) : 1.12773
+================================================
+
+
+=============================================================
+  Running the CENTRAL_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:47:35 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:47:35 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.0101449
+ Giga AMOs/sec (GAMS) : 3.15428
+================================================
+
+
+=============================================================
+  Running the SG_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:48:51 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:48:52 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.00668192
+ Giga AMOs/sec (GAMS) : 3.59178
+================================================
+
+
+=============================================================
+  Running the SCATTER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:50:08 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:50:08 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.00656509
+ Giga AMOs/sec (GAMS) : 3.6557
+================================================
+
+
+=============================================================
+  Running the GATHER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:51:24 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:51:24 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00607419
+ Giga AMOs/sec (GAMS) : 1.31705
+================================================
+
+
+=============================================================
+  Running the RAND_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:52:40 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:52:40 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.000995874
+ Giga AMOs/sec (GAMS) : 8.03314
+================================================
+
+
+=============================================================
+  Running the STRIDE1_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:53:56 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:53:57 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.00102091
+ Giga AMOs/sec (GAMS) : 7.83616
+================================================
+
+
+=============================================================
+  Running the STRIDEN_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:55:13 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:55:13 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0.00707912
+ Giga AMOs/sec (GAMS) : 1.13008
+================================================
+
+
+=============================================================
+  Running the CENTRAL_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:56:29 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:56:29 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.010165
+ Giga AMOs/sec (GAMS) : 3.14806
+================================================
+
+
+=============================================================
+  Running the SG_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:57:45 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:57:46 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.00668502
+ Giga AMOs/sec (GAMS) : 3.59012
+================================================
+
+
+=============================================================
+  Running the SCATTER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 10:59:02 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 10:59:02 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.00657916
+ Giga AMOs/sec (GAMS) : 3.64788
+================================================
+
+
+=============================================================
+  Running the GATHER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:00:18 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 11:00:19 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : RAND_ADD
+ Timing (secs)        : 0.00609994
+ Giga AMOs/sec (GAMS) : 1.31149
+================================================
+
+
+=============================================================
+  Running the RAND_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:01:35 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 11:01:35 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDE1_ADD
+ Timing (secs)        : 0.00100207
+ Giga AMOs/sec (GAMS) : 7.98345
+================================================
+
+
+=============================================================
+  Running the STRIDE1_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:02:51 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 11:02:51 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.00101209
+ Giga AMOs/sec (GAMS) : 7.90446
+================================================
+
+
+=============================================================
+  Running the STRIDEN_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:04:07 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 11:04:08 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : CENTRAL_ADD
+ Timing (secs)        : 0.00707889
+ Giga AMOs/sec (GAMS) : 1.13012
+================================================
+
+
+=============================================================
+  Running the CENTRAL_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:05:24 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SG_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 11:05:24 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SG_ADD
+ Timing (secs)        : 0.0101879
+ Giga AMOs/sec (GAMS) : 3.14099
+================================================
+
+
+=============================================================
+  Running the SG_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:06:40 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 11:06:41 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : SCATTER_ADD
+ Timing (secs)        : 0.00667
+ Giga AMOs/sec (GAMS) : 3.5982
+================================================
+
+
+=============================================================
+  Running the SCATTER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:07:57 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+
+=============================================================
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  28-03-23 AT 11:07:57 
+=============================================================
+Running with 16 teams, 128 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : GATHER_ADD
+ Timing (secs)        : 0.00660801
+ Giga AMOs/sec (GAMS) : 3.63196
+================================================
+
+
+=============================================================
+  Running the GATHER_CAS kernel using the OpenMP impl...
+                  28-03-23 AT 11:09:14 
+=============================================================
+Running with 16 teams, 128 threads per team
+ERROR : CAS IMPLEMENTATION NOT SUPPORTED IN CT_OMP_TARGET
+
+

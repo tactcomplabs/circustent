@@ -1,0 +1,10 @@
+=============================================================
+        ITERATION 1
+=============================================================
+=============================================================
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  30-03-23 AT 15:27:29 
+=============================================================
+Running with 16 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE set to 0

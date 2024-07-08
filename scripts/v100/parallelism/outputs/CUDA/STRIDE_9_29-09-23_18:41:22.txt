@@ -1,0 +1,132 @@
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_CAS kernel using the CUDA impl...
+                  29-09-23 AT 18:41:22 
+------------------------------------------------------
+Running with 16 blocks, 256 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : STRIDEN_CAS
+ Timing (secs)        : 0.00324512
+ Giga AMOs/sec (GAMS) : 2.46524
+================================================
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_CAS kernel using the CUDA impl...
+                  29-09-23 AT 18:42:38 
+------------------------------------------------------
+Running with 32 blocks, 256 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : STRIDEN_CAS
+ Timing (secs)        : 0.00613999
+ Giga AMOs/sec (GAMS) : 2.60587
+================================================
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_CAS kernel using the CUDA impl...
+                  29-09-23 AT 18:43:55 
+------------------------------------------------------
+Running with 64 blocks, 256 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : STRIDEN_CAS
+ Timing (secs)        : 0.0140929
+ Giga AMOs/sec (GAMS) : 2.27064
+================================================
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_CAS kernel using the CUDA impl...
+                  29-09-23 AT 18:45:11 
+------------------------------------------------------
+Running with 128 blocks, 256 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0
+================================================
+ Benchmark Kernel     : STRIDEN_CAS
+ Timing (secs)        : 0.0369699
+ Giga AMOs/sec (GAMS) : 1.73114
+================================================
+
+
+
+
+
+
+
+
+
+
+
+

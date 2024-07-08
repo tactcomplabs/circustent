@@ -1,0 +1,13 @@
+=============================================================
+  Running the RAND_ADD kernel using the CUDA impl...
+                  29-03-23 AT 22:48:06 
+=============================================================
+Running with 32 blocks, 512 threads per block
+------------------------------------------------
+            CUDA Device Properties
+------------------------------------------------
+Number of CUDA enabled devices detected: 2
+Target Device Details:
+Device Name: Tesla V100-PCIE-32GB
+Global Memory (bytes): 34089730048
+Compute Capability: 7.0

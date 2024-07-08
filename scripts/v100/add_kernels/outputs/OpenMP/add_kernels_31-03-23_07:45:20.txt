@@ -1,0 +1,191 @@
+=============================================================
+                      ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:20 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:21 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:21 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:21 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the SG_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:21 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:22 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:22 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+=============================================================
+                      ITERATION 2
+=============================================================
+------------------------------------------------------
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:22 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:22 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:23 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:23 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the SG_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:23 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:23 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the GATHER_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:24 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+=============================================================
+                      ITERATION 3
+=============================================================
+------------------------------------------------------
+  Running the RAND_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:24 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the STRIDE1_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:24 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:24 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the CENTRAL_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:25 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the SG_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:25 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the SCATTER_ADD kernel using the OpenMP impl...
+                  31-03-23 AT 07:45:25 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+Unknown option: -p
+Failed to parse command line options
+
+
+------------------------------------------------------
+  Running the GATHER_ADD kernel using the OpenMP impl...

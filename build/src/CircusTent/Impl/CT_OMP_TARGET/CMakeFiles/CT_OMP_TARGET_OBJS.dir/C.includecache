@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/mibeebe/ct/circustent_journal_performance_eval/src/CircusTent/Impl/CT_OMP_TARGET/CT_OMP_TARGET_IMPL.c
+omp.h
+-
+stdint.h
+-
+stdio.h
+-
+

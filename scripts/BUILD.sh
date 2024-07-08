@@ -1,36 +1,89 @@
 #!/bin/bash
 
-##################################################
-# Flags for each GPU impl
-##################################################
-CMAKE_CUDA_FLAGS="-DENABLE_CUDA=ON"
-
-# CMAKE_OMP_FLAGS="-mp=gpu -Minfo=mp -gpu -DENABLE_OMP_TARGET=ON"
-CMAKE_OMP_FLAGS="-DENABLE_OMP_TARGET=ON"
-
-# CMAKE_OACC_FLAGS="-acc -gpu=cc70 -DENABLE_OPENACC=ON"
-CMAKE_OACC_FLAGS="-DENABLE_OPENACC=ON"
-
-# Set flags for desired backend here
-# CMAKE_FLAGS=$CMAKE_CUDA_FLAGS
-# CMAKE_FLAGS=$CMAKE_OMP_FLAGS
-CMAKE_FLAGS=$CMAKE_OACC_FLAGS
-
-
-##################################################
-# Don't edit below
-##################################################
-cd ../
-CT_ROOT=$(pwd)
-CT_BUILD=$CT_ROOT/build
-
-if [ -d $CT_BUILD ] ; then
-    rm -rf $CT_BUILD
+# --- Check if the correct number of arguments are provided
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <gpu> <backend>"
+  echo "Where <gpu> is either v100 or a100"
+  echo "and <backend> is either openmp, openacc, or cuda"
+  exit 1
 fi
 
-mkdir $CT_BUILD
-cd $CT_BUILD
-cmake $CMAKE_FLAGS ../
+# --- Assign command line arguments to variables
+GPU=$1
+BACKEND=$2
+
+# --- Validate the GPU argument
+if [[ "$GPU" != "v100" && "$GPU" != "a100" ]]; then
+  echo "Invalid GPU specified. Must be 'v100' or 'a100'."
+  exit 1
+fi
+
+# --- Validate the backend argument
+if [[ "$BACKEND" != "openmp" && "$BACKEND" != "openacc" && "$BACKEND" != "cuda" ]]; then
+  echo "Invalid backend specified. Must be 'openmp', 'openacc', or 'cuda'."
+  exit 1
+fi
+
+# --- Print the parsed arguments
+echo "GPU: $GPU"
+echo "Backend: $BACKEND"
+
+# --- Set flags based on GPU and backend
+GPU_FLAGS=""
+ENABLE_FLAG=""
+LINK_FLAGS=""
+
+if [[ "$GPU" == "v100" ]]; then
+  ml load gcc/10.1.0
+  ml load gcc/9.3.0
+  case "$BACKEND" in
+    openmp)
+      ENABLE_FLAG="-DENABLE_OMP_TARGET=ON"
+      GPU_FLAGS="-mp=gpu -Minfo=mp -gpu"
+      LINK_FLAGS="-mp=gpu -gpu"
+      ;;
+    cuda)
+      ENABLE_FLAG="-DENABLE_CUDA=ON"
+      GPU_FLAGS="-arch=sm_70"
+      ;;
+    openacc)
+      ENABLE_FLAG="-DENABLE_OPENACC=ON"
+      GPU_FLAGS="-ta=tesla:cc70"
+      ;;
+  esac
+elif [[ "$GPU" == "a100" ]]; then
+  ml load gcc/9.3.0
+  ml load nvhpc/21.3-mpi
+  case "$BACKEND" in
+    openmp)
+      ENABLE_FLAG="-DENABLE_OMP_TARGET=ON"
+      GPU_FLAGS="-mp=gpu -Minfo=mp -gpu=cc80"
+      LINK_FLAGS="-mp=gpu -gpu=cc80"
+      export OMP_TARGET_OFFLOAD=MANDATORY
+      ;;
+    cuda)
+      ENABLE_FLAG="-DENABLE_CUDA=ON"
+      GPU_FLAGS="-arch=sm_80"
+      ;;
+    openacc)
+      ENABLE_FLAG="-DENABLE_OPENACC=ON"
+      GPU_FLAGS="-ta=tesla:cc80"
+      ;;
+  esac
+fi
+
+# --- Print the set flags
+echo "GPU_FLAGS: $GPU_FLAGS"
+echo "ENABLE_FLAG: $ENABLE_FLAG"
+echo "LINK_FLAGS: $LINK_FLAGS"
+
+# --- Create build directory and run cmake
+ml load cmake/3.17.3
+
+./CLEAN.sh
+cd ../
+mkdir -p build
+cd build
+cmake $ENABLE_FLAG -DCMAKE_CXX_COMPILER=nvc++ -DCMAKE_C_COMPILER=nvc -DCMAKE_CXX_FLAGS="$GPU_FLAGS" -DCMAKE_EXE_LINKER_FLAGS="$LINK_FLAGS" ../
 make
 
-cd $CT_ROOT/scripts

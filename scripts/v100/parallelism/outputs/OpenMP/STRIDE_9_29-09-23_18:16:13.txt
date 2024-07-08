@@ -1,0 +1,112 @@
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  29-09-23 AT 18:16:14 
+------------------------------------------------------
+Running with 16 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 16
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.00173402
+ Giga AMOs/sec (GAMS) : 4.61356
+================================================
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  29-09-23 AT 18:17:30 
+------------------------------------------------------
+Running with 32 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 32
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.00274301
+ Giga AMOs/sec (GAMS) : 5.83302
+================================================
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  29-09-23 AT 18:18:47 
+------------------------------------------------------
+Running with 64 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 64
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.0059402
+ Giga AMOs/sec (GAMS) : 5.38703
+================================================
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================
+        ITERATION 1
+=============================================================
+------------------------------------------------------
+  Running the STRIDEN_ADD kernel using the OpenMP impl...
+                  29-09-23 AT 18:20:04 
+------------------------------------------------------
+Running with 128 teams, 256 threads per team
+CT_OMP_TARGET::SetDevice : Found 2 available offload targets.
+CT_OMP_TARGET::SetDevice : OMP_DEFAULT_DEVICE is not set, using default.
+RUNNING WITH NUM_TEAMS = 128
+================================================
+ Benchmark Kernel     : STRIDEN_ADD
+ Timing (secs)        : 0.0114982
+ Giga AMOs/sec (GAMS) : 5.56608
+================================================
+
+
+
+
+
+
+
+
+
+
+
+
