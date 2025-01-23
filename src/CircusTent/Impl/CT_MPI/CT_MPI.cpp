@@ -315,18 +315,35 @@ bool CT_MPI::AllocateData( uint64_t m,
 
   MPI_Barrier(MPI_COMM_WORLD);
 
-  // initiate the random array
-  srand(time(NULL) + rank);
+  // mersenne_twister_engine seeded uniquely for each rank
+  std::mt19937_64 gen(pes + rank);
+
+  // uniform distribution for target array
+  std::uniform_int_distribution<int> target_dist(0, size - 1);
+
+  if( rank == 0 ){
+    std::cout << "Target distribution MAX (int): " << (int)target_dist.max() << std::endl;
+    std::cout << "Target distribution MIN (int): " << (int)target_dist.min() << std::endl;
+  }
 
   // Init the target array
   if( size == 1 ){
     for( unsigned i=0; i<iters; i++ ){
       Target[i] = 0;
     }
-  }else if( this->GetBenchType() == CT_PTRCHASE ){
+  }else if( (this->GetBenchType() == CT_PTRCHASE) || 
+            (this->GetBenchType() == CT_RAND) || 
+            (this->GetBenchType() == CT_SCATTER) || 
+            (this->GetBenchType() == CT_GATHER) ||
+            (this->GetBenchType() == CT_SG) ){
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
-      Target[i] = (int)(rand()%(size));
+      Target[i] = (int)target_dist(gen);
+
+      if ((Target[i] > (int)(size - 1)) || (Target[i] < 0))
+      {
+        std::cout << "Errors int Target[] initialization: values exceeded bounds" << std::endl;
+      }
     }
   }else{
     for( unsigned i=0; i<iters; i++ ){
@@ -340,16 +357,29 @@ bool CT_MPI::AllocateData( uint64_t m,
     }
   }
 
-  // setup the Idx and array values
-  for( unsigned i=0; i<(iters+1); i++ ){
-    if( this->GetBenchType() == CT_PTRCHASE ){
-      Idx[i] = (uint64_t)(rand()%(iters-1));
-    }else{
-      Idx[i] = (uint64_t)(rand()%(elems));
-    }
+  // If this is not the pointer chase benchmark simply point to a random VAL index
+  uint64_t max_index = elems - 1;
+
+  // Otherwise, we are pointing to the next value in the distributed IDX array
+  if( this->GetBenchType() == CT_PTRCHASE ){
+    max_index = iters - 2;
   }
+
+  // uniform distribution for IDX array
+  std::uniform_int_distribution<uint64_t> idx_dist(0, max_index);
+
+  if( rank == 0 ){
+    std::cout << "IDX distribution MAX (uint64_t): " << (uint64_t) idx_dist.max() << std::endl;
+    std::cout << "IDX distribution MIN (uint64_t): " << (uint64_t) idx_dist.min() << std::endl;
+  }
+
+  // setup the Idx and array values
+  for( uint64_t i=0; i<(iters+1); i++ ){
+    Idx[i] = (uint64_t)idx_dist(gen); 
+  }
+
   for( uint64_t i=0; i<elems; i++ ){
-    Array[i] = (uint64_t)(rand());
+    Array[i] = gen();
   }
 
   if( rank == 0 ){

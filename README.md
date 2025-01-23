@@ -113,7 +113,7 @@ accurate GAMs values across platforms).
 ### RAND
 Performs a stride-1 atomic update using an index array with randomly generated
 indices and a source value array.  The index array (IDX) must contain valid indices
-within the bounds of the source value array (ARRAY).  Utilizing standard-C
+within the bounds of the source value array (ARRAY). In most cases, utilizing standard-C
 linear congruential methods is sufficient.
 ```
 for( i=0; i<iters; i++ ){
@@ -489,6 +489,41 @@ circustent -b RAND_ADD -m 1024 -i 1000 --blocks 100 --threads 512
 | GATHER_ADD | yes |
 | GATHER_CAS | yes |
 
+### YGM
+* CMake Build Flag: -DENABLE_YGM=ON
+* Implementation Language: C++17
+* Utilizes unsigned 64-bit integers for the ARRAY and IDX values
+* Utilizes [YGM Communication Library](https://github.com/LLNL/ygm/tree/develop)
+* Target PE's for STRIDE1 and STRIDEN benchmarks are initialized in a stride-1 ring pattern. This implies
+that for every N'th PE, the target PE is N+1.
+* The target PE during the CENTRAL benchmark is rank 0 for all ranks participating in the benchmark.
+* The PTRCHASE, RAND, SG, SCATTER, GATHER benchmarks utilize randomly generated target PE's for each iteration. This strays from some other implementations where all benchmarks except PTRCHASE are initialized in ring pattern.
+* While operations are atomic with respect to each rank executing remote function calls, they are not atomic with respect to the sender. Because there is no notion of this behavior in YGM asynchronous communication we do not use built in C/C++ atomics, but rather implement the same operation written as C++ lambdas executable as YGM remote procedure calls. 
+* Tested with MVAPICH 2, GCC 12
+
+There are two options available for specific testing of YGM features. These are not specified at execution time, but should be part of the CMake flags as they will change compilation of the benchmarks. These flags can be turned on or off independently, and by default they are both OFF. 
+* -DSKIP_PROGRESS_PTRCHASE=ON : disables the ygm::comm::local_progress() call in the PTRCHASE implementations, leaving scheduling of buffer sends up to YGM runtime.
+* -DSHORTCUT_RPC=ON : In applicable  benchmarks, enables 'shortcut' versions of remote lambda calls that minimize message counts but are less informative as a distributed benchmark.
+
+| Benchmark | Supported? |
+| ------ | ------ |
+| RAND_ADD | yes |
+| RAND_CAS | yes |
+| STRIDE1_ADD | yes |
+| STRIDE1_CAS | yes |
+| STRIDEN_ADD | yes |
+| STRIDEN_CAS | yes |
+| PTRCHASE_ADD | yes |
+| PTRCHASE_CAS | yes |
+| CENTRAL_ADD | yes |
+| CENTRAL_CAS | yes |
+| SG_ADD | yes |
+| SG_CAS | yes |
+| SCATTER_ADD | yes |
+| SCATTER_CAS | yes |
+| GATHER_ADD | yes |
+| GATHER_CAS | yes |
+
 ## Execution Parameters
 
 ### Backend Independent Parameters
@@ -592,6 +627,7 @@ CircustTent is licensed under an Apache-style license see the [LICENSE](LICENSE)
 * *Pedro Barros* - *Undergraduate Student* - [Instituto Militar de Engenharia](https://www.linkedin.com/in/pbbdasilva/)
 * *John Leidel* - *Chief Scientist* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 * *David Donofrio* - *Chief Hardware Architect* - [Tactical Computing Labs](http://www.tactcomplabs.com)
+* *Preston Piercey* - *Research Engineer I* - [Tactical Computing Labs](http://www.tactcomplabs.com)
 
 ## Acknowledgments
 * None at this time

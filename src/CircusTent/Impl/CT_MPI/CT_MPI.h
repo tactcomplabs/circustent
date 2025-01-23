@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <mpi.h>
 #include <ctime>
+#include <random>
 
 #include "CircusTent/CTBaseImpl.h"
 
@@ -201,7 +202,7 @@ public:
   /// CircusTent MPI destructor
   ~CT_MPI();
 
-  /// CircusTent MPI exeuction function
+  /// CircusTent MPI execution function
   virtual bool Execute(double &Timing,double &GAMS) override;
 
   /// CircusTent MPI data allocation function
