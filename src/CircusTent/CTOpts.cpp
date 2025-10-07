@@ -86,6 +86,11 @@ bool CTOpts::ParseOpts(int argc, char **argv){
       PrintHelp();
       return true;
     }
+    else if( (s=="-a") || (s=="-arch") || (s=="--arch") ){
+      isHelp = true;
+      PrintArch();
+      return true;
+    }
     else if( (s=="-b") || (s=="-bench") || (s=="--bench") ){
       if( i+1 > (argc-1) ){
         std::cout << "Error : --bench requires an argument" << std::endl;
@@ -177,6 +182,79 @@ bool CTOpts::ParseOpts(int argc, char **argv){
   return true;
 }
 
+void CTOpts::PrintArch(){
+  std::cout << "===================================================================================" << std::endl;
+  std::cout << " CircusTent Configuration" << std::endl;
+  std::cout << "===================================================================================" << std::endl;
+
+  // target configuration
+#ifdef _ENABLE_OMP_
+  std::cout << " Arch = OpenMP" << std::endl;
+#endif
+#ifdef _ENABLE_OMP_TARGET_
+  std::cout << " Arch = OpenMP Target" << std::endl;
+#endif
+#ifdef _ENABLE_OPENSHMEM_
+  std::cout << " Arch = OpenSHMEM" << std::endl;
+#endif
+#ifdef _ENABLE_MPI_
+  std::cout << " Arch = MPI" << std::endl;
+#endif
+#ifdef _ENABLE_XBGAS_
+  std::cout << " Arch = xBGAS" << std::endl;
+#endif
+#ifdef _ENABLE_PTHREADS_
+  std::cout << " Arch = Pthreads" << std::endl;
+#endif
+#ifdef _ENABLE_OPENACC_
+  std::cout << " Arch = OpenACC" << std::endl;
+#endif
+#ifdef _ENABLE_OPENCL_
+  std::cout << " Arch = OpenCL" << std::endl;
+#endif
+#ifdef _ENABLE_CPP_STD_
+  std::cout << " Arch = CXX Threads" << std::endl;
+#endif
+#ifdef _ENABLE_CUDA_
+  std::cout << " Arch = CUDA" << std::endl;
+#endif
+
+  // compiler
+#ifdef __clang__
+  std::cout << " Compiler = Clang " << __clang_major__ << "." << __clang_minor__ << std::endl;
+#elif defined(__GNUC__)
+  std::cout << " Compiler = GCC " << __GNUC__ << "." << __GNUC_MINOR__ << std::endl;
+#endif
+
+// platform
+#ifdef __x86_64__
+  std::cout << " Platform = x86_64" << std::endl;
+#elif __arm__
+  std::cout << " Platform = arm" << std::endl;
+#elif __powerpc
+  std::cout << " Platform = PowerPC" << std::endl;
+#elif __zarch__
+  std::cout << " Platform = SystemZ" << std::endl;
+#else
+  std::cout << " Platform = Unknown" << std::endl;
+#endif
+
+  // C++ version
+  long cpp_version = __cplusplus;
+  if (cpp_version == 199711L) {
+    std::cout << " C++ Version = C++98/03" << std::endl;
+  } else if (cpp_version == 201103L) {
+    std::cout << " C++ Version = C++11" << std::endl;
+  } else if (cpp_version == 201402L) {
+    std::cout << " C++ Version = C++14" << std::endl;
+  } else if (cpp_version == 201703L) {
+    std::cout << " C++ Version = C++17" << std::endl;
+  } else if (cpp_version > 201703L) {
+    std::cout << " C++ Version = C++20 or later" << std::endl;
+  }
+  std::cout << "===================================================================================" << std::endl;
+}
+
 void CTOpts::PrintBench(){
   std::cout << "===================================================================================" << std::endl;
   std::cout << "BENCHMARK | REQUIRED_OPTIONS | DESCRIPTION" << std::endl;
@@ -215,6 +293,7 @@ void CTOpts::PrintHelp(){
   std::cout << "=================================================================================" << std::endl;
   std::cout << " -h|-help|--help                           : Prints this help menu" << std::endl;
   std::cout << " -l|-list|--list                           : List benchmarks" << std::endl;
+  std::cout << " -a|-arch|--arch                           : Prints the benchmark configuration" << std::endl;
   std::cout << "=================================================================================" << std::endl;
 }
 

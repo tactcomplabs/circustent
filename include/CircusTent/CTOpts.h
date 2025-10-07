@@ -55,6 +55,9 @@ private:
   /// Prints the benchmark list
   void PrintBench();
 
+  /// Prints the target architecture configuration of the benchmark
+  void PrintArch();
+
   /// Checks and enables the benchmark entry
   bool EnableBench( std::string Bench );
 
