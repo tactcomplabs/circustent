@@ -37,6 +37,7 @@ endif()
 
 if (ENABLE_PTHREADS)
   add_executable(circustent ${CTSrcs} $<TARGET_OBJECTS:CT_PTHREADS_OBJS>)
+  target_link_libraries(circustent PUBLIC pthread)
 endif()
 
 if (ENABLE_OPENACC)

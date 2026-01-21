@@ -17,3 +17,4 @@ include_directories(${CT_INCLUDE_PATH})
 include_directories(./)
 
 add_library(CT_PTHREADS_OBJS OBJECT ${CTPTHREADSSrcs})
+target_link_libraries(CT_PTHREADS_OBJS PUBLIC pthread)

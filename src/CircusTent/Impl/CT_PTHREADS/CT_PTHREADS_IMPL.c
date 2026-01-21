@@ -440,8 +440,9 @@ void *thread_PTRCHASE_ADD(void *thread_args){
   // Perform atomic ops
   uint64_t i;
   uint64_t start = thread_id * iters;
+  uint64_t tmpStart = start;
   for(i = start; i < (start + iters); i++){
-    start = __atomic_fetch_add(&IDX[start], (uint64_t)(0x00ull), __ATOMIC_RELAXED);
+    tmpStart = __atomic_fetch_add(&IDX[tmpStart], (uint64_t)(0x00ull), __ATOMIC_RELAXED);
   }
 
   // Worker thread finished
@@ -501,8 +502,9 @@ void *thread_PTRCHASE_CAS(void *thread_args){
   // Perform atomic ops
   uint64_t i;
   uint64_t start = thread_id * iters;
+  uint64_t tmpStart = start;
   for(i = start; i < (start + iters); i++){
-    __atomic_compare_exchange_n(&IDX[start], &start, IDX[start], 0, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
+    __atomic_compare_exchange_n(&IDX[tmpStart], &start, IDX[tmpStart], 0, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
   }
 
   // Worker thread finished
