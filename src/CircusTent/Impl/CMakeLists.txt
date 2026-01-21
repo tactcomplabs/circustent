@@ -45,4 +45,8 @@ if (ENABLE_CUDA)
   add_subdirectory(CT_CUDA)
 endif()
 
+if (ENABLE_YGM)
+  add_subdirectory(CT_YGM)
+endif()
+
 # EOF

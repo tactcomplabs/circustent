@@ -331,7 +331,11 @@ bool CT_SHMEM::AllocateData( uint64_t m,
     for( unsigned i=0; i<iters; i++ ){
       Target[i] = 0;
     }
-  }else if( this->GetBenchType() == CT_PTRCHASE ){
+  }else if( (this->GetBenchType() == CT_PTRCHASE) || 
+            (this->GetBenchType() == CT_RAND) || 
+            (this->GetBenchType() == CT_SCATTER) || 
+            (this->GetBenchType() == CT_GATHER) ||
+            (this->GetBenchType() == CT_SG) ){
     for( unsigned i=0; i<iters; i++ ){
       // randomize the Target pe
       Target[i] = (int)(rand()%(shmem_n_pes()));

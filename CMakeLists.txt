@@ -7,7 +7,7 @@
 # See LICENSE in the top level directory for licensing details
 #
 
-cmake_minimum_required(VERSION 3.4.3)
+cmake_minimum_required(VERSION 3.14)
 project(CircusTent)
 
 set(VERSION "0.2.0")
@@ -136,6 +136,71 @@ if (ENABLE_CUDA)
   message(STATUS "ENABLING CUDA Implementation")
 else()
   message(STATUS "DISABLING CUDA Implementation")
+endif()
+
+if (ENABLE_YGM)
+
+  # Gather dependencies for CT_YGM Impl
+
+  include(FetchContent)
+
+  #
+  #  MPI
+  find_package(MPI)
+
+  #
+  #  ygm
+  find_package(ygm CONFIG)
+
+  if(NOT ygm_FOUND)
+    if(DEFINED ENV{YGM_BENCH_YGM_REPO})
+		  set(YGM_REPO $ENV{YGM_BENCH_YGM_REPO})
+	  else()
+		  set(YGM_REPO "https://github.com/llnl/ygm.git")
+	  endif()
+
+    if(DEFINED ENV{YGM_BENCH_YGM_TAG})
+      set(YGM_TAG $ENV{YGM_BENCH_YGM_TAG})
+    else()
+      set(YGM_TAG "v0.6")
+    endif()
+
+    FetchContent_Declare(
+    ygm
+    GIT_REPOSITORY 	${YGM_REPO}
+    GIT_TAG 		${YGM_TAG}
+    )      
+
+    set(JUST_INSTALL_YGM ON)
+
+    FetchContent_MakeAvailable(ygm)
+    message(STATUS "Cloned ygm dependency " ${ygm_SOURCE_DIR})
+  else()
+	  message(STATUS "Found ygm dependency " ${ygm_DIR})
+  endif()
+
+  # Set flags for YGM specific options
+
+  if (SHORTCUT_RPC)
+    set(SHORTCUT_ARGS " -D_SHORTCUT_RPC_")
+  else()
+    set(SHORCUT_ARGS "")
+  endif()
+
+  if (SKIP_PROGRESS_PTRCHASE)
+    set(PROGRESS_ARGS "")
+  else ()
+    set(PROGRESS_ARGS " -D_PROGRESS_PTRCHASE_")
+  endif()
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_ENABLE_YGM_${SHORTCUT_ARGS}${PROGRESS_ARGS}")
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -D_ENABLE_YGM_${SHORTCUT_ARGS}${PROGRESS_ARGS}")
+
+  message(STATUS "ENABLING YGM Implementation")
+else()
+  message(STATUS "DISABLING YGM Implementation")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
 #------------------------------------------------------------------------

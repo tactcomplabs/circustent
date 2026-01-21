@@ -99,6 +99,16 @@ void STRIDE1_ADD( uint64_t *restrict ARRAY,
   MPI_Win_lock_all(0, AWin);
 
   for( i=0; i<iters; i++ ){
+    // buffer use not standard but appears benign.
+    //
+    // This technically causes undefined behavior, origin buffer and result buffer
+    // aren't supposed to be the same per documentation.
+    // Hypothesis for what is happening:
+    //  - array value is copied into start,
+    //  - start and array value are added, (array value is doubled in place)
+    //  - start is returned to the rank that called the operation.
+    // Doesn't break program and still implements the desired AMO.
+    
     MPI_Fetch_and_op((unsigned long *)(&start),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      ((&ARRAY[i])-(&ARRAY[0])),MPI_SUM,AWin);
@@ -332,6 +342,10 @@ void CENTRAL_ADD( uint64_t *restrict ARRAY,
   MPI_Win_lock_all(0, AWin);
 
   for( i=0; i<iters; i++ ){
+    // Would appear that it targets the first element 
+    // at the target rank, not the first element of the 
+    // shared data array. This is as per CT documentation, but not like YGM.
+    
     MPI_Fetch_and_op((unsigned long *)(&one),(unsigned long *)(&start),
                      MPI_UNSIGNED_LONG,TARGET[i],
                      (0),MPI_SUM,AWin);
